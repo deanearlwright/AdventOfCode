@@ -1,0 +1,13 @@
+# Mine Cart Madness - day 13 of Advent of Code 2018
+
+# Vertical line example from instructions
+
+|
+v
+|
+|
+|
+^
+|
+
+# Solution is 0,3

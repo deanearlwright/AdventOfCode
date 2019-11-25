@@ -1,0 +1,12 @@
+# Mine Cart Madness - day 13 of Advent of Code 2018
+
+# A longer example from the instructions
+
+/->-\
+|   |  /----\
+| /-+--+-\  |
+| | |  | v  |
+\-+-/  \-+--/
+  \------/
+
+# Solution is 7,3
