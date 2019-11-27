@@ -13,22 +13,15 @@
 # ----------------------------------------------------------------------
 #                                                                 import
 # ----------------------------------------------------------------------
+import cart
 
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
 
-GOUP = "^"
-DOWN = "v"
-LEFT = "<"
-RGHT = ">"
-
-BLANK = " "
-CROSS = " "
-VERT = "|"
-HORZ = "-"
-CRNR1 = "\\"
-CRNR2 = "/"
+TRACK_PIECES = "|-+/\\"
+CART_PIECES = "^v<>"
+ALL_PIECES = TRACK_PIECES + CART_PIECES
 
 # ======================================================================
 #                                                                  Track
@@ -39,14 +32,140 @@ class Track(object):                      # pylint: disable=E0012,R0205
     """Object representing a map of Mine Card Madness"""
 
     def __init__(self):
-        pass
+        self.tracks = {}
+        self.carts = []
+        self.max_rows = 0
+        self.max_cols = 0
+        self.time = 0
+        self.crashed = None
 
-    def fromFile(self, filepath):
+    def add_track(self, location, track):
+        "Set a piece of track at a location"
+
+        # 0. Preconditions
+        assert(track in ALL_PIECES)
+        assert(location[0] >= 0)
+        assert(location[1] >= 0)
+
+        # 1. Add the track
+        self.tracks[location] = track
+
+        # 2. Adjust the size as needed
+        if location[0] > self.max_cols:
+            self.max_cols = location[0]
+        if location[1] > self.max_rows:
+            self.max_rows = location[1]
+
+        # 3. If this is a cart, add it to the carts
+        if track in CART_PIECES:
+            self.carts.append(cart.Cart(location=location, direction=track))
+
+    def set_track(self, location, track):
+        "Set a piece of track at a location"
+
+        # 0. Preconditions
+        assert(track in ALL_PIECES)
+        assert(location[0] >= 0 and location[0] <= self.max_cols)
+        assert(location[1] >= 0 and location[1] <= self.max_rows)
+
+        # 1. Set the track at that location
+        self.tracks[location] = track
+
+    def set_crashed(self, location):
+        "Set a piece of track at a location"
+
+        # 0. Preconditions
+        assert(location[0] >= 0 and location[0] <= self.max_cols)
+        assert(location[1] >= 0 and location[1] <= self.max_rows)
+
+        # 1. Set the track at that location to indicate a crash
+        self.tracks[location] = 'X'
+
+        # 2. Remember where we crashed
+        self.crashed = location
+
+    def get_track(self, location):
+        "Get the track at a location, if no track return blank"
+
+        # 0. Preconditions
+        assert(location[0] >= 0 and location[0] <= self.max_cols)
+        assert(location[1] >= 0 and location[1] <= self.max_rows)
+
+        # 1. If there is track there, return it
+        if location in self.tracks:
+            return self.tracks[location]
+
+        # 2. Else return a blank
+        return ' '
+
+    def size(self):
+        "Return the size of the tracks grid"
+
+        return (self.max_cols, self.max_rows)
+
+    def __str__(self):
+        result = []
+        for row in range(1+self.max_rows):
+            one_row = []
+            for col in range(1+self.max_cols):
+                one_row.append(self.get_track((col, row)))
+            result.append(''.join(one_row))
+        return '\n'.join(result)
+
+    def from_file(self, filepath):
         "Read the tracks from a file"
-        pass
+
+        self.from_text(open(filepath).read())
+
+    def from_text(self, text):
+        "Set the track from a text string"
+
+        # 1. We start with row zero
+        row = 0
+
+        # 2. Loop for lines in the text
+        for line in text.split('\n'):
+
+            # 3. But ignore blank and comment lines
+            line = line.rstrip(' \r')
+            if not line:
+                continue
+            if line.startswith('#'):
+                continue
+
+            # 4. Walk through the tracks in this row
+            for col, track in enumerate(line):
+
+                # 5. We don't bother to store blanks
+                #    because carts can't go there
+                if track == ' ':
+                    continue
+
+                # 6. Add this track piece (or cart) to the tracks
+                self.add_track((col, row), track)
+
+            # 7. Done this this row
+            row += 1
+
+    def tick(self):
+        "Move all the carts one space"
+
+        # 1 Put the carts in the order (rows by columns)
+        self.carts.sort()
+
+        # 2. Move each of the carts in turn. break if crashed
+        for moving in self.carts:
+            if moving.tick(track=self):
+                return True
+
+        # 3. Return success (not crashing)
+        return False
+
 
     def solve(self, maxtime=0):
         "Determine where the mine carts collide"
+        if maxtime > 0 and maxtime > self.time:
+            return None
         return None
 
 # ----------------------------------------------------------------------

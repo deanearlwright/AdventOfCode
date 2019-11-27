@@ -37,11 +37,11 @@ class TestCart(unittest.TestCase):  # pylint: disable=R0904
         mycart = cart.Cart()
 
         # 2. Make sure it has the default values
-        self.assertEqual(mycart.location, (0,0))
+        self.assertEqual(mycart.location, (0, 0))
         self.assertEqual(mycart.direction, '^')
         self.assertEqual(mycart.crossings, 0)
         self.assertEqual(mycart.crashed, False)
-        self.assertEqual(mycart.space, ' ')
+        self.assertEqual(mycart.space, '|')
 
         # 3. Check methods
         #self.assertEqual(mycoin.letter(), 'C')
