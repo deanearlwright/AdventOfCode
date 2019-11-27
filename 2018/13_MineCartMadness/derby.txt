@@ -1,0 +1,12 @@
+# Sample problem for part two
+# Mine Cart Demolition Derby
+
+/>-<\
+|   |
+| /<+-\
+| | | v
+\>+</ |
+  |   ^
+  \<->/
+
+# The final cart will be at 6,4

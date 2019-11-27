@@ -101,6 +101,7 @@ class Cart():                 # pylint: disable=E0012,R0205,R0903
         self.direction = direction
         self.crossings = crossings
         self.crashed = crashed
+        self.time = 0
 
         # 2. Determint the track under the kart
         #    Simplifing assumtion: always | or - not +
@@ -122,6 +123,10 @@ class Cart():                 # pylint: disable=E0012,R0205,R0903
             self.crashed = True
             return True
 
+        # 1.5. If we have already moved this tick, don't move again
+        if self.time >= track.time:
+            return False
+
         # 2. If we are not on the track, we crash
         if track.get_track(self.location) != self.direction:
             self.crashed = True
@@ -137,8 +142,9 @@ class Cart():                 # pylint: disable=E0012,R0205,R0903
         #print("loc: dir=%s, old=%s, delta=%s, new=%s" % (self.direction, self.location, delta, new_loc))
         self.location = new_loc
 
-        # 5. Get the piece of track at that location
+        # 5. Get the piece of track at that location and save time of movement
         self.space = track.get_track(self.location)
+        self.time = track.time
 
         # 6. Have we hit another cart?
         if self.space in DIRECTIONS:

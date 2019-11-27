@@ -157,17 +157,17 @@ class Track(object):                      # pylint: disable=E0012,R0205
         # 2. Assume that there will be no crash
         result = False
 
-        # 3 Put the carts in the order (rows by columns)
+        # 3. Increment the clock
+        self.time += 1
+
+        # 4. Put the carts in the order (rows by columns)
         self.carts.sort()
 
-        # 4. Move each of the carts in turn. break if crashed
+        # 5. Move each of the carts in turn. break if crashed
         for kart in self.carts:
             if kart.tick(track=self):
                 result = True
                 break
-
-        # 5. Increment the clock
-        self.time += 1
 
         # 6. Return crash (True) or no crash (False)
         return result
@@ -188,6 +188,18 @@ class Track(object):                      # pylint: disable=E0012,R0205
 
         # 4. Return the location of the traffic mishap
         return self.crashed
+
+    def cleanup(self, location):
+        "Clean up after a collision"
+
+        # 1. Back up the timer a tick
+        self.time -= 1
+
+        # 2. Find the carts involved
+
+        # 3. Replair the track
+
+        # 4. Remove the carts
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
