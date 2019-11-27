@@ -32,8 +32,8 @@ DELTA_LOC = {'^': (0, -1),
 # The change in direction (if any) when moving in one of the four
 # directions and encountering the given track type.
 # Crossings (+) are handled using CROSS_DIR
-TRACK_DIR = {'|': {'^': '<',
-                   'v': '>',
+TRACK_DIR = {'|': {'^': '^',
+                   'v': 'v',
                    '<': '?',
                    '>': '?',
                   },
@@ -49,8 +49,8 @@ TRACK_DIR = {'|': {'^': '<',
                   },
              '\\': {'^': '<',
                     'v': '>',
-                    '<': 'v',
-                    '>': '^',
+                    '<': '^',
+                    '>': 'v',
                    },
             }
 
@@ -70,7 +70,7 @@ CROSS_DIR = {'<': {'^': '<',
                    '>': '>',
                   },
              '>': {'^': '>',
-                   'v': '<v',
+                   'v': '<',
                    '<': '^',
                    '>': 'v',
                   },
@@ -134,9 +134,8 @@ class Cart():                 # pylint: disable=E0012,R0205,R0903
         delta = DELTA_LOC[self.direction]
         new_loc = (self.location[0] + delta[0],
                    self.location[1] + delta[1])
-        print("dir=%s, old=%s, delta=%s, new=%s" % (self.direction, self.location, delta, new_loc))
+        #print("loc: dir=%s, old=%s, delta=%s, new=%s" % (self.direction, self.location, delta, new_loc))
         self.location = new_loc
-
 
         # 5. Get the piece of track at that location
         self.space = track.get_track(self.location)
@@ -148,6 +147,14 @@ class Cart():                 # pylint: disable=E0012,R0205,R0903
             return True
 
         # 7. Determine our new direction
+        if self.space == '+':
+            cross_turn = CROSSINGS[self.crossings % 3]
+            self.crossings += 1
+            new_dir = CROSS_DIR[cross_turn][self.direction]
+        else:
+            new_dir = TRACK_DIR[self.space][self.direction]
+        #print("dir: dir=%s, loc=%s, space=%s, new=%s" % (self.direction, self.location, self.space, new_dir))
+        self.direction = new_dir
 
         # 8. Put our direction on the track
         track.set_track(self.location, self.direction)

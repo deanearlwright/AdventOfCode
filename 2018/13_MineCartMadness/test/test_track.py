@@ -37,7 +37,7 @@ v
 # Solution is 0,3
 """
 
-SAMPLE_TRACK = r"""
+SAMPLE = r"""
 # Mine Cart Madness - day 13 of Advent of Code 2018
 
 # A longer example from the instructions
@@ -64,7 +64,96 @@ v    |
 >----/""", r"""/----v
 |    |
 |    |
-\>---/"""]
+\>---/""", r"""/----\
+|    v
+|    |
+\->--/""", r"""/----\
+|    |
+|    v
+\-->-/""", r"""/----\
+|    |
+|    |
+\---><""", r"""/----\
+|    |
+|    |
+\----X"""]
+
+EXAMPLE = [r"""/->-\
+|   |  /----\
+| /-+--+-\  |
+| | |  | v  |
+\-+-/  \-+--/
+  \------/""", r"""/-->\
+|   |  /----\
+| /-+--+-\  |
+| | |  | |  |
+\-+-/  \->--/
+  \------/""", r"""/---v
+|   |  /----\
+| /-+--+-\  |
+| | |  | |  |
+\-+-/  \-+>-/
+  \------/""", r"""/---\
+|   v  /----\
+| /-+--+-\  |
+| | |  | |  |
+\-+-/  \-+->/
+  \------/""", r"""/---\
+|   |  /----\
+| /->--+-\  |
+| | |  | |  |
+\-+-/  \-+--^
+  \------/""", r"""/---\
+|   |  /----\
+| /-+>-+-\  |
+| | |  | |  ^
+\-+-/  \-+--/
+  \------/""", r"""/---\
+|   |  /----\
+| /-+->+-\  ^
+| | |  | |  |
+\-+-/  \-+--/
+  \------/""", r"""/---\
+|   |  /----<
+| /-+-->-\  |
+| | |  | |  |
+\-+-/  \-+--/
+  \------/""", r"""/---\
+|   |  /---<\
+| /-+--+>\  |
+| | |  | |  |
+\-+-/  \-+--/
+  \------/""", r"""/---\
+|   |  /--<-\
+| /-+--+-v  |
+| | |  | |  |
+\-+-/  \-+--/
+  \------/""", r"""/---\
+|   |  /-<--\
+| /-+--+-\  |
+| | |  | v  |
+\-+-/  \-+--/
+  \------/""", r"""/---\
+|   |  /<---\
+| /-+--+-\  |
+| | |  | |  |
+\-+-/  \-<--/
+  \------/""", r"""/---\
+|   |  v----\
+| /-+--+-\  |
+| | |  | |  |
+\-+-/  \<+--/
+  \------/""", r"""/---\
+|   |  /----\
+| /-+--v-\  |
+| | |  | |  |
+\-+-/  ^-+--/
+  \------/""", r"""/---\
+|   |  /----\
+| /-+--+-\  |
+| | |  X |  |
+\-+-/  \-+--/
+  \------/"""]
 
 # ======================================================================
 #                                                                  Track
@@ -110,7 +199,7 @@ class TestTrack(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(mytrack.size(), (1, 3))
 
     def test_vertical(self):
-        """Test vertical track example"""
+        """Test vertical track"""
 
         # 1. Create default Track object
         mytrack = track.Track()
@@ -142,7 +231,7 @@ class TestTrack(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(str(mytrack), "|\n|\n|\nX\n|\n|\n|")
 
     def test_vertical_text(self):
-        """Test vertical track example using from_text()"""
+        """Test vertical track using from_text()"""
 
         # 1. Create default Track object
         mytrack = track.Track()
@@ -167,8 +256,8 @@ class TestTrack(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(mytrack.crashed, (0, 3))
         self.assertEqual(str(mytrack), "|\n|\n|\nX\n|\n|\n|")
 
-    def test_round_text(self):
-        """Test round track example using from_text()"""
+    def test_round_tick(self):
+        """Test round track using tick()"""
 
         # 1. Create default Track object
         mytrack = track.Track()
@@ -183,26 +272,88 @@ class TestTrack(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(mytrack.size(), (5, 3))
         self.assertEqual(str(mytrack), ROUND[0])
 
-        # 4. Advance the clock by one
-        self.assertEqual(mytrack.tick(), False)
-        self.assertEqual(mytrack.crashed, None)
-        self.assertEqual(str(mytrack), ROUND[1])
+        # 4. Loop for all but last iteration
+        for i in range(1, len(ROUND)-1):
 
-        # 5. Advance the clock by one more
-        self.assertEqual(mytrack.tick(), False)
-        self.assertEqual(mytrack.crashed, None)
-        self.assertEqual(str(mytrack), ROUND[2])
+            # 5. Advance the clock by one each loop
+            self.assertEqual(mytrack.tick(), False)
+            self.assertEqual(mytrack.crashed, None)
+            self.assertEqual(str(mytrack), ROUND[i])
 
+        # 6. Advance the clock by one last time
+        self.assertEqual(mytrack.tick(), True)
+        self.assertEqual(mytrack.crashed, (5, 3))
+        self.assertEqual(str(mytrack), ROUND[len(ROUND)-1])
 
-        #self.assertEqual(mytrack.tick(), True)
-        #self.assertEqual(mytrack.crashed, (0, 3))
-        #self.assertEqual(str(mytrack), "|\n|\n|\nX\n|\n|\n|")
+    def test_example_tick(self):
+        """Test example track using tick()"""
+
+        # 1. Create default Track object
+        mytrack = track.Track()
+
+        # 2. Add the track from text
+        mytrack.from_text(EXAMPLE[0])
+
+        # 3. Check a few things
+        self.assertEqual(len(mytrack.carts), 2)
+        self.assertEqual(mytrack.time, 0)
+        self.assertEqual(mytrack.size(), (12, 5))
+        self.assertEqual(str(mytrack), EXAMPLE[0])
+
+        # 4. Loop for all but last iteration
+        for i in range(1, len(EXAMPLE)-1):
+
+            # 5. Advance the clock by one each loop
+            self.assertEqual(mytrack.tick(), False)
+            self.assertEqual(mytrack.crashed, None)
+            #print("........... actual %d" % i)
+            #print(str(mytrack))
+            #print("........... expected %d" % i)
+            #print(EXAMPLE[i])
+            self.assertEqual(str(mytrack), EXAMPLE[i])
+
+        # 6. Advance the clock by one last time
+        self.assertEqual(mytrack.tick(), True)
+        self.assertEqual(mytrack.crashed, (7, 3))
+        self.assertEqual(str(mytrack), EXAMPLE[len(EXAMPLE)-1])
+
+    def test_round_solve(self):
+        """Test round track example using solve()"""
+
+        # 1. Create default Track object
+        mytrack = track.Track()
+
+        # 2. Add the track from text
+        mytrack.from_text(ROUND[0])
+
+        # 3. Check a few things
+        self.assertEqual(len(mytrack.tracks), 16)
+        self.assertEqual(len(mytrack.carts), 2)
+        self.assertEqual(mytrack.time, 0)
+        self.assertEqual(mytrack.size(), (5, 3))
+        self.assertEqual(str(mytrack), ROUND[0])
+
+        # 4. Solve this puzzle
+        self.assertEqual(mytrack.solve(), (5, 3))
+        self.assertEqual(str(mytrack), ROUND[len(ROUND)-1])
+
+    def test_sample_solve(self):
+        """Test sample track using solve()"""
+
+        # 1. Create default Track object
+        mytrack = track.Track()
+
+        # 2. Add the track from text
+        mytrack.from_text(SAMPLE)
+
+        # 3. Solve this puzzle
+        self.assertEqual(mytrack.solve(), (7, 3))
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
 # ----------------------------------------------------------------------
 if __name__ == '__main__':
-    print(SAMPLE_TRACK)
+    pass
 
 # ======================================================================
 # end                   t e s t _ t r a c k . p y                    end

@@ -56,7 +56,7 @@ def main():
 
     # 2. Read the puzzle file
     tracks = track.Track()
-    tracks.fromFile(args.filepath)
+    tracks.from_file(args.filepath)
 
     # 3. Run the mine cars
     solution = tracks.solve(maxtime=args.maxtime)
@@ -66,7 +66,7 @@ def main():
         print("No solution after %d ticks" % args.maxtime)
         sys.exit(2)
     else:
-        print("The solution is (%d,%d)" % solution)
+        print("The solution is (%d,%d) at %d ticks" % (solution[0], solution[1], tracks.time))
         sys.exit(0)
 
 # ----------------------------------------------------------------------

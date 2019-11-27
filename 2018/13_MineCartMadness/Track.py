@@ -109,7 +109,7 @@ class Track(object):                      # pylint: disable=E0012,R0205
             one_row = []
             for col in range(1+self.max_cols):
                 one_row.append(self.get_track((col, row)))
-            result.append(''.join(one_row))
+            result.append(''.join(one_row).rstrip())
         return '\n'.join(result)
 
     def from_file(self, filepath):
@@ -150,23 +150,44 @@ class Track(object):                      # pylint: disable=E0012,R0205
     def tick(self):
         "Move all the carts one space"
 
-        # 1 Put the carts in the order (rows by columns)
+        # 1. Bug out early if already crashed
+        if self.crashed:
+            return True
+
+        # 2. Assume that there will be no crash
+        result = False
+
+        # 3 Put the carts in the order (rows by columns)
         self.carts.sort()
 
-        # 2. Move each of the carts in turn. break if crashed
-        for moving in self.carts:
-            if moving.tick(track=self):
-                return True
+        # 4. Move each of the carts in turn. break if crashed
+        for kart in self.carts:
+            if kart.tick(track=self):
+                result = True
+                break
 
-        # 3. Return success (not crashing)
-        return False
+        # 5. Increment the clock
+        self.time += 1
+
+        # 6. Return crash (True) or no crash (False)
+        return result
 
 
     def solve(self, maxtime=0):
         "Determine where the mine carts collide"
-        if maxtime > 0 and maxtime > self.time:
-            return None
-        return None
+
+        # 1. Loop until the carts crash
+        while not self.crashed:
+
+            # 2. Bug out early if this is taking too long
+            if maxtime > 0 and maxtime > self.time:
+                return None
+
+            # 3. Move the carts one tick
+            self.tick()
+
+        # 4. Return the location of the traffic mishap
+        return self.crashed
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
