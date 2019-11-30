@@ -12,7 +12,7 @@ proj.directory-list = [{'dirloc': loc('.'),
                         'watch_for_changes': True}]
 proj.file-type = 'shared'
 proj.launch-config = {loc('mcm.py'): ('project',
-                                      (u'vertical.txt',
+                                      (u'-p1 -v -f -t 1000 sample.txt',
                                        '')),
                       loc('test/test_cart.py'): ('project',
         (u'-p 1 sample.txt',

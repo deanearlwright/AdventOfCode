@@ -183,7 +183,7 @@ class Track(object):                      # pylint: disable=E0012,R0205
         while not self.crashed:
 
             # 2. Bug out early if this is taking too long
-            if maxtime > 0 and maxtime > self.time:
+            if maxtime > 0 and self.time > maxtime:
                 return None
 
             # 3. Move the carts one tick, stopping on crash
@@ -199,7 +199,7 @@ class Track(object):                      # pylint: disable=E0012,R0205
         while len(self.carts) > 1:
 
             # 2. Bug out early if this is taking too long
-            if maxtime > 0 and maxtime > self.time:
+            if maxtime > 0 and self.time > maxtime:
                 return None
 
             # 3. Move the carts one tick, not stopping on a crash

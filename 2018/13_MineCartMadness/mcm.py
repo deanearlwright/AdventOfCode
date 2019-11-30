@@ -113,9 +113,9 @@ def main():
 
     # 3. Process the appropiate part of the puzzle
     if args.part == 1:
-        result = part_two(args, tracks)
-    else:
         result = part_one(args, tracks)
+    else:
+        result = part_two(args, tracks)
 
     # 4. Output the final grid (if requested)
     if args.final:
