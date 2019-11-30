@@ -40,7 +40,7 @@ def parse_command_line():
                         dest='part', help='Puzzle Part (1 or 2)')
     parser.add_argument('-f', '--final', action='store_true', default=False,
                         dest='final', help='Show the final state')
-    parser.add_argument('-t', '--max-time', action='store', default=0,
+    parser.add_argument('-t', '--max-time', action='store', default=0, type=int,
                         dest='maxtime', help='Maximum timer ticks before quitting')
     parser.add_argument('filepath', metavar='ticks', action='store', type=str,
                         help="Location of puzzle input")
