@@ -1,0 +1,7 @@
+# --- Day 5: Alchemical Reduction ---
+
+# --- Problem 1 Sample ---
+
+dabAcCaCBAcCcaDA
+
+# After all possible reactions, the resulting polymer contains 10 units.

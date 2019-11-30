@@ -1,0 +1,17 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('ar.py'),
+                  loc('prob_one.txt'),
+                  loc('prob_two.txt'),
+                  loc('sample.txt')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('ar.py'): ('project',
+                                     (u'-p 2 -v -t 6000 input.txt',
+                                      '')),
+                      loc('sample.txt'): ('project',
+        (u'-p 1 -v sample.txt',
+         ''))}
