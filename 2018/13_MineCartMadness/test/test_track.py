@@ -433,6 +433,42 @@ class TestTrack(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(mytrack.derby(), (6, 4))
         self.assertEqual(str(mytrack), DERBY[len(DERBY) - 1])
 
+    def test_sample_solve_file(self):
+        """Test sample.txt using solve()"""
+
+        # 1. Create default Track sample.txt
+        mytrack = track.Track()
+
+        # 2. Add the track from text
+        mytrack.from_file("../sample.txt")
+
+        # 3. Check a few things
+        self.assertEqual(len(mytrack.carts), 2)
+        self.assertEqual(mytrack.time, 0)
+        self.assertEqual(mytrack.size(), (12, 5))
+        self.assertEqual(str(mytrack), EXAMPLE[0])
+
+        # 4. Solve this puzzle for first collision
+        self.assertEqual(mytrack.solve(), (7, 3))
+
+    def test_derby_derby_file(self):
+        """Test derby.txt using derby()"""
+
+        # 1. Create default Track object
+        mytrack = track.Track()
+
+        # 2. Add the track from derby.txt
+        mytrack.from_file("../derby.txt")
+
+        # 3. Check a few things
+        self.assertEqual(len(mytrack.carts), 9)
+        self.assertEqual(mytrack.time, 0)
+        self.assertEqual(mytrack.size(), (6, 6))
+        self.assertEqual(str(mytrack), DERBY[0])
+
+        # 4. Solve this puzzle for the last cart standing
+        self.assertEqual(mytrack.derby(), (6, 4))
+        self.assertEqual(str(mytrack), DERBY[len(DERBY) - 1])
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
