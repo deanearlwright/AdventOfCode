@@ -1,0 +1,10 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('cc.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt')]
+proj.file-type = 'shared'

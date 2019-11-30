@@ -43,9 +43,9 @@ class Track(object):                      # pylint: disable=E0012,R0205
         "Set a piece of track at a location"
 
         # 0. Preconditions
-        assert(track in ALL_PIECES)
-        assert(location[0] >= 0)
-        assert(location[1] >= 0)
+        assert track in ALL_PIECES
+        assert location[0] >= 0
+        assert location[1] >= 0
 
         # 1. Add the track
         self.tracks[location] = track
@@ -64,7 +64,7 @@ class Track(object):                      # pylint: disable=E0012,R0205
         "Set a piece of track at a location"
 
         # 0. Preconditions
-        assert(track in ALL_PIECES)
+        assert track in ALL_PIECES
         assert(location[0] >= 0 and location[0] <= self.max_cols)
         assert(location[1] >= 0 and location[1] <= self.max_rows)
 
@@ -105,9 +105,9 @@ class Track(object):                      # pylint: disable=E0012,R0205
 
     def __str__(self):
         result = []
-        for row in range(1+self.max_rows):
+        for row in range(1 + self.max_rows):
             one_row = []
-            for col in range(1+self.max_cols):
+            for col in range(1 + self.max_cols):
                 one_row.append(self.get_track((col, row)))
             result.append(''.join(one_row).rstrip())
         return '\n'.join(result)
@@ -147,59 +147,105 @@ class Track(object):                      # pylint: disable=E0012,R0205
             # 7. Done this this row
             row += 1
 
-    def tick(self):
-        "Move all the carts one space"
-
-        # 1. Bug out early if already crashed
-        if self.crashed:
-            return True
-
-        # 2. Assume that there will be no crash
-        result = False
+    def tick(self, stop=True):
+        "Move all the carts one space, return True if crash"
 
         # 3. Increment the clock
         self.time += 1
 
-        # 4. Put the carts in the order (rows by columns)
+        # 2. Put the carts in the order (rows by columns)
         self.carts.sort()
 
-        # 5. Move each of the carts in turn. break if crashed
+        # 3. Loop for all of the carts
         for kart in self.carts:
-            if kart.tick(track=self):
-                result = True
-                break
 
-        # 6. Return crash (True) or no crash (False)
-        return result
+            # 4. Move the cart
+            crashed = kart.tick(track=self)
 
+            # 5. If the cart crashed and are stopping at the first crash, stop
+            if crashed and stop:
+                return True
+
+            # 6. If the cart crashed, do immediate repairs
+            if crashed:
+                self.repair()
+
+        # 7. Permantely remove any crashed carts
+        self.cleanup()
+
+        # 8. No crashes to report
+        return False
 
     def solve(self, maxtime=0):
         "Determine where the mine carts collide"
 
-        # 1. Loop until the carts crash
+        # 1. Loop until there is a crash
         while not self.crashed:
 
             # 2. Bug out early if this is taking too long
             if maxtime > 0 and maxtime > self.time:
                 return None
 
-            # 3. Move the carts one tick
+            # 3. Move the carts one tick, stopping on crash
             self.tick()
 
         # 4. Return the location of the traffic mishap
         return self.crashed
 
-    def cleanup(self, location):
-        "Clean up after a collision"
+    def derby(self, maxtime=0):
+        "Determine the last cart standing"
 
-        # 1. Back up the timer a tick
-        self.time -= 1
+        # 1. Loop until there is only one cart
+        while len(self.carts) > 1:
 
-        # 2. Find the carts involved
+            # 2. Bug out early if this is taking too long
+            if maxtime > 0 and maxtime > self.time:
+                return None
 
-        # 3. Replair the track
+            # 3. Move the carts one tick, not stopping on a crash
+            self.tick(stop=False)
 
-        # 4. Remove the carts
+        # 4. Return the location of the lonesome cart
+        if not self.carts:
+            return None
+        return self.carts[0].location
+
+    def repair(self):
+        "Immediate clean up after a collision"
+
+        # 0. Preconditions
+        assert self.crashed is not None
+
+        # 1. Find the carts involved
+        location = self.crashed
+        broken = []
+        for kart in self.carts:
+            if kart.location == location:
+                kart.crashed = location
+                broken.append(kart)
+                #print("repair: (%d, %d) %s" % (location[0], location[1], kart.space))
+
+        # 2. Repair the track
+        for kart in broken:
+            if kart.space not in CART_PIECES:
+                self.set_track(location, kart.space)
+                break
+
+        # 3. Reset crashed indicator
+        self.crashed = None
+
+    def cleanup(self):
+        "Final clean up after collisions"
+
+        # 1. Find the non-crashed carts
+        working = []
+        for kart in self.carts:
+            if not kart.crashed:
+                working.append(kart)
+
+        # 2. Keep only the working carts
+        self.carts = working
+
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

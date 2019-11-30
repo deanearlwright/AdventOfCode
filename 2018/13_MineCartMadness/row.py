@@ -1,50 +1,62 @@
 # ======================================================================
-# Mine Cart Madness
-#   Advent of Code 2018 Day 13 -- Eric Wastl -- https://adventofcode.com
+# No Matter How You Slice It
+#   Advent of Code 2018 Day 03 -- Eric Wastl -- https://adventofcode.com
 #
 # Computer simulation by Dr. Dean Earl Wright III
 # ======================================================================
 
 # ======================================================================
-#                        t e s t _ c a r t . p y
+#                               r o w . p y
 # ======================================================================
-"Test Carts for day 13 of Advent of Code 2018, Mine Cart Madness"
+"Row for No Matter How You Slice It problem of Advent of Code 2018-03"
 
 # ----------------------------------------------------------------------
 #                                                                 import
 # ----------------------------------------------------------------------
-import unittest
-
-import cart
+from collections import Counter
+from claim import Claim
 
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
 
-
 # ======================================================================
-#                                                               TestCart
+#                                                                    Row
 # ======================================================================
 
 
-class TestCart(unittest.TestCase):  # pylint: disable=R0904
-    """Test Cart object"""
+class Row():
+    """Object representing a single row of fabric"""
 
-    def test_empty_init(self):
-        """Test default Cart object creation"""
+    def __init__(self, number=0):
 
-        # 1. Create default Cart object
-        mycart = cart.Cart()
+        # 1. Set the values
+        self.number = number
+        self.counts = Counter()
 
-        # 2. Make sure it has the default values
-        self.assertEqual(mycart.location, (0, 0))
-        self.assertEqual(mycart.direction, '^')
-        self.assertEqual(mycart.crossings, 0)
-        self.assertEqual(mycart.crashed, None)
-        self.assertEqual(mycart.space, '|')
+    def add_claim(self, claim):
+        "Add claim against this row of fabric"
 
-        # 3. Check methods
-        self.assertEqual(str(mycart), 'cart: l=(0, 0) d=^ x=0 c=None s=|')
+        # 0. Preconditions
+        assert claim is not None
+        assert isinstance(claim, Claim)
+
+        # 1. Might not have much to do
+        if claim.bottom < self.number or claim.top > self.number:
+            return
+
+        # 2. Make claims to squares in this row
+        self.counts.update(range(claim.left, claim.right - 1))
+
+    def claimed(self):
+        "Return the number of squares claimed in the row"
+
+        return len(self.counts)
+
+    def overlap(self):
+        "Return the number of squares with overlapping claims"
+
+        return sum([s for s, n in self.counts.items() if n > 1])
 
 
 # ----------------------------------------------------------------------
@@ -54,5 +66,5 @@ if __name__ == '__main__':
     pass
 
 # ======================================================================
-# end                    t e s t _ c a r t . p y                     end
+# end                          r o w . p y                           end
 # ======================================================================

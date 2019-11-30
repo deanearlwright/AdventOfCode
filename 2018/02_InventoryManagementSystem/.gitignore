@@ -1,0 +1,5 @@
+*.pyc
+*.pyo
+*.wpu
+test/__pycache__
+

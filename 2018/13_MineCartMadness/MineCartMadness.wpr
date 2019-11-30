@@ -13,6 +13,9 @@ proj.directory-list = [{'dirloc': loc('.'),
 proj.file-type = 'shared'
 proj.launch-config = {loc('mcm.py'): ('project',
                                       (u'vertical.txt',
-                                       ''))}
+                                       '')),
+                      loc('test/test_cart.py'): ('project',
+        (u'-p 1 sample.txt',
+         ''))}
 testing.auto-test-file-specs = (('glob',
                                  'test/test_*.py'),)

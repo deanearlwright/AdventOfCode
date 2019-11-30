@@ -1,0 +1,13 @@
+# --- Day 2: Inventory Management System ---
+# --- Part Two ---
+
+abcde
+fghij
+klmno
+pqrst
+fguij
+axcye
+wvxyz
+
+# The solution is fgij
+

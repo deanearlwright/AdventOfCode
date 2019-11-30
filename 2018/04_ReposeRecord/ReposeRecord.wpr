@@ -1,0 +1,16 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('rr.py'),
+                  loc('shift.py'),
+                  loc('test.txt'),
+                  loc('test/test_shift.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('rr.py'): ('project',
+                                     (u'-p2 -v sorted.txt',
+                                      ''))}

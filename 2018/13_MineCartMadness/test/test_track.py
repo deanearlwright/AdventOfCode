@@ -299,7 +299,7 @@ class TestTrack(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(str(mytrack), ROUND[0])
 
         # 4. Loop for all but last iteration
-        for i in range(1, len(ROUND)-1):
+        for i in range(1, len(ROUND) - 1):
 
             # 5. Advance the clock by one each loop
             self.assertEqual(mytrack.tick(), False)
@@ -309,7 +309,7 @@ class TestTrack(unittest.TestCase):  # pylint: disable=R0904
         # 6. Advance the clock by one last time
         self.assertEqual(mytrack.tick(), True)
         self.assertEqual(mytrack.crashed, (5, 3))
-        self.assertEqual(str(mytrack), ROUND[len(ROUND)-1])
+        self.assertEqual(str(mytrack), ROUND[len(ROUND) - 1])
 
     def test_example_tick(self):
         """Test example track using tick()"""
@@ -327,21 +327,21 @@ class TestTrack(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(str(mytrack), EXAMPLE[0])
 
         # 4. Loop for all but last iteration
-        for i in range(1, len(EXAMPLE)-1):
+        for i in range(1, len(EXAMPLE) - 1):
 
             # 5. Advance the clock by one each loop
             self.assertEqual(mytrack.tick(), False)
             self.assertEqual(mytrack.crashed, None)
-            #print("........... actual %d" % i)
-            #print(str(mytrack))
-            #print("........... expected %d" % i)
-            #print(EXAMPLE[i])
+            # print("........... actual %d" % i)
+            # print(str(mytrack))
+            # print("........... expected %d" % i)
+            # print(EXAMPLE[i])
             self.assertEqual(str(mytrack), EXAMPLE[i])
 
         # 6. Advance the clock by one last time
         self.assertEqual(mytrack.tick(), True)
         self.assertEqual(mytrack.crashed, (7, 3))
-        self.assertEqual(str(mytrack), EXAMPLE[len(EXAMPLE)-1])
+        self.assertEqual(str(mytrack), EXAMPLE[len(EXAMPLE) - 1])
 
     def test_round_solve(self):
         """Test round track example using solve()"""
@@ -359,9 +359,9 @@ class TestTrack(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(mytrack.size(), (5, 3))
         self.assertEqual(str(mytrack), ROUND[0])
 
-        # 4. Solve this puzzle
+        # 4. Solve this puzzle for first collision
         self.assertEqual(mytrack.solve(), (5, 3))
-        self.assertEqual(str(mytrack), ROUND[len(ROUND)-1])
+        self.assertEqual(str(mytrack), ROUND[len(ROUND) - 1])
 
     def test_sample_solve(self):
         """Test sample track using solve()"""
@@ -372,8 +372,67 @@ class TestTrack(unittest.TestCase):  # pylint: disable=R0904
         # 2. Add the track from text
         mytrack.from_text(SAMPLE)
 
-        # 3. Solve this puzzle
+        # 3. Solve this puzzle for first collision
         self.assertEqual(mytrack.solve(), (7, 3))
+
+    def test_derby_tick(self):
+        """Test derby track using tick()"""
+
+        # 1. Create default Track object
+        mytrack = track.Track()
+
+        # 2. Add the track from text
+        mytrack.from_text(DERBY[0])
+
+        # 3. Check a few things
+        self.assertEqual(len(mytrack.carts), 9)
+        self.assertEqual(mytrack.time, 0)
+        self.assertEqual(mytrack.size(), (6, 6))
+        self.assertEqual(str(mytrack), DERBY[0])
+
+        # 4. Loop for all but last iteration
+        for i in range(1, len(DERBY) - 1):
+
+            # 5. Advance the clock by one each loop
+            self.assertEqual(mytrack.tick(stop=False), False)
+            self.assertEqual(mytrack.crashed, None)
+            self.assertTrue(len(mytrack.carts) > 1)
+            #print("........... actual %d" % i)
+            # print(str(mytrack))
+            #print("........... expected %d" % i)
+            # print(DERBY[i])
+            self.assertEqual(str(mytrack), DERBY[i])
+
+        # 6. Advance the clock by one last time
+        self.assertEqual(mytrack.tick(False), False)
+        #print("final ........... actual %d" % 3)
+        # print(str(mytrack))
+        #print("final ........... expected %d" % 3)
+        # print(DERBY[3])
+        self.assertEqual(mytrack.crashed, None)
+        self.assertEqual(len(mytrack.carts), 1)
+        self.assertEqual(mytrack.carts[0].location, (6, 4))
+        self.assertEqual(str(mytrack), DERBY[len(DERBY) - 1])
+
+    def test_derby_derby(self):
+        """Test derby track using derby()"""
+
+        # 1. Create default Track object
+        mytrack = track.Track()
+
+        # 2. Add the track from text
+        mytrack.from_text(DERBY[0])
+
+        # 3. Check a few things
+        self.assertEqual(len(mytrack.carts), 9)
+        self.assertEqual(mytrack.time, 0)
+        self.assertEqual(mytrack.size(), (6, 6))
+        self.assertEqual(str(mytrack), DERBY[0])
+
+        # 4. Solve this puzzle for the last cart standing
+        self.assertEqual(mytrack.derby(), (6, 4))
+        self.assertEqual(str(mytrack), DERBY[len(DERBY) - 1])
+
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

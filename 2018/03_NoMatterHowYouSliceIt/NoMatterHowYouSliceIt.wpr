@@ -1,0 +1,19 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('claim.py'),
+                  loc('nmhysi.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('row.py'),
+                  loc('test/test_claim.py'),
+                  loc('test/test_row.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('nmhysi.py'): ('project',
+        (u'test.txt',
+         ''))}
+testing.auto-test-file-specs = (('glob',
+                                 'test/test_*.py'),)

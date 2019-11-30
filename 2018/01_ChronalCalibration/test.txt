@@ -1,0 +1,9 @@
+# Test file for 2018 day 1 Chronal Calibration
++1
+-2
++3
++1
+
+# Part one soution is 3
+# Part two solution is 2
+

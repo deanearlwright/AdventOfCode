@@ -1,0 +1,12 @@
+# --- Day 2: Inventory Management System ---
+
+abcdef
+bababc
+abbcde
+abcccd
+aabcdd
+abcdee
+ababab
+
+# part one solution = 12
+
