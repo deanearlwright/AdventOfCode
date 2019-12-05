@@ -1,0 +1,14 @@
+# --- Day 3: Crossed Wires ---
+
+R8,U5,L5,D3
+U7,R6,D4,L4
+
+# wire 1 points are (0,0), (8,0), (8,5), (3,5), and (3,2)
+$ wire 2 points are (0,0), (0,7), (6,7), (6,3), and (2,3)
+
+# wire 1 ends at (3, 2)
+# wire 2 ends at (2, 3)
+
+# They cross at (3,3) and (6, 5)
+
+# The mantattan distance to the nearest crossing is 6
