@@ -1,0 +1,17 @@
+# --- Day 5: Sunny with a Chance of Asteroids ---
+
+# --- Sample intcode machine with
+# ---   1. input and output instructions
+# ---   3. Immediate operands
+
+#    Source Code       |    Object Code
+# ---------------------+----------------------
+# 00: INP 5            | 00: 3, 5
+# 02: INP 6            | 02: 3, 6
+# 04: ADD =0, =0, 9    | 04: 1101, 0, 0, 9
+# 08: OUT =0           | 08: 104, 0
+# 10: HLT              | 10: 99
+
+3,5,3,6,1101,1,0,0,9,104,0,99
+
+# With inputs 127 and 32, the program would output 159
