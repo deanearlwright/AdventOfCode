@@ -8,7 +8,7 @@
 # ======================================================================
 #                           a o c _ s i . p y
 # ======================================================================
-"Solve the Space Image Format problem for Advent of Code 2019 day 07"
+"Solve the Space Image Format problem for Advent of Code 2019 day 08"
 
 # ----------------------------------------------------------------------
 #                                                                 import

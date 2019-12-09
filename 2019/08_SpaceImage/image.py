@@ -26,8 +26,8 @@ PIXEL_TRANS = '2'
 
 PIXELS = (PIXEL_BLACK, PIXEL_WHITE, PIXEL_TRANS)
 
-PIXEL_DISPLAY = {PIXEL_BLACK: 'X',
-                 PIXEL_WHITE: ' ',
+PIXEL_DISPLAY = {PIXEL_BLACK: ' ',
+                 PIXEL_WHITE: 'X',
                  PIXEL_TRANS: '?'}
 
 # ======================================================================
@@ -130,24 +130,20 @@ class Image(object):
             return None
 
         # 2. Start with the first layer
-        decoded = self.layers[0]
+        decoded = list(self.layers[0])
 
         # 3. Loop through the remaining layers
         for lindx in range(1, len(self.layers) - 1):
 
             # 4. Loop for all the pixels
-            nxt = []
             for pindx, pixel in enumerate(decoded):
 
                 # 5. If the pixel is transparent, get the pixel from the next layer
                 if pixel == PIXEL_TRANS:
-                    nxt.append(self.layers[lindx+1][pindx])
-                else:
-                    nxt.append(pixel)
-            decoded = ''.join(nxt)
+                    decoded[pindx] = self.layers[lindx+1][pindx]
 
         # 6. Return the decoded image (as a single string)
-        return decoded
+        return ''.join(decoded)
 
     def part_two(self):
         "Return the visual image of the DIOS password"
@@ -164,13 +160,12 @@ class Image(object):
             display = display.replace(pixel, PIXEL_DISPLAY[pixel])
 
         # 3 Reformat into rows
-        chunk_size = self.width
-        assert len(display) % chunk_size == 0
+        assert len(display) / self.width == self.height
         reformatted = []
         while display:
-            row = display[:chunk_size]
+            row = display[:self.width]
             reformatted.append(row)
-            display = display[chunk_size:]
+            display = display[self.width:]
 
         # 4. Return decoded image
         return '\n'.join(reformatted)
