@@ -1,0 +1,20 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('amp.py'),
+                  loc('aoc_ac.py'),
+                  loc('feedback.txt'),
+                  loc('intcode.py'),
+                  loc('prob_one.txt'),
+                  loc('prog_two.txt'),
+                  loc('sample2.txt'),
+                  loc('sample.txt'),
+                  loc('test/test_amp.py'),
+                  loc('test/test_intcode.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_ac.py'): ('project',
+        (u'-p2 input.txt',
+         ''))}
