@@ -79,15 +79,15 @@ def part_two(args, input_lines):
     "Process part two of the puzzle"
 
     # 1. Create the image of the password
-    pswd = image.Image(width=3, height=2, text=input_lines[0])
+    pswd = image.Image(width=25, height=6, text=input_lines[0])
     if args.verbose:
         print('Number of layers = %d' % len(pswd.layers))
-        print('Layers = %s' % pswd.layers)
+        #print('Layers = %s' % pswd.layers)
 
-    # 2. Get the number of ones times twos in the layer with the most zeroes
-    solution = pswd.part_one()
+    # 2. Get the decoded image
+    solution = pswd.part_two()
     if solution is not None:
-        print("solution (ones times twos) = %d" % (solution))
+        print(solution)
     else:
         print("Unable to determine solution")
 

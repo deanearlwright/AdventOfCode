@@ -20,6 +20,15 @@ from collections import Counter
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
+PIXEL_BLACK = '0'
+PIXEL_WHITE = '1'
+PIXEL_TRANS = '2'
+
+PIXELS = (PIXEL_BLACK, PIXEL_WHITE, PIXEL_TRANS)
+
+PIXEL_DISPLAY = {PIXEL_BLACK: 'X',
+                 PIXEL_WHITE: ' ',
+                 PIXEL_TRANS: '?'}
 
 # ======================================================================
 #                                                                  Image
@@ -89,9 +98,9 @@ class Image(object):
 
         # 4. Find the layer with the fewest number of zeroes
         least_zeroes = (-1, self.width*self.height+1)
-        for indx in range(len(counts)):
-            if '0' in counts[indx]:
-                zeroes = counts[indx]['0']
+        for indx, knts in enumerate(counts):
+            if '0' in knts:
+                zeroes = knts['0']
             else:
                 zeroes = 0
             if zeroes < least_zeroes[1]:
@@ -113,6 +122,58 @@ class Image(object):
               (best, least_zeroes[1], ones, twos, ones * twos))
         return ones * twos
 
+    def decode(self):
+        "Decode the layers"
+
+        # 1. if there are no layers, this is pretty easy
+        if not self.layers:
+            return None
+
+        # 2. Start with the first layer
+        decoded = self.layers[0]
+
+        # 3. Loop through the remaining layers
+        for lindx in range(1, len(self.layers) - 1):
+
+            # 4. Loop for all the pixels
+            nxt = []
+            for pindx, pixel in enumerate(decoded):
+
+                # 5. If the pixel is transparent, get the pixel from the next layer
+                if pixel == PIXEL_TRANS:
+                    nxt.append(self.layers[lindx+1][pindx])
+                else:
+                    nxt.append(pixel)
+            decoded = ''.join(nxt)
+
+        # 6. Return the decoded image (as a single string)
+        return decoded
+
+    def part_two(self):
+        "Return the visual image of the DIOS password"
+
+        # 1. Decode the layers
+        decoded = self.decode()
+        #print("decoded=%s" % (decoded))
+        if not decoded:
+            return None
+
+        # 2. Transform into display characters
+        display = decoded
+        for pixel in PIXELS:
+            display = display.replace(pixel, PIXEL_DISPLAY[pixel])
+
+        # 3 Reformat into rows
+        chunk_size = self.width
+        assert len(display) % chunk_size == 0
+        reformatted = []
+        while display:
+            row = display[:chunk_size]
+            reformatted.append(row)
+            display = display[chunk_size:]
+
+        # 4. Return decoded image
+        return '\n'.join(reformatted)
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
@@ -121,5 +182,5 @@ if __name__ == '__main__':
     pass
 
 # ======================================================================
-# end                           u o m a p . p y                      end
+# end                           i m a g e . p y                      end
 # ======================================================================

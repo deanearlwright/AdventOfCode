@@ -10,9 +10,8 @@ proj.file-list = [loc('aoc_si.py'),
                   loc('prob_one.txt'),
                   loc('prob_two.txt'),
                   loc('sample.txt'),
-                  loc('test/test_image.py'),
-                  loc('trace.txt')]
+                  loc('test/test_image.py')]
 proj.file-type = 'shared'
 proj.launch-config = {loc('aoc_si.py'): ('project',
-        (u'-p1 -v input.txt',
+        (u'-p2 -v input.txt',
          ''))}
