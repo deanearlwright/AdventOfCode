@@ -16,6 +16,8 @@
 import argparse
 import sys
 
+import image
+
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -54,12 +56,14 @@ def part_one(args, input_lines):
     "Process part one of the puzzle"
 
     # 1. Create the image of the password
-    pwsd = image.Image(width=25, height=6, text=input_lines[0])
+    pswd = image.Image(width=25, height=6, text=input_lines[0])
+    if args.verbose:
+        print('Number of layers = %d' % len(pswd.layers))
 
     # 2. Get the number of ones times twos in the layer with the most zeroes
     solution = pswd.part_one()
     if solution is not None:
-        print("ones times twos are = %d" % (solution))
+        print("solution (ones times twos) = %d" % (solution))
     else:
         print("Unable to determine solution")
 
@@ -75,17 +79,17 @@ def part_two(args, input_lines):
     "Process part two of the puzzle"
 
     # 1. Create the image of the password
-    pwsd = image.Image(width=3, height=2, text=input_lines[0])
+    pswd = image.Image(width=3, height=2, text=input_lines[0])
+    if args.verbose:
+        print('Number of layers = %d' % len(pswd.layers))
+        print('Layers = %s' % pswd.layers)
 
     # 2. Get the number of ones times twos in the layer with the most zeroes
     solution = pswd.part_one()
     if solution is not None:
-        print("ones times twos are = %d" % (solution))
+        print("solution (ones times twos) = %d" % (solution))
     else:
         print("Unable to determine solution")
-
-    # 3. Return result
-    return solution is not None
 
     # 3. Return result
     return solution is not None

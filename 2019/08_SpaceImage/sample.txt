@@ -1,5 +1,5 @@
-# --- Day 7: Amplification Circuit ---
+# --- Day 8: Space Image Format ---
 
-# Max thruster signal 43210 (from phase setting sequence 4,3,2,1,0):
+# width = 3, height = 2, layers = 2, solution = 2
 
-3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0
+123456789012
