@@ -1,0 +1,11 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_ms.py'),
+                  loc('asteroids.py'),
+                  loc('prob_one.txt'),
+                  loc('test/test_asteroids.py')]
+proj.file-type = 'shared'
