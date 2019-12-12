@@ -61,7 +61,7 @@ def part_one(args, input_lines):
     if not solution:
         print("Unable to determine maximum number of asteroids")
     else:
-        print("Maximum asteroids can be detected = %d" % (solution))
+        print("Maximum asteroids that can be detected is %d at %s" % (solution))
 
     # 3. Return result
     return solution is not None
