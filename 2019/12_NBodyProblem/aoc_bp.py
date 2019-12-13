@@ -79,12 +79,11 @@ def part_two(args, input_lines):
     # 1. Create the moons
     bodies = moons.Moons(text=input_lines)
 
-    # 2. Run the moon for a specified number of steps
-    steps = bodies.run(watch=args.verbose, steps=args.maxlime)
+    # 2. Run the moon for a specified number of steps or until we repeat
+    solution = bodies.run(watch=args.verbose, steps=args.maxtime, zero=True)
 
     # 3. Get the total energy in the system
-    solution = bodies.total_energy()
-    print("Total energy in the system after %d steps is %d" % (steps, solution))
+    print("It takes %d steps to react the first state that exactly matches a previous state" % (solution))
 
     # 4. Return result
     return solution is not None

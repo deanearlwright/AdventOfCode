@@ -13,11 +13,21 @@
 # ----------------------------------------------------------------------
 #                                                                 import
 # ----------------------------------------------------------------------
+from math import gcd
+
 import moon
 
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
+
+# ----------------------------------------------------------------------
+#                                                                utility
+# ----------------------------------------------------------------------
+
+def lcm(numa, numb):
+    """Return lowest common multiple."""
+    return numa * numb // gcd(numa, numb)
 
 # ======================================================================
 #                                                                  Moons
@@ -31,6 +41,7 @@ class Moons():
 
         # 1. Start with very few moons
         self.moons = []
+        self.zeroes = [0, 0, 0]
 
         # 2. If we have text, create moons and add to list
         if text is not None:
@@ -65,12 +76,12 @@ class Moons():
         # 1. Start with nothing
         return sum([_.energy() for _ in self.moons])
 
-    def run(self, watch=False, steps=0):
+    def run(self, watch=False, steps=0, zero=False):
         "Run the system for a specified number of steps"
 
         # 1. Loop until number of steps reached
         tick = 0
-        while steps < 0 or tick < steps:
+        while steps <= 0 or tick < steps:
 
             # 2. Loop for each of the moons
             for moon_num, one_moon in enumerate(self.moons):
@@ -95,8 +106,29 @@ class Moons():
                 print("After %d steps:" % (tick))
                 print(str(self))
 
+            # 9. Check if zero velocity state reached
+            if zero:
+                zeroes = self.zero()
+                for dim in range(3):
+                    if self.zeroes[dim] == 0 and zeroes[dim]:
+                        self.zeroes[dim] = tick
+                if all(self.zeroes[_] > 0 for _ in range(3)):
+                    #print("Found periods for all three dimensions at the %d step" % (tick))
+                    #print("x=%d y=%d, z=%d" % (self.zeroes[0], self.zeroes[1], self.zeroes[2]))
+                    zlcm = lcm(lcm(self.zeroes[0], self.zeroes[1]), self.zeroes[2])
+                    #print("Least common multiple = %d, twice = %d" % (zlcm, zlcm*2))
+                    return zlcm*2
+
         # 4. Return number of steps
         return tick
+
+    def zero(self):
+        "Return True of all the velocities are zero"
+
+        return [all([_.zero(0) for _ in self.moons]),
+                all([_.zero(1) for _ in self.moons]),
+                all([_.zero(2) for _ in self.moons])]
+
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

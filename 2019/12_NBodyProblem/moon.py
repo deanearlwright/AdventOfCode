@@ -91,6 +91,16 @@ class Moon():
         return (abs(self.pos[0]) + abs(self.pos[1]) + abs(self.pos[2])) * \
                (abs(self.vel[0]) + abs(self.vel[1]) + abs(self.vel[2]))
 
+    def stopped(self):
+        "Return True of all the velocities are zero"
+
+        return all([0 == _ for _ in self.vel])
+
+    def zero(self, dim):
+        "Return True if the velocities in the specified dimension is zero"
+
+        return 0 == self.vel[dim]
+
 # ----------------------------------------------------------------------
 #                                                  module initialization
 # ----------------------------------------------------------------------

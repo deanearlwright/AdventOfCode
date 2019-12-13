@@ -42,6 +42,7 @@ class TestMoon(unittest.TestCase):  # pylint: disable=R0904
 
         # 3. Check methods
         self.assertEqual(mymoon.energy(), 0)
+        self.assertEqual(mymoon.stopped(), True)
         self.assertEqual(str(mymoon),
                          'pos=<x=  0, y=  0, z=  0>, vel=<x=  0, y=  0, z=  0>, nrg=   0')
 
@@ -57,6 +58,7 @@ class TestMoon(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(mymoon.delta, [0, 0, 0])
 
         # 3. Check methods
+        self.assertEqual(mymoon.stopped(), False)
         self.assertEqual(mymoon.energy(), 36)
         self.assertEqual(str(mymoon),
                          'pos=<x=  2, y= -1, z= -3>, vel=<x=  3, y= -2, z= -1>, nrg=  36')
@@ -73,6 +75,7 @@ class TestMoon(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(mymoon.delta, [0, 0, 0])
 
         # 3. Check methods
+        self.assertEqual(mymoon.stopped(), True)
         self.assertEqual(mymoon.energy(), 0)
         self.assertEqual(str(mymoon),
                          'pos=<x= -1, y=  0, z=  2>, vel=<x=  0, y=  0, z=  0>, nrg=   0')
@@ -99,9 +102,11 @@ class TestMoon(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(ganymede.pos, (4, 4, 6))
         self.assertEqual(ganymede.vel, (1, 0, -1))
         self.assertEqual(ganymede.delta, [0, 0, 0])
+        self.assertEqual(ganymede.stopped(), False)
         self.assertEqual(callisto.pos, (4, 4, 3))
         self.assertEqual(callisto.vel, (-1, 0, 1))
         self.assertEqual(callisto.delta, [0, 0, 0])
+        self.assertEqual(callisto.stopped(), False)
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
