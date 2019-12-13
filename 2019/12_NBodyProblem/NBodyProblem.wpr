@@ -1,0 +1,18 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_bp.py'),
+                  loc('moon.py'),
+                  loc('moons.py'),
+                  loc('prob_one.txt'),
+                  loc('sample10.txt'),
+                  loc('sample100.txt'),
+                  loc('test/test_moon.py'),
+                  loc('test/test_moons.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_bp.py'): ('project',
+        (u'-p1 -t1000 input.txt',
+         ''))}
