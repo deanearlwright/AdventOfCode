@@ -16,6 +16,7 @@
 import argparse
 import sys
 import asteroids
+import laser
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -81,11 +82,26 @@ def part_two(args, input_lines):
     solution = a_map.maximum()
     if not solution:
         print("Unable to determine maximum number of asteroids")
-    else:
-        print("Maximum asteroids can be detected = %d at (%d,%d)" %
-              (solution[0], solution[1][0], solution[1][1]))
+        return False
 
-    # 3. Return result
+    print("Maximum asteroids can be detected = %d at (%d,%d)" %
+          (solution[0], solution[1][0], solution[1][1]))
+
+    # 3. Put a laser there
+    mylaser = laser.Laser(center=solution[1], text=input_lines)
+
+    # 4. Go shoot 'em up
+    loc = mylaser.shoot_until(number=args.maxtime, verbose=args.verbose)
+
+    # 5. Announce the result
+    if loc is not None:
+        solution = 100 * loc[0] + loc[1]
+        print("Shot the %d asteroid at %s, solution is %d" %
+              (args.maxtime, loc, solution))
+    else:
+        solution = None
+
+    # 6. Return result
     return solution is not None
 
 # ----------------------------------------------------------------------

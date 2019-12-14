@@ -8,7 +8,7 @@
 # ======================================================================
 #                    t e s t _ a s t e r o i d s . p y
 # ======================================================================
-"Test astroid map for Advent of Code 2019 day 10, Monitoring Station"
+"Test computer for Advent of Code 2019 day 10, Monitoring Station"
 
 # ----------------------------------------------------------------------
 #                                                                 import

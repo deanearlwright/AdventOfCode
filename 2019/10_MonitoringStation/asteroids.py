@@ -8,7 +8,7 @@
 # ======================================================================
 #                           a s t e r o i d s . p y
 # ======================================================================
-"Computer for Monitoring Station problem for Advent of Code 2018 Day 10"
+"Computer for Monitoring Station problem for Advent of Code 2019 Day 10"
 
 # ----------------------------------------------------------------------
 #                                                                 import
@@ -60,7 +60,7 @@ class Asteroids():
         # 1. Loop for the rows
         for row_num, row in enumerate(self.amap):
             if verbose:
-                print("Processing row %3d: %s", (row_num, row))
+                print("Processing row %3d: %s" % (row_num, row))
 
             # 3. All asteroids on this row can see those on the next row
             self.add_next_row(row_num)
@@ -260,7 +260,6 @@ class Asteroids():
 
         # 6. Return all the counts
         return '\n'.join(result)
-
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

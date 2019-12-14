@@ -6,11 +6,15 @@
 [project attributes]
 proj.file-list = [loc('aoc_ms.py'),
                   loc('asteroids.py'),
+                  loc('laser.py'),
                   loc('prob_one.txt'),
                   loc('prob_two.txt'),
+                  loc('quadrant.py'),
                   loc('sample.txt'),
-                  loc('test/test_asteroids.py')]
+                  loc('test/test_asteroids.py'),
+                  loc('test/test_gradrant.py'),
+                  loc('test/test_laser.py')]
 proj.file-type = 'shared'
 proj.launch-config = {loc('aoc_ms.py'): ('project',
-        (u'-p1 input.txt',
+        (u'-p2 -v -t200 input.txt',
          ''))}
