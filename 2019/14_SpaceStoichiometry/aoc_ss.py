@@ -1,14 +1,14 @@
 # ======================================================================
-#  Care Package
-#   Advent of Code 2019 Day 13 -- Eric Wastl -- https://adventofcode.com
+#  Space Stoichiometry
+#   Advent of Code 2019 Day 14 -- Eric Wastl -- https://adventofcode.com
 #
 # Computer simulation by Dr. Dean Earl Wright III
 # ======================================================================
 
 # ======================================================================
-#                           a o c _ s p . p y
+#                           a o c _ s s . p y
 # ======================================================================
-"Solve the Care Package problem for Advent of Code 2019 day 13"
+"Solve the N-Body Problem problem for Advent of Code 2019 day 12"
 
 # ----------------------------------------------------------------------
 #                                                                 import
@@ -16,8 +16,7 @@
 import argparse
 import sys
 
-import arcade
-import intcode
+import nanofactory
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -32,8 +31,8 @@ def parse_command_line():
     "Parse the command line options"
 
     # 1. Create the command line parser
-    desc = 'Care Package - day 13 of Advent of Code 2019'
-    sample = 'sample: python aoc_cp.py input.txt'
+    desc = 'Space Stoichiometry - day 14 of Advent of Code 2019'
+    sample = 'sample: python aoc_ss.py input.txt'
     parser = argparse.ArgumentParser(description=desc,
                                      epilog=sample)
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
@@ -56,17 +55,19 @@ def parse_command_line():
 def part_one(args, input_lines):
     "Process part one of the puzzle"
 
-    # 1. Create the arcade game
-    game = arcade.Arcade(text=input_lines[0])
+    # 1. Create the factory
+    factory = nanofactory.NanoFactory(text=input_lines)
 
-    # 2. Get the number of block tiles on the screen when the game exits
-    halted = game.run_demo(watch=args.verbose)
-    if halted != intcode.STOP_HLT:
-        print("Game stopped unexpectively, reason = %d" % (halted))
-        solution = None
+    # 2. Produced the desired item and quanity
+    DESIRED = '1 FUEL'
+    produced = factory.produce(DESIRED, watch=args.verbose)
+    if produced:
+        solution = factory.ore
+        print("The amount of ORE required to produce exactly %s is %d" %
+              (DESIRED, solution))
     else:
-        solution = game.block_tiles_on_the_screen()
-        print("There were %d block tiles on the screen when the game exited" % (solution))
+        solution = None
+        print("Unable to produce exactly %s" % (DESIRED))
 
     # 3. Return result
     return solution is not None
@@ -79,17 +80,22 @@ def part_one(args, input_lines):
 def part_two(args, input_lines):
     "Process part two of the puzzle"
 
-    # 1. Create the arcade game
-    game = arcade.Arcade(text=input_lines[0], free=True)
+    # 1. Create the factory
+    factory = nanofactory.NanoFactory(text=input_lines)
 
-    # 2. Get the number of block tiles on the screen when the game exits
-    halted = game.run_game(watch=args.verbose)
-    if halted != intcode.STOP_HLT:
-        print("Game stopped unexpectively, reason = %d" % (halted))
-        solution = None
+    # 2. Produced the desired item and quanity
+    DESIRED = '1 FUEL'
+    produced = factory.produce(DESIRED)
+    if produced:
+        solution = factory.ore
+        print("The amount of ORE required to produce exactly %s is %d" %
+              (DESIRED, solution))
     else:
-        solution = game.score
-        print("You score was %d when the game exited" % (solution))
+        solution = None
+        print("Unable to produce exactly %s" % (DESIRED))
+
+    # 3. Return result
+    return solution is not None
 
     # 3. Return result
     return solution is not None
@@ -137,7 +143,7 @@ def from_text(text):
 
 
 def main():
-    """Read the Care Package problem and solve it"""
+    """Read the Space Stoichiometry Problem and solve it"""
 
     # 1. Get the command line options
     args = parse_command_line()
@@ -164,5 +170,5 @@ if __name__ == '__main__':
     main()
 
 # ======================================================================
-# end                         a o c _ c p . p y                      end
+# end                         a o c _ s s . p y                      end
 # ======================================================================

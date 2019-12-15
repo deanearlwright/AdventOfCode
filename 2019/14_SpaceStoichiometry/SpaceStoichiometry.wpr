@@ -1,0 +1,16 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_ss.py'),
+                  loc('nanofactory.py'),
+                  loc('reaction.py'),
+                  loc('Sample.txt'),
+                  loc('test/test_nanofactory.py'),
+                  loc('test/test_reaction.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_ss.py'): ('project',
+        (u'-p1 input.txt',
+         ''))}
