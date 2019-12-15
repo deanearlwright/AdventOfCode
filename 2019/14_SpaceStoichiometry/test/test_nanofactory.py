@@ -70,7 +70,7 @@ EXP4_TEXT = [
     '176 ORE => 6 VJHF'
 ]
 EXP4_ORE = 180697
-EXP3_TRILLION = 82892753
+EXP4_TRILLION = 5586022
 
 EXP5_TEXT = [
     '171 ORE => 8 CNZTR',
@@ -93,6 +93,7 @@ EXP5_TEXT = [
     '5 BHXH, 4 VRPVC => 5 LTCX'
 ]
 EXP5_ORE = 2210736
+EXP5_TRILLION = 460664
 
 # ======================================================================
 #                                                        TestNanoFactory

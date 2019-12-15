@@ -55,6 +55,22 @@ class NanoFactory():
         self.resources = {}
         self.ore = 0
 
+    def any_leftovers(self):
+        "Return True if there are left over resources"
+
+        # 1. Assume there are none
+        result = False
+
+        # 2. Loop over any resources we may have
+        for number in self.resources.values():
+
+            # 3. If we have some of this one, Return True
+            if number > 0:
+                result = True
+                break
+
+        # 4. Return True if there are left over resources
+        return result
 
     def produce(self, desired, watch=False):
         "Have the factory produce the desired item at the indicated quanity"
@@ -109,29 +125,56 @@ class NanoFactory():
         # 3. And return success
         return True
 
-    def fuel_per_trillion(self, watch=True):
+    def fuel_per_trillion(self, watch=False):
         "Determine amount of fuel that can be produced with one trillion ore"
 
         # 1. Keep track of ore for fuel
-        ore_for_fuels = {}
+        ore_for_fuel = {}
+        fuel_No_leftovers = 0
 
-        # 2. Determine cost for one fuel
-        assert self.produce('1 FUEL')
-        ore_for_one = self.ore
-        guess = TRILLION//ore_for_one
+        # 2. Loop until we find a fuel amount that generates no left-overs
+        while True:
+
+            # 3. Generate one more fuel
+            assert self.produce('1 FUEL')
+
+            # 4. Save it
+            fuel_No_leftovers += 1
+            ore_for_fuel[fuel_No_leftovers] = self.ore
+            if watch:
+                print("Producing %d FUEL takes %d ORE" % (fuel_No_leftovers, self.ore))
+
+            # 5. If there are no left overs, we have all that we need
+            if not self.any_leftovers():
+                break
+
+        # 6. Compute max ore used with no leftovers
         if watch:
-            print("Ore cost for single FUEL is %d, initial guess = %d" %
-                  (ore_for_one, guess))
-
-        # 3. Determine cost at the guess level
-        self.reset()
-        assert self.produce('%d FUEL' % (guess))
-        ore_for_guess = self.ore
+            print("Producing %d FUEL has no left over resources" % (fuel_No_leftovers))
+        ore_no_leftovers = self.ore
+        times_no_leftovers = TRILLION // ore_no_leftovers
+        total_fuel = fuel_No_leftovers * times_no_leftovers
+        total_ore = ore_no_leftovers * times_no_leftovers
+        remaining_ore = TRILLION - total_ore
         if watch:
-            print("Ore cost for %d FUEL is %d" %
-                  (guess, ore_for_quess))
+            print("Producing %d FUEL %d times would produce %d FUEL with %d ORE remaining" %
+                  (fuel_No_leftovers, times_no_leftovers, total_fuel, remaining_ore))
 
-        return guess
+        # 7. Find a production FUEL number to use up the last of the ore
+        extra_fuel = 0
+        extra_ore = 0
+        skeys = sorted(ore_for_fuel)
+        for key in skeys:
+            if ore_for_fuel[key] < remaining_ore:
+                extra_fuel = key
+                extra_ore = ore_for_fuel[key]
+
+        # 8. Compute total_fuel we can produce
+        total_fuel += extra_fuel
+        if watch:
+            print("An additional %d FUEL can be produced using %d ORE for a total of %d FUEL" %
+                  (extra_fuel, extra_ore, total_fuel))
+        return total_fuel
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
