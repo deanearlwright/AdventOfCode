@@ -21,6 +21,8 @@ import reaction
 # ----------------------------------------------------------------------
 ORE = "ORE"
 
+TRILLION = 1000000000000
+
 # ======================================================================
 #                                                            NanoFactory
 # ======================================================================
@@ -47,6 +49,12 @@ class NanoFactory():
 
                 # 5. Add this reaction to the list
                 self.recipes[recipe.produces] = recipe
+
+    def reset(self):
+        "Clear out previous production"
+        self.resources = {}
+        self.ore = 0
+
 
     def produce(self, desired, watch=False):
         "Have the factory produce the desired item at the indicated quanity"
@@ -101,6 +109,29 @@ class NanoFactory():
         # 3. And return success
         return True
 
+    def fuel_per_trillion(self, watch=True):
+        "Determine amount of fuel that can be produced with one trillion ore"
+
+        # 1. Keep track of ore for fuel
+        ore_for_fuels = {}
+
+        # 2. Determine cost for one fuel
+        assert self.produce('1 FUEL')
+        ore_for_one = self.ore
+        guess = TRILLION//ore_for_one
+        if watch:
+            print("Ore cost for single FUEL is %d, initial guess = %d" %
+                  (ore_for_one, guess))
+
+        # 3. Determine cost at the guess level
+        self.reset()
+        assert self.produce('%d FUEL' % (guess))
+        ore_for_guess = self.ore
+        if watch:
+            print("Ore cost for %d FUEL is %d" %
+                  (guess, ore_for_quess))
+
+        return guess
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

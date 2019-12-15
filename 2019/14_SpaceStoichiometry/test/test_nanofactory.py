@@ -53,6 +53,7 @@ EXP3_TEXT = [
     '3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF => 8 KHKGT'
 ]
 EXP3_ORE = 13312
+EXP3_TRILLION = 82892753
 
 EXP4_TEXT = [
     '2 VPVL, 7 FWMGM, 2 CXFTF, 11 MNCFX => 1 STKFG',
@@ -69,6 +70,7 @@ EXP4_TEXT = [
     '176 ORE => 6 VJHF'
 ]
 EXP4_ORE = 180697
+EXP3_TRILLION = 82892753
 
 EXP5_TEXT = [
     '171 ORE => 8 CNZTR',
@@ -154,7 +156,7 @@ class TestNanoFactory(unittest.TestCase):  # pylint: disable=R0904
         myfactory.ore = 0
 
     def test_examples(self):
-        """Test NanoFactory object creation with text"""
+        """Test NanoFactory examples"""
 
         # 1. Create and run factory for example 1
         myfactory = nanofactory.NanoFactory(text=EXP1_TEXT)
@@ -181,6 +183,20 @@ class TestNanoFactory(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(myfactory.produce('1 FUEL'), True)
         self.assertEqual(myfactory.ore, EXP5_ORE)
 
+    def test_trillion(self):
+        """Test NanoFactory fuel per one trillion ore"""
+
+        # 1. Create and get fuel amount for example 3
+        myfactory = nanofactory.NanoFactory(text=EXP3_TEXT)
+        self.assertEqual(myfactory.fuel_per_trillion(), EXP3_TRILLION)
+
+        # 2. Create and get fuel amount for example 4
+        myfactory = nanofactory.NanoFactory(text=EXP4_TEXT)
+        self.assertEqual(myfactory.fuel_per_trillion(), EXP4_TRILLION)
+
+        # 3. Create and get fuel amount for example 5
+        myfactory = nanofactory.NanoFactory(text=EXP5_TEXT)
+        self.assertEqual(myfactory.fuel_per_trillion(), EXP5_TRILLION)
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

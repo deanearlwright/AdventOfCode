@@ -6,6 +6,7 @@
 [project attributes]
 proj.file-list = [loc('aoc_ss.py'),
                   loc('nanofactory.py'),
+                  loc('prob_two.txt'),
                   loc('reaction.py'),
                   loc('Sample.txt'),
                   loc('test/test_nanofactory.py'),
