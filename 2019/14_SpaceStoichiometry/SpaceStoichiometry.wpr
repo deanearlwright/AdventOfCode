@@ -8,10 +8,10 @@ proj.file-list = [loc('aoc_ss.py'),
                   loc('nanofactory.py'),
                   loc('prob_two.txt'),
                   loc('reaction.py'),
-                  loc('Sample.txt'),
+                  loc('sample.txt'),
                   loc('test/test_nanofactory.py'),
                   loc('test/test_reaction.py')]
 proj.file-type = 'shared'
 proj.launch-config = {loc('aoc_ss.py'): ('project',
-        (u'-p1 input.txt',
+        (u'-p2 -v example3.txt',
          ''))}

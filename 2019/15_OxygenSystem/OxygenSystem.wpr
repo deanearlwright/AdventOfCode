@@ -4,5 +4,13 @@
 # Wing IDE project file                                          #
 ##################################################################
 [project attributes]
-proj.file-list = [loc('prob_one.txt')]
+proj.file-list = [loc('aoc_os.py'),
+                  loc('droid.py'),
+                  loc('intcode.py'),
+                  loc('location.py'),
+                  loc('prob_one.txt'),
+                  loc('ship.py'),
+                  loc('test/test_droid.py'),
+                  loc('test/test_location.py'),
+                  loc('test/test_ship.py')]
 proj.file-type = 'shared'

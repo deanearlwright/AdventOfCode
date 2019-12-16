@@ -116,7 +116,11 @@ class NanoFactory():
         if watch:
             print("Following recipe: %s" % str(recipe))
         for in_item in recipe.requires:
+            if watch:
+                print("Looking for %s in recipe: %s" % (in_item, str(recipe)))
             if not self.produce(in_item):
+                if watch:
+                    print("Unable to produce %s in recipe: %s" % (in_item, str(recipe)))
                 return False
 
         # 2. We have everything, Cook it up
@@ -130,37 +134,42 @@ class NanoFactory():
 
         # 1. Keep track of ore for fuel
         ore_for_fuel = {}
-        fuel_No_leftovers = 0
+        fuel_no_leftovers = 0
 
         # 2. Loop until we find a fuel amount that generates no left-overs
-        while True:
+        while self.ore < TRILLION:
 
             # 3. Generate one more fuel
             assert self.produce('1 FUEL')
 
             # 4. Save it
-            fuel_No_leftovers += 1
-            ore_for_fuel[fuel_No_leftovers] = self.ore
+            fuel_no_leftovers += 1
+            ore_for_fuel[fuel_no_leftovers] = self.ore
             if watch:
-                print("Producing %d FUEL takes %d ORE" % (fuel_No_leftovers, self.ore))
+                print("Producing %d FUEL takes %d ORE" % (fuel_no_leftovers, self.ore))
 
             # 5. If there are no left overs, we have all that we need
             if not self.any_leftovers():
                 break
 
-        # 6. Compute max ore used with no leftovers
+        # 6. If no production had no leftovers
+        if self.ore >= TRILLION:
+            fuel_no_leftovers -= 1
+            return ore_for_fuel[fuel_no_leftovers]
+
+        # 7. Compute max ore used with no leftovers
         if watch:
-            print("Producing %d FUEL has no left over resources" % (fuel_No_leftovers))
+            print("Producing %d FUEL has no left over resources" % (fuel_no_leftovers))
         ore_no_leftovers = self.ore
         times_no_leftovers = TRILLION // ore_no_leftovers
-        total_fuel = fuel_No_leftovers * times_no_leftovers
+        total_fuel = fuel_no_leftovers * times_no_leftovers
         total_ore = ore_no_leftovers * times_no_leftovers
         remaining_ore = TRILLION - total_ore
         if watch:
             print("Producing %d FUEL %d times would produce %d FUEL with %d ORE remaining" %
-                  (fuel_No_leftovers, times_no_leftovers, total_fuel, remaining_ore))
+                  (fuel_no_leftovers, times_no_leftovers, total_fuel, remaining_ore))
 
-        # 7. Find a production FUEL number to use up the last of the ore
+        # 8. Find a production FUEL number to use up the last of the ore
         extra_fuel = 0
         extra_ore = 0
         skeys = sorted(ore_for_fuel)
@@ -169,7 +178,7 @@ class NanoFactory():
                 extra_fuel = key
                 extra_ore = ore_for_fuel[key]
 
-        # 8. Compute total_fuel we can produce
+        # 9. Compute total_fuel we can produce
         total_fuel += extra_fuel
         if watch:
             print("An additional %d FUEL can be produced using %d ORE for a total of %d FUEL" %

@@ -1,14 +1,14 @@
 # ======================================================================
-#  Space Stoichiometry
-#   Advent of Code 2019 Day 14 -- Eric Wastl -- https://adventofcode.com
+#  Oxygen System
+#   Advent of Code 2019 Day 15 -- Eric Wastl -- https://adventofcode.com
 #
 # Computer simulation by Dr. Dean Earl Wright III
 # ======================================================================
 
 # ======================================================================
-#                           a o c _ s s . p y
+#                           a o c _ o s . p y
 # ======================================================================
-"Solve the N-Body Problem problem for Advent of Code 2019 day 12"
+"Solve the Oxygen System problem for Advent of Code 2019 day 15"
 
 # ----------------------------------------------------------------------
 #                                                                 import
@@ -16,7 +16,8 @@
 import argparse
 import sys
 
-import nanofactory
+import driod
+import intcode
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -31,8 +32,8 @@ def parse_command_line():
     "Parse the command line options"
 
     # 1. Create the command line parser
-    desc = 'Space Stoichiometry - day 14 of Advent of Code 2019'
-    sample = 'sample: python aoc_ss.py input.txt'
+    desc = 'Oxygen System - day 15 of Advent of Code 2019'
+    sample = 'sample: python aoc_os.py input.txt'
     parser = argparse.ArgumentParser(description=desc,
                                      epilog=sample)
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
@@ -51,22 +52,20 @@ def parse_command_line():
 #                                                               part_one
 # ----------------------------------------------------------------------
 
-
 def part_one(args, input_lines):
     "Process part one of the puzzle"
 
-    # 1. Create the factory
-    factory = nanofactory.NanoFactory(text=input_lines)
+    # 1. Create the droid
+    huey = droid.Droid(text=input_lines[0])
 
-    # 2. Produced the desired item and quanity
-    produced = factory.produce('1 FUEL', watch=args.verbose)
-    if produced:
-        solution = factory.ore
-        print("The amount of ORE required to produce exactly %s is %d" %
-              ('1 FUEL', solution))
-    else:
+    # 2. Get the maximum of the amplifiers without feedback
+    halted = droid.run(watch=args.verbose)
+    if halted != intcode.STOP_HLT:
+        print("The repair droid, Huey, stopped unexpectively, reason = %d" % (halted))
         solution = None
-        print("Unable to produce exactly %s" % ('1 FUEL'))
+    else:
+        solution = len(droid.oxygen_path())
+        print("The repair droid, Huey, found a path of length %d to the oxygen system" % (solution))
 
     # 3. Return result
     return solution is not None
@@ -79,21 +78,20 @@ def part_one(args, input_lines):
 def part_two(args, input_lines):
     "Process part two of the puzzle"
 
-    # 1. Create the factory
-    factory = nanofactory.NanoFactory(text=input_lines)
+    # 1. Create the droid
+    huey = droid.Droid(text=input_lines[0])
 
-    # 2. Determine the maximum FUEL that can be produced from a trillion ORE
-    solution = factory.fuel_per_trillion(watch=args.verbose)
-    if solution is not None:
-        print("The maximal amount of FUEL that can be produded with a trillion ORE is %d" %
-              (solution))
-    else:
+    # 2. Get the maximum of the amplifiers without feedback
+    halted = droid.run(watch=args.verbose)
+    if halted != intcode.STOP_HLT:
+        print("The repair droid, Huey, stopped unexpectively, reason = %d" % (halted))
         solution = None
-        print("Unable to produce FUEL")
+    else:
+        solution = droid.path_length()
+        print("The repair droid, Huey, found a path of length %d to the oxygen system" % (solution))
 
     # 3. Return result
     return solution is not None
-
 
 # ----------------------------------------------------------------------
 #                                                              from_file
@@ -138,7 +136,7 @@ def from_text(text):
 
 
 def main():
-    """Read the Space Stoichiometry Problem and solve it"""
+    """Read the Oxygen System problem and solve it"""
 
     # 1. Get the command line options
     args = parse_command_line()
@@ -165,5 +163,5 @@ if __name__ == '__main__':
     main()
 
 # ======================================================================
-# end                         a o c _ s s . p y                      end
+# end                         a o c _ o s . p y                      end
 # ======================================================================
