@@ -16,7 +16,7 @@
 import argparse
 import sys
 
-import driod
+import droid
 import intcode
 
 # ----------------------------------------------------------------------
@@ -59,12 +59,12 @@ def part_one(args, input_lines):
     huey = droid.Droid(text=input_lines[0])
 
     # 2. Get the maximum of the amplifiers without feedback
-    halted = droid.run(watch=args.verbose)
-    if halted != intcode.STOP_HLT:
+    halted = huey.run(watch=args.verbose)
+    if halted != intcode.STOP_INP:
         print("The repair droid, Huey, stopped unexpectively, reason = %d" % (halted))
         solution = None
     else:
-        solution = len(droid.oxygen_path())
+        solution = len(huey.oxygen_path(watch=args.verbose))
         print("The repair droid, Huey, found a path of length %d to the oxygen system" % (solution))
 
     # 3. Return result
@@ -82,12 +82,12 @@ def part_two(args, input_lines):
     huey = droid.Droid(text=input_lines[0])
 
     # 2. Get the maximum of the amplifiers without feedback
-    halted = droid.run(watch=args.verbose)
-    if halted != intcode.STOP_HLT:
+    halted = huey.run(watch=args.verbose)
+    if halted != intcode.STOP_INP:
         print("The repair droid, Huey, stopped unexpectively, reason = %d" % (halted))
         solution = None
     else:
-        solution = droid.path_length()
+        solution = len(huey.oxygen_path())
         print("The repair droid, Huey, found a path of length %d to the oxygen system" % (solution))
 
     # 3. Return result

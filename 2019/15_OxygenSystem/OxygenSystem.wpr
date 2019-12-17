@@ -14,3 +14,6 @@ proj.file-list = [loc('aoc_os.py'),
                   loc('test/test_location.py'),
                   loc('test/test_ship.py')]
 proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_os.py'): ('project',
+        (u'-p1 input.txt',
+         ''))}

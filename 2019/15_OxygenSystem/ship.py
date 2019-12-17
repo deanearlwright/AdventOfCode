@@ -44,14 +44,14 @@ class Ship():
         max_col = -999999
         max_row = -999999
         for loc in self.area.values():
-            if pan.loc[0] < min_col:
-                min_col = pan.loc[0]
-            if pan.loc[0] > max_col:
-                max_col = pan.loc[0]
-            if pan.loc[1] < min_row:
-                min_row = pan.loc[1]
-            if pan.loc[1] > max_row:
-                max_row = pan.loc[1]
+            if loc.loc[0] < min_col:
+                min_col = loc.loc[0]
+            if loc.loc[0] > max_col:
+                max_col = loc.loc[0]
+            if loc.loc[1] < min_row:
+                min_row = loc.loc[1]
+            if loc.loc[1] > max_row:
+                max_row = loc.loc[1]
 
         # 3. Loop for all of the rows
         for row_num in range(min_row, max_row+1):
@@ -60,8 +60,8 @@ class Ship():
             # 4. Loop for all of the columns in the row
             for col_num in range(min_col, max_col+1):
                 loc = (col_num, row_num)
-                if loc in self.panels:
-                    row.append(str(self.panels[loc]))
+                if loc in self.area:
+                    row.append(str(self.area[loc]))
                 else:
                     row.append(' ')
 
@@ -71,44 +71,42 @@ class Ship():
         # 6. Return the image
         return '\n'.join(result)
 
-    def color(self, loc):
-        "Get the color of a panel"
+    def record_wall(self, loc, direction):
+        "We bumped into a wall"
 
-        # 1. If we don't have the current panel, create it
-        if loc not in self.panels:
-            self.panels[loc] = panel.Panel(loc=loc)
+        # 1. If we don't have the current location, create it
+        if loc not in self.area:
+            self.area[loc] = location.Location(loc=loc)
 
-        # 2. Return the color of the panel
-        return self.panels[loc].color()
+        # 2. Record  the wall
+        self.area[loc].set_dir(direction, location.IS_WALL)
 
-    def paint(self, loc, color):
-        "Paint a panel"
+    def record_move(self, loc, direction, new_loc, oxygen):
+        "We managed to move"
 
-        # 0. Preconditions
-        assert color in panel.COLORS
+        # 1. If we don't have the current location, create it
+        if loc not in self.area:
+            self.area[loc] = location.Location(loc=loc)
+        if new_loc not in self.area:
+            self.area[new_loc] = location.Location(loc=new_loc)
 
-        # 1. If we don't have the current panel, create it
-        if loc not in self.panels:
-            self.panels[loc] = panel.Panel(loc=loc)
+        # 2. Move forward
+        if oxygen:
+            at_fwd = location.IS_OXYGEN
+        else:
+            at_fwd = location.IS_FWD
+        self.area[loc].set_dir(direction, at_fwd)
 
-        # 2. Pain the panel
-        self.panels[loc].paint(color=color)
+        # 3. Record the reverse movement
+        self.area[new_loc].set_back(direction)
 
-    def at_least_once(self):
-        "Return the number of panels painter at least one"
+    def explore(self, loc):
+        "Return the unkown directions from this location"
+        return self.area[loc].unknown()
 
-        # 1. Start with none
-        result = 0
-
-        # 2. Loop for all the panels
-        for pan in self.panels.values():
-
-            # 3. if panel has been painted, add it to the count
-            if pan.painted:
-                result += 1
-
-        # 4. Return number of painted panels
-        return result
+    def go_back(self, loc):
+        "Return the direction to go back"
+        return self.area[loc].back()
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
