@@ -1,0 +1,18 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aii.py'),
+                  loc('aoc_sf.py'),
+                  loc('exterior.py'),
+                  loc('intcode.py'),
+                  loc('location.py'),
+                  loc('test/test_ascii.py'),
+                  loc('test/test_exterior.py'),
+                  loc('test/test_location.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_sf.py'): ('project',
+        (u'-p1 input.txt',
+         ''))}
