@@ -1,0 +1,13 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_ff.py'),
+                  loc('fft.py'),
+                  loc('test/test_fft.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_ff.py'): ('project',
+        (u'-p1 -v input.txt',
+         ''))}
