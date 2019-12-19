@@ -35,6 +35,7 @@ class AII():
         # 1. Set the initial values
         self.computer = intcode.IntCode(text=text)
         self.ext_map = []
+        self.dust = -1
 
     def __str__(self):
         return ''.join([chr(_) for _ in self.ext_map])
@@ -50,6 +51,20 @@ class AII():
 
         # 3. Return the reason for the machine stopping
         return result
+
+    def get_dust(self, watch=False, movement=None):
+        "Run the ascii program until it stops"
+
+        # 1. Run the computer until it stops
+        self.computer.alter(0, 2)
+        result = self.computer.run(watch=watch, inp=movement)
+
+        # 2. Ouput is the how much dust
+        self.dust = self.computer.outputs()
+
+        # 3. Return the reason for the machine stopping
+        return result
+
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

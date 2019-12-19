@@ -22,6 +22,13 @@ import intcode
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
+PROG = [
+    65, 44, 66, 44, 65, 44, 67, 44, 66, 44, 67, 44, 65, 44, 66, 44, 65, 44, 67, 10,
+    82, 44, 54, 44, 76, 44, 49, 48, 44, 82, 44, 56, 44, 82, 44, 56, 10,
+    82, 44, 49, 50, 44, 76, 44, 56, 44, 76, 44, 49, 48, 10,
+    82, 44, 49, 50, 44, 76, 44, 49, 48, 44, 82, 44, 54, 44, 76, 44, 49, 48, 10,
+    ord('n'), 10
+]
 
 # ----------------------------------------------------------------------
 #                                                      parse_commnd_line
@@ -61,7 +68,7 @@ def part_one(args, input_lines):
     # 2. Get the map
     halted = mapper.get_map(watch=args.verbose)
     if halted != intcode.STOP_HLT:
-        print("The ASCII computer, stopped unexpectively, reason = %d" % (halted))
+        print("The ASCII computer stopped unexpectively, reason = %d" % (halted))
         solution = None
     else:
         solution = str(mapper)
@@ -80,16 +87,16 @@ def part_two(args, input_lines):
     "Process part two of the puzzle"
 
     # 1. Create the droid
-    mapper = aii.AII(text=input_lines[0])
+    duster = aii.AII(text=input_lines[0])
 
-    # 2. Get the map
-    halted = mapper.get_map(watch=args.verbose)
+    # 2. Get the dust
+    halted = duster.get_dust(watch=args.verbose, movement=PROG)
     if halted != intcode.STOP_HLT:
-        print("The ASCII computer, stopped unexpectively, reason = %d" % (halted))
+        print("The vacuum stopped unexpectively, reason = %d, dust = %d" % (halted, duster.dust))
         solution = None
     else:
-        solution = str(aii)
-        print("The ASCII computer produced a map")
+        solution = duster.dust
+        print("The vacumm collected %s dust" % (solution))
         print(solution)
 
     # 3. Return result

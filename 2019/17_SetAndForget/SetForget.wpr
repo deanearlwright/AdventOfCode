@@ -6,13 +6,15 @@
 [project attributes]
 proj.file-list = [loc('aii.py'),
                   loc('aoc_sf.py'),
+                  loc('compress.py'),
                   loc('exterior.py'),
                   loc('intcode.py'),
                   loc('location.py'),
-                  loc('test/test_ascii.py'),
+                  loc('prob_two.txt'),
+                  loc('test/test_aii.py'),
                   loc('test/test_exterior.py'),
                   loc('test/test_location.py')]
 proj.file-type = 'shared'
 proj.launch-config = {loc('aoc_sf.py'): ('project',
-        (u'-p1 input.txt',
+        (u'-p2 input.txt',
          ''))}
