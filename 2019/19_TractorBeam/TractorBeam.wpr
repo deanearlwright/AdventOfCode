@@ -1,0 +1,13 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_tb.py'),
+                  loc('drone.py'),
+                  loc('intcode.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_tb.py'): ('project',
+        (u'-p1 -v input.txt',
+         ''))}
