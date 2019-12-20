@@ -79,7 +79,8 @@ class Ship():
             self.area[loc] = location.Location(loc=loc)
 
         # 2. Record  the wall
-        self.area[loc].set_dir(direction, location.IS_WALL)
+        self.area[loc].set_wall(direction)
+        #self.area[loc].set_dir(direction, location.IS_WALL)
 
     def record_move(self, loc, direction, new_loc, oxygen):
         "We managed to move"
@@ -107,6 +108,18 @@ class Ship():
     def go_back(self, loc):
         "Return the direction to go back"
         return self.area[loc].back()
+
+    def exits_at(self, loc):
+        "Return direction that exit the location"
+        return self.area[loc].exits_at()
+
+    def oxygen_at(self, loc):
+        "Return direction that exit the location"
+        return self.area[loc].oxygen_at()
+
+    def set_oxygen_time(self, loc, o_time):
+        "Set when oxygen reached this location"
+        self.area[loc].set_oxygen_time(o_time)
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

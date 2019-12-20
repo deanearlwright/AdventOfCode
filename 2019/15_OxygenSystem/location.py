@@ -60,6 +60,7 @@ class Location():
                      DIR_W: None,
                      DIR_E: None}
         self.dist = 0
+        self.o_time = None
 
     def __str__(self):
         return "loc: (%d,%d) N:%s, S:%s, W:%s, E:%s" % (
@@ -68,7 +69,7 @@ class Location():
             self.dirs[DIR_W], self.dirs[DIR_E])
 
     def set_dir(self, direction, value):
-        "Return the value for a direction"
+        "Set the value for a direction"
 
         # 0. Preconditions
         assert direction in DIRS
@@ -78,8 +79,18 @@ class Location():
         # 1. Set the value
         self.dirs[direction] = value
 
+    def set_wall(self, direction):
+        "Set direction as leading to a wall"
+
+        # 0. Preconditions
+        assert direction in DIRS
+        assert self.dirs[direction] is None
+
+        # 1. Set the value
+        self.dirs[direction] = IS_WALL
+
     def set_back(self, direction):
-        "Return the value for a direction"
+        "Set direction as leading to the origin"
 
         # 0. Preconditions
         assert direction in DIRS
@@ -88,7 +99,6 @@ class Location():
         # 1. Set the value
         self.dirs[REV_DIR[direction]] = IS_BACK
 
-
     def unknown(self):
         "Return the unknown directions"
         return [key for key, item in self.dirs.items() if item is None]
@@ -96,6 +106,18 @@ class Location():
     def back(self):
         "Return the reverse direction"
         return [key for key, item in self.dirs.items() if item == IS_BACK][0]
+
+    def exits_at(self):
+        "Return the direction of the exits"
+        return [key for key, item in self.dirs.items() if item is not None and item != IS_WALL]
+
+    def oxygen_at(self):
+        "Return when oxygen reached this location (if ever)"
+        return self.o_time
+
+    def set_oxygen_time(self, o_time):
+        "Set when oxygen reached this location"
+        self.o_time = o_time
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

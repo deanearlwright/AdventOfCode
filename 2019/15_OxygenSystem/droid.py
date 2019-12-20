@@ -78,7 +78,7 @@ class Droid():
     def __str__(self):
         return str(self.ship)
 
-    def run(self, watch=False, max_dist=False):
+    def run(self, watch=False, complete=False):
         "Run the droid until it stops"
 
         # 1. Assume the computer wants input
@@ -114,11 +114,12 @@ class Droid():
                               (self.state, self.loc[0], self.loc[1],
                                status, last_dir, new_loc[0], new_loc[1]))
                     if self.state == STATE_SEARCHING:
-                        if status == STATUS_FWD or max_dist:
+                        if status == STATUS_FWD:
                             self.ship.record_move(self.loc, last_dir, new_loc, False)
                         else:
                             self.ship.record_move(self.loc, last_dir, new_loc, True)
-                            self.state = STATE_FOUND
+                            if not complete:
+                                self.state = STATE_FOUND
                             self.oxygen = new_loc
                             if watch:
                                 print("Oxygen found at (%d,%d)" %
@@ -197,6 +198,49 @@ class Droid():
 
         # 7. Return the reverse path joined into a string
         return ''.join(result)
+
+    def oxygen_time(self, watch=False):
+        "Return how long it take to restore the oxygen everywhere"
+
+        # 1. Start with no one having oxygen
+        o_time = 0
+        locs = [self.oxygen]
+        total_locs = 1
+
+        # 2. Loop while there are new places
+        while locs:
+            if watch:
+                print("Time %d, %d total locations, locations to process = %d" %
+                      (o_time, total_locs, len(locs)))
+
+            # 3. Start the next generation
+            next_locs = []
+
+            # 4. Loop for the current locations
+            for loc in locs:
+
+                # 5. Record the time of oxygen here
+                self.ship.set_oxygen_time(loc, o_time)
+                total_locs += 1
+
+                # 6. Get where oxygen will flow from here
+                for e_dir in self.ship.exits_at(loc):
+                    delta = DELTA[MOVE[e_dir]]
+                    new_loc = (loc[0] + delta[0], loc[1] + delta[1])
+
+                    # 7. If no oxygen there, add it to the next list
+                    if self.ship.oxygen_at(new_loc) is None:
+                        next_locs.append(new_loc)
+
+            # 8. Set time timer tick
+            locs = next_locs
+            o_time += 1
+
+        # 9. Return time it took to oxygen to reach everywhere
+        if watch:
+            print("Final time %d, %d total locations" %
+                  (o_time - 1, total_locs))
+        return o_time - 1
 
 
 # ----------------------------------------------------------------------

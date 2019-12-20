@@ -9,11 +9,12 @@ proj.file-list = [loc('aoc_os.py'),
                   loc('intcode.py'),
                   loc('location.py'),
                   loc('prob_one.txt'),
+                  loc('prob_two.txt'),
                   loc('ship.py'),
                   loc('test/test_droid.py'),
                   loc('test/test_location.py'),
                   loc('test/test_ship.py')]
 proj.file-type = 'shared'
 proj.launch-config = {loc('aoc_os.py'): ('project',
-        (u'-p1 input.txt',
+        (u'-p2 -v input.txt',
          ''))}

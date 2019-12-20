@@ -74,7 +74,6 @@ def part_one(args, input_lines):
 #                                                               part_two
 # ----------------------------------------------------------------------
 
-
 def part_two(args, input_lines):
     "Process part two of the puzzle"
 
@@ -82,13 +81,14 @@ def part_two(args, input_lines):
     huey = droid.Droid(text=input_lines[0])
 
     # 2. Get the maximum of the amplifiers without feedback
-    halted = huey.run(watch=args.verbose)
-    if halted != intcode.STOP_INP:
+    halted = huey.run(watch=args.verbose, complete=True)
+    if halted != intcode.STOP_HLT:
         print("The repair droid, Huey, stopped unexpectively, reason = %d" % (halted))
         solution = None
     else:
-        solution = len(huey.oxygen_path())
-        print("The repair droid, Huey, found a path of length %d to the oxygen system" % (solution))
+        print("The repair droid, Huey, found %d locations" % (len(huey.ship.area)))
+        solution = huey.oxygen_time(watch=args.verbose)
+        print("The repair droid, Huey, determine that it will take %d minutes to fill the map with oxygen" % (solution))
 
     # 3. Return result
     return solution is not None
