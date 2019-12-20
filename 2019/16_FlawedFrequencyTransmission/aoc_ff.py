@@ -77,9 +77,8 @@ def part_two(args, input_lines):
     rid = fft.FFT()
 
     # 2. Transform the ingut
-    result = rid.transform(input_lines[0], watch=args.verbose)
-    solution = result[:8]
-    print("The first eight digits in the final output list is %s" % (str(solution)))
+    solution = rid.real_signal(input_lines[0], watch=args.verbose)
+    print("The eight-digits message embedded in the final output list is %s" % (str(solution)))
 
     # 3. Return result
     return solution is not None

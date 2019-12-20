@@ -14,12 +14,16 @@
 #                                                                 import
 # ----------------------------------------------------------------------
 from itertools import repeat
+from math import ceil
 
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
 BASE_PATTERN = [0, 1, 0, -1]
 DEFAULT_PHASES = 100
+DEFAULT_TIMES = 10000
+MESSAGE_SIZE = 8
+OFFSET_SIZE = 7
 
 # ======================================================================
 #                                                                    FFT
@@ -97,6 +101,45 @@ class FFT():
 
         # 3. Return just the bit we want
         return mask[1:length+1]
+
+    def real_signal(self, digits, watch=False,
+                    phases=DEFAULT_PHASES, times=DEFAULT_TIMES,
+                    msize=MESSAGE_SIZE, moffset=OFFSET_SIZE):
+        "Return the eight-digit message embedded in the final output"
+
+        # 1. if input is a string, convert to integer vector
+        if isinstance(digits, str):
+            digits = [int(c) for c in digits]
+
+        # 2. Get the message offset
+        offset = int(''.join(['0123456789'[_] for _ in digits[:moffset]]))
+        if watch:
+            print("offset = %d" % (offset))
+
+        # 3. Expand (and then contract) input message
+        exp_len = len(digits) * times
+        assert offset > exp_len / 2, "Unable to solve quickly, and I don't have time to do it slow"
+        req_len = exp_len - offset
+        copies = ceil(req_len / len(digits))
+        c_digits = digits * copies
+        c_digits = c_digits[-req_len:]
+
+        # 4. Run these digits through a very Flawed Frequency Transmission
+        rlen = len(c_digits) - 1
+        if watch:
+            print("len(digits)=%d, expanded length = %d, required length= %d, copies=%d, len(copy)=%d" %
+                  (len(digits), exp_len, req_len, copies, rlen))
+        for _ in range(0, phases):
+            d_total = 0
+            for d_num in range(rlen, -1, -1):
+                d_total += c_digits[d_num] # Look ma, no multiply
+                c_digits[d_num] = d_total % 10
+
+        # 5. Return the message
+        msg = ''.join([str(d) for d in c_digits[:msize]])
+        if watch:
+            print("final message = %s" % (msg))
+        return msg
 
 
 # ----------------------------------------------------------------------

@@ -54,6 +54,18 @@ LARGER_OUT = [
     '52432133',
 ]
 
+REAL_INP = [
+    '03036732577212944063491565474664',
+    '02935109699940807407585447034323',
+    '03081770884921959731165446850517',
+]
+
+REAL_OUT = [
+    '84462026',
+    '78725270',
+    '53553731',
+]
+
 # ======================================================================
 #                                                                TestFFT
 # ======================================================================
@@ -135,6 +147,23 @@ class TestFFT(unittest.TestCase):  # pylint: disable=R0904
                              (digits[0], digits[1], digits[2], digits[3],
                               digits[4], digits[5], digits[6], digits[7]),
                              LARGER_OUT[num])
+
+
+    def test_real_signal(self):
+        "Test transformations of real_signals"
+
+        # 1. Create a transformer
+        myfft = fft.FFT()
+
+        # 2. Loop for the three examples
+        for num in range(3):
+
+            # 3. Transform the digits
+            digits = myfft.real_signal(REAL_INP[num])
+
+            # 4. Verify the results
+            self.assertEqual(digits, REAL_OUT[num])
+
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
