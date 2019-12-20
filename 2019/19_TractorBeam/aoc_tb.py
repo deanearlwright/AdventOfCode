@@ -17,7 +17,6 @@ import argparse
 import sys
 
 import drone
-import intcode
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -60,15 +59,9 @@ def part_one(args, input_lines):
     uav = drone.Drone(text=input_lines[0])
 
     # 2. Explore the beam
-    halted = uav.explore_beam(watch=args.verbose, size=SIZE)
-    if halted != intcode.STOP_HLT:
-        print("The drone stopped unexpectively, reason = %d, points=%d" % (halted, uav.points))
-        solution = None
-    else:
-        solution = uav.points
-        print("The drone reports %d points are effected by the tractor beam" %
-              (solution))
-        print(solution)
+    solution = uav.explore_beam(watch=args.verbose, size=SIZE)
+    print("The drone reports %d points are effected by the tractor beam" %
+          (solution))
 
     # 3. Return result
     return solution is not None
@@ -84,16 +77,9 @@ def part_two(args, input_lines):
     # 1. Create the drone
     uav = drone.Drone(text=input_lines[0])
 
-    # 2. Explore the beam
-    halted = uav.explore_beam(watch=args.verbose, size=SIZE)
-    if halted != intcode.STOP_INP:
-        print("The drone stopped unexpectively, reason = %d" % (halted))
-        solution = None
-    else:
-        solution = uav.points()
-        print("The drone reports %d points are effected by the tractor beam" %
-              (solution))
-        print(solution)
+    solution = uav.find_santa_size(watch=args.verbose, size=100)
+    print("The drone reports that the beam at (%d,%d) is big enough for SANTA, %d" %
+          (solution[0], solution[1], solution[0]*10000 + solution[1]))
 
     # 3. Return result
     return solution is not None
