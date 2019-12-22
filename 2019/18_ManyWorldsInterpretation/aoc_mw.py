@@ -1,14 +1,14 @@
 # ======================================================================
-#  Oxygen System
-#   Advent of Code 2019 Day 15 -- Eric Wastl -- https://adventofcode.com
+#  Many-Worlds Interpretation
+#   Advent of Code 2019 Day 18 -- Eric Wastl -- https://adventofcode.com
 #
 # Computer simulation by Dr. Dean Earl Wright III
 # ======================================================================
 
 # ======================================================================
-#                           a o c _ o s . p y
+#                           a o c _ m w . p y
 # ======================================================================
-"Solve the Oxygen System problem for Advent of Code 2019 day 15"
+"Solve the Many-Worlds Interpretation problem for AoC 2019 day 18"
 
 # ----------------------------------------------------------------------
 #                                                                 import
@@ -16,8 +16,7 @@
 import argparse
 import sys
 
-import droid
-import intcode
+import solver
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -32,8 +31,8 @@ def parse_command_line():
     "Parse the command line options"
 
     # 1. Create the command line parser
-    desc = 'Oxygen System - day 15 of Advent of Code 2019'
-    sample = 'sample: python aoc_os.py input.txt'
+    desc = 'Many-Worlds Interpretation - day 18 of Advent of Code 2019'
+    sample = 'sample: python aoc_mw.py input.txt'
     parser = argparse.ArgumentParser(description=desc,
                                      epilog=sample)
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
@@ -55,17 +54,15 @@ def parse_command_line():
 def part_one(args, input_lines):
     "Process part one of the puzzle"
 
-    # 1. Create the droid
-    huey = droid.Droid(text=input_lines[0])
+    # 1. Create the keymaster
+    clortho = solver.Solver(text=input_lines, verbose=args.verbose)
 
     # 2. Get the maximum of the amplifiers without feedback
-    halted = huey.run(watch=args.verbose)
-    if halted != intcode.STOP_INP:
-        print("The repair droid, Huey, stopped unexpectively, reason = %d" % (halted))
-        solution = None
+    solution, _ = clortho.get_all_keys(verbose=args.verbose)
+    if solution is None:
+        print("The keymaster could not solve the vault")
     else:
-        solution = len(huey.oxygen_path(watch=args.verbose))
-        print("The repair droid, Huey, found a path of length %d to the oxygen system" % (solution))
+        print("The keymaster collected all the keys in %d steps" % (solution))
 
     # 3. Return result
     return solution is not None
@@ -77,18 +74,15 @@ def part_one(args, input_lines):
 def part_two(args, input_lines):
     "Process part two of the puzzle"
 
-    # 1. Create the droid
-    huey = droid.Droid(text=input_lines[0])
+    # 1. Create the keymaster
+    clortho = solver.Solver(text=input_lines, part2=True)
 
     # 2. Get the maximum of the amplifiers without feedback
-    halted = huey.run(watch=args.verbose, complete=True)
-    if halted != intcode.STOP_HLT:
-        print("The repair droid, Huey, stopped unexpectively, reason = %d" % (halted))
-        solution = None
+    solution, _ = clortho.get_all_keys(verbose=args.verbose)
+    if solution is None:
+        print("The keymaster could not solve the vault")
     else:
-        print("The repair droid, Huey, found %d locations" % (len(huey.ship.area)))
-        solution = huey.oxygen_time(watch=args.verbose)
-        print("The repair droid, Huey, determine that it will take %d minutes to fill the map with oxygen" % (solution))
+        print("The keymaster collected all the keys in %d steps" % (solution))
 
     # 3. Return result
     return solution is not None
@@ -121,7 +115,7 @@ def from_text(text):
         line = line.rstrip(' \r')
         if not line:
             continue
-        if line.startswith('#'):
+        if line.startswith('!'):
             continue
 
         # 4. Add the line
@@ -136,7 +130,7 @@ def from_text(text):
 
 
 def main():
-    """Read the Oxygen System problem and solve it"""
+    """Read the Many-Worlds Interpretation problem and solve it"""
 
     # 1. Get the command line options
     args = parse_command_line()
@@ -163,5 +157,5 @@ if __name__ == '__main__':
     main()
 
 # ======================================================================
-# end                         a o c _ o s . p y                      end
+# end                         a o c _ m w . p y                      end
 # ======================================================================

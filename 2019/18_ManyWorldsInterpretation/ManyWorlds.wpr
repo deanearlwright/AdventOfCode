@@ -4,4 +4,17 @@
 # Wing IDE project file                                          #
 ##################################################################
 [project attributes]
+proj.file-list = [loc('aoc_mw.py'),
+                  loc('location.py'),
+                  loc('p2example.txt'),
+                  loc('prob_two.txt'),
+                  loc('sample.txt'),
+                  loc('solver.py'),
+                  loc('test/test_location.py'),
+                  loc('test/test_solver.py'),
+                  loc('test/test_vault.py'),
+                  loc('vault.py')]
 proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_mw.py'): ('project',
+        (u'-p2 input.txt',
+         ''))}

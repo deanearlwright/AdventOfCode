@@ -1,6 +1,6 @@
 # ======================================================================
-# Oxygen System
-#   Advent of Code 2019 Day 15 -- Eric Wastl -- https://adventofcode.com
+# Many-Worlds Interpretation
+#   Advent of Code 2019 Day 18 -- Eric Wastl -- https://adventofcode.com
 #
 # Computer simulation by Dr. Dean Earl Wright III
 # ======================================================================
@@ -8,7 +8,7 @@
 # ======================================================================
 #                           l o c a t i o n . p y
 # ======================================================================
-"A ship location for Oxygen System problem Advent of Code 2019 Day 15"
+"A location in the Many-Worlds Interpretation vault for AoC 2019 Day 18"
 
 # ----------------------------------------------------------------------
 #                                                                 import
@@ -38,10 +38,8 @@ REV_DIR = {
 }
 
 IS_WALL = '#'
-IS_BACK = '<'
-IS_FWD = '>'
-IS_OXYGEN = 'O'
-IS_VALUES = set([IS_WALL, IS_BACK, IS_FWD, IS_OXYGEN])
+IS_PATH = '.'
+IS_VALUES = frozenset([IS_WALL, IS_PATH])
 
 # ======================================================================
 #                                                               Location
@@ -49,7 +47,7 @@ IS_VALUES = set([IS_WALL, IS_BACK, IS_FWD, IS_OXYGEN])
 
 
 class Location():
-    """Object representing a location in the space ship"""
+    """Object representing a location in the Neptune vault"""
 
     def __init__(self, loc=(0, 0)):
 
@@ -111,13 +109,6 @@ class Location():
         "Return the direction of the exits"
         return [key for key, item in self.dirs.items() if item is not None and item != IS_WALL]
 
-    def oxygen_at(self):
-        "Return when oxygen reached this location (if ever)"
-        return self.o_time
-
-    def set_oxygen_time(self, o_time):
-        "Set when oxygen reached this location"
-        self.o_time = o_time
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
