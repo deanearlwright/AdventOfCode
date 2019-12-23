@@ -1,0 +1,107 @@
+# ======================================================================
+# Donut Maze
+#   Advent of Code 2019 Day 20 -- Eric Wastl -- https://adventofcode.com
+#
+# Computer simulation by Dr. Dean Earl Wright III
+# ======================================================================
+
+# ======================================================================
+#                           l o c a t i o n . p y
+# ======================================================================
+"A location in the Donut Maze vault for Advent of Code 2019 Day 20"
+
+# ----------------------------------------------------------------------
+#                                                                 import
+# ----------------------------------------------------------------------
+
+# ----------------------------------------------------------------------
+#                                                              constants
+# ----------------------------------------------------------------------
+DIR_N = 'N'
+DIR_S = 'S'
+DIR_W = 'W'
+DIR_E = 'E'
+DIRS = set([DIR_N, DIR_S, DIR_W, DIR_E])
+
+DIR_LETTER = {
+    DIR_N: '^',
+    DIR_S: 'v',
+    DIR_W: '<',
+    DIR_E: '>'
+}
+
+REV_DIR = {
+    DIR_N: DIR_S,
+    DIR_S: DIR_N,
+    DIR_W: DIR_E,
+    DIR_E: DIR_W
+}
+
+IS_WALL = '#'
+IS_PATH = '.'
+IS_VALUES = frozenset([IS_WALL, IS_PATH])
+
+# ======================================================================
+#                                                               Location
+# ======================================================================
+
+
+class Location():
+    """Object representing a location in the Neptune vault"""
+
+    def __init__(self, loc=(0, 0)):
+
+        # 1. Set the initial values
+        self.loc = loc
+        self.dirs = {DIR_N: None,
+                     DIR_S: None,
+                     DIR_W: None,
+                     DIR_E: None}
+        self.dist = 0
+        self.o_time = None
+
+    def __str__(self):
+        return "loc: (%d,%d) N:%s, S:%s, W:%s, E:%s" % (
+            self.loc[0], self.loc[1],
+            self.dirs[DIR_N], self.dirs[DIR_S],
+            self.dirs[DIR_W], self.dirs[DIR_E])
+
+    def set_dir(self, direction, value):
+        "Set the value for a direction"
+
+        # 0. Preconditions
+        assert direction in DIRS
+        assert value in IS_VALUES
+        assert self.dirs[direction] is None
+
+        # 1. Set the value
+        self.dirs[direction] = value
+
+    def set_wall(self, direction):
+        "Set direction as leading to a wall"
+
+        # 0. Preconditions
+        assert direction in DIRS
+        assert self.dirs[direction] is None
+
+        # 1. Set the value
+        self.dirs[direction] = IS_WALL
+
+    def unknown(self):
+        "Return the unknown directions"
+        return [key for key, item in self.dirs.items() if item is None]
+
+    def exits_at(self):
+        "Return the direction of the exits"
+        return [key for key, item in self.dirs.items() if item is not None and item != IS_WALL]
+
+
+# ----------------------------------------------------------------------
+#                                                  module initialization
+# ----------------------------------------------------------------------
+if __name__ == '__main__':
+    pass
+
+# ======================================================================
+# end                     l o c a t i o n  . p y                     end
+# ======================================================================

@@ -1,0 +1,14 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_dm.py'),
+                  loc('donut.py'),
+                  loc('location.py'),
+                  loc('solver.py'),
+                  loc('test/test_donut.py'),
+                  loc('test/test_location.py'),
+                  loc('test/test_solver.py')]
+proj.file-type = 'shared'
