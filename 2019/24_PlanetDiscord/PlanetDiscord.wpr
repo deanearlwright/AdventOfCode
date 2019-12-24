@@ -1,0 +1,10 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_pd.py'),
+                  loc('bugs.py'),
+                  loc('test/test_bugs.py')]
+proj.file-type = 'shared'
