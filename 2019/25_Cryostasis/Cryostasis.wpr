@@ -1,0 +1,15 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('adv_droid.py'),
+                  loc('aoc_25.py'),
+                  loc('intcode.py'),
+                  loc('test/prob_one.txt'),
+                  loc('test/test_adv_droid.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_25.py'): ('project',
+        (u'-p1 input.txt',
+         ''))}
