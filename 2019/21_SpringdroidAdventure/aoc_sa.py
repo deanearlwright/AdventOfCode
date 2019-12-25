@@ -25,20 +25,34 @@ import intcode
 WALK = [ord('W'), ord('A'), ord('L'), ord('K'), 10]
 RUN = [ord('R'), ord('U'), ord('N'), 10]
 
-PROG1 = [ # If we can't walk one space, we jump: #####.#..######## WWWWJ
+PROG1 = [  # If we can't walk one space, we jump: #####.#..######## WWWWJ
     ord('N'), ord('O'), ord('T'), ord(' '), ord('A'), ord(' '), ord('J'), 10,
 ]
-PROG2 = [ # If we can't jump, we walk: #####.#..######## JW sb WWJJW...
+PROG2 = [  # If we can't jump, we walk: #####.#..######## JW sb WWJJW...
     ord('N'), ord('O'), ord('T'), ord(' '), ord('J'), ord(' '), ord('J'), 10,
     ord('A'), ord('N'), ord('D'), ord(' '), ord('D'), ord(' '), ord('J'), 10,
 ]
-PROG3 = [ # If can jump (D) and we must (~A) or we should (~C): 19348359!
+PROG3 = [  # If can jump (D) and we must (~A) or we should (~C): 19348359!
     ord('N'), ord('O'), ord('T'), ord(' '), ord('A'), ord(' '), ord('J'), 10,
     ord('N'), ord('O'), ord('T'), ord(' '), ord('C'), ord(' '), ord('T'), 10,
     ord('O'), ord('R'), ord(' '), ord('T'), ord(' '), ord('J'), 10,
     ord('A'), ord('N'), ord('D'), ord(' '), ord('D'), ord(' '), ord('J'), 10,
-] # But in part two: #####.#.##...####: WWJW Should be WWWJWJW...
+]  # But in part two: #####.#.##...####: WWJW Should be WWWJWJW...
 
+# ------ Part 2
+
+PROG4 = [  # Like part 1 but with added E and H sensors
+    ord('N'), ord('O'), ord('T'), ord(' '), ord('A'), ord(' '), ord('T'), 10,
+    ord('N'), ord('O'), ord('T'), ord(' '), ord('T'), ord(' '), ord('T'), 10,
+    ord('A'), ord('N'), ord('D'), ord(' '), ord('B'), ord(' '), ord('T'), 10,
+    ord('A'), ord('N'), ord('D'), ord(' '), ord('C'), ord(' '), ord('T'), 10,
+    ord('N'), ord('O'), ord('T'), ord(' '), ord('T'), ord(' '), ord('J'), 10,
+    ord('A'), ord('N'), ord('D'), ord(' '), ord('D'), ord(' '), ord('J'), 10,
+    ord('N'), ord('O'), ord('T'), ord(' '), ord('E'), ord(' '), ord('T'), 10,
+    ord('N'), ord('O'), ord('T'), ord(' '), ord('T'), ord(' '), ord('T'), 10,
+    ord('O'), ord('R'), ord(' '), ord('H'), ord(' '), ord('T'), 10,
+    ord('A'), ord('N'), ord('D'), ord(' '), ord('T'), ord(' '), ord('J'), 10,
+]
 
 # ----------------------------------------------------------------------
 #                                                      parse_commnd_line
@@ -68,6 +82,7 @@ def parse_command_line():
 # ----------------------------------------------------------------------
 #                                                               part_one
 # ----------------------------------------------------------------------
+
 
 def part_one(args, input_lines):
     "Process part one of the puzzle"
@@ -102,7 +117,7 @@ def part_two(args, input_lines):
     duey = droid.Droid(text=input_lines[0])
 
     # 2. Get the damage
-    halted = duey.get_damage(prog=PROG3 + RUN, watch=args.verbose)
+    halted = duey.get_damage(prog=PROG4 + RUN, watch=args.verbose)
     if halted != intcode.STOP_HLT:
         print("The springdroid, duey, stopped unexpectively, reason = %d" % (halted))
         solution = None
