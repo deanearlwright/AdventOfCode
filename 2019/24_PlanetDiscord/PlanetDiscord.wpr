@@ -6,5 +6,10 @@
 [project attributes]
 proj.file-list = [loc('aoc_pd.py'),
                   loc('bugs.py'),
+                  loc('prob_two.txt'),
+                  loc('sample.txt'),
                   loc('test/test_bugs.py')]
 proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_pd.py'): ('project',
+        (u'-p2 input.txt',
+         ''))}

@@ -1,0 +1,9 @@
+! Example 1
+
+....#
+#..#.
+#..##
+..#..
+#....
+
+! total biodiversity rating of 212992

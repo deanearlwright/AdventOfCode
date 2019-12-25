@@ -21,47 +21,34 @@ import aoc_pd
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
-P1_EXAMPLE = ["""
+P1_EXAMPLE = """
 ! Initial state:
 ....#
 #..#.
 #..##
 ..#..
-#....""", """
-! After 1 minute:
-#..#.
-####.
-###.#
-##.##
-.##..""","""
-! After 2 minutes:
-#####
-....#
-....#
-...#.
-#.###""","""
-! After 3 minutes:
-#....
-####.
-...##
-#.##.
-.##.#""","""
-! After 4 minutes:
-####.
-....#
-##..#
-.....
-##..."""
-]
+#...."""
 
-P1_EXAMPLE_DUP = """
-.....
-.....
-.....
-#....
-.#..."""
+P1_EXAMPLE_DUP = "...............#.....#..."
+P1_EXAMPLE_GEN = 86
 
 P1_EXAMPLE_BIODIVERSITY = 2129920
+
+P2_GEN_10 = {
+    -5: '..#...#.#...?.#.#.#...#..',
+    -4: '...#....##..?.....##...#.',
+    -3: '#.#...#.....?...#...#.#..',
+    -2: '.#.##....#..?.#...##.###.',
+    -1: '#..##...##..?.....#..####',
+    0: '.#....#.##.#?............',
+    1: '.##..#..##..?.###.#######',
+    2: '###..##.#.#.?...#.###.#..',
+    3: '..###.....#.?..#....#...#',
+    4: '.###.#..#.#.?..##.#......',
+    5: '####.#..#.#.?#.####......'
+}
+
+P2_GEN_10_KNT = 99
 
 # ======================================================================
 #                                                               TestBugs
@@ -69,7 +56,7 @@ P1_EXAMPLE_BIODIVERSITY = 2129920
 
 
 class TestBugs(unittest.TestCase):  # pylint: disable=R0904
-    """Test Asteroids object"""
+    """Test Bugs object"""
 
     def test_empty_init(self):
         """Test default Bugs object creation"""
@@ -78,115 +65,128 @@ class TestBugs(unittest.TestCase):  # pylint: disable=R0904
         mybugs = bugs.Bugs()
 
         # 2. Make sure it has the default values
-        self.assertEqual(myass.rows, 0)
-        self.assertEqual(myass.cols, 0)
-        self.assertEqual(len(myass.amap), 0)
-        self.assertEqual(len(myass.knts), 0)
-
-        # 3. Check methods
-        self.assertEqual(myass.maximum(), None)
-        self.assertEqual(str(myass), '')
+        self.assertEqual(mybugs.size, bugs.SIZE)
+        self.assertEqual(mybugs.length, bugs.SIZE * bugs.SIZE)
+        self.assertEqual(len(mybugs.current), mybugs.length)
+        self.assertEqual(mybugs.minute, 0)
+        self.assertEqual(len(mybugs.adjacent), mybugs.length)
+        self.assertEqual(len(mybugs.levels), 0)
 
     def test_text_init(self):
         "Test Bugs object creation with text"
 
-        # 1. Create Intcode obhect with values
-        mybugs = bugs.Bugs(text=P1_EXP1_TEXT)
+        # 1. Create Bugs object with text
+        mybugs = bugs.Bugs(text=aoc_pd.from_text(P1_EXAMPLE))
 
         # 2. Make sure it has the specified values
-        self.assertEqual(myass.rows, 5)
-        self.assertEqual(myass.cols, 5)
-        self.assertEqual(len(myass.amap), 5)
-        self.assertEqual(len(myass.knts), 5)
-        self.assertEqual(myass.knts, P1_EXP1_KNTS)
+        self.assertEqual(mybugs.size, bugs.SIZE)
+        self.assertEqual(mybugs.length, bugs.SIZE * bugs.SIZE)
+        self.assertEqual(len(mybugs.current), mybugs.length)
+        self.assertEqual(mybugs.current, '....##..#.#..##..#..#....')
+        self.assertEqual(mybugs.minute, 0)
+        self.assertEqual(len(mybugs.adjacent), mybugs.length)
+        self.assertEqual(len(mybugs.levels), 0)
 
-        # 3. Check methods
-        self.assertEqual(myass.maximum(), (8, (3, 4)))
+    def test_smaller(self):
+        "Test Creating a smaller grid"
 
-    def test_add_to_the_right(self):
-        "Test looking to the right for asteroids"
-
-        # 1. Create Intcode obhect with values
-        myass = asteroids.Asteroids(text=P1_EXP1_TEXT, knts=False)
-
-        # 2. Make sure it has the specified values
-        self.assertEqual(myass.rows, 5)
-        self.assertEqual(myass.cols, 5)
-        self.assertEqual(len(myass.amap), 5)
-        self.assertEqual(len(myass.knts), 5)
-
-        # 3. Look to the right for all
-        for rnum in range(myass.rows):
-            myass.add_to_the_right(rnum)
-
-        # 3. Check methods
-        self.assertEqual(myass.knts, P1_EXP1_RIGHT_KNTS)
-        self.assertEqual(myass.maximum(), (2, (1, 2)))
-
-    def test_add_next_row(self):
-        "Test looking at the row below for asteroids"
-
-        # 1. Create Intcode obhect with values
-        myass = asteroids.Asteroids(text=P1_EXP1_TEXT, knts=False)
+        # 1. Create a world with only a 3x3 grid
+        mybugs = bugs.Bugs(size=3)
 
         # 2. Make sure it has the specified values
-        self.assertEqual(myass.rows, 5)
-        self.assertEqual(myass.cols, 5)
-        self.assertEqual(len(myass.amap), 5)
-        self.assertEqual(len(myass.knts), 5)
+        self.assertEqual(mybugs.size, 3)
+        self.assertEqual(mybugs.length, 9)
+        self.assertEqual(mybugs.current, '.........')
+        self.assertEqual(mybugs.minute, 0)
+        self.assertEqual(mybugs.adjacent,
+                         [[1, 3], [2, 0, 4], [1, 5],
+                          [4, 6, 0], [5, 3, 7, 1], [4, 8, 2],
+                          [7, 3], [8, 6, 4], [7, 5]])
+        self.assertEqual(len(mybugs.levels), 0)
 
-        # 3. Look to the right for all
-        for rnum in range(myass.rows - 1):
-            myass.add_next_row(rnum)
+    def test_part_one_next_genertion(self):
+        "Test the first few generations of the part one example"
 
-        # 3. Check methods
-        self.assertEqual(myass.knts, P1_EXP1_ROW_BELOW_KNTS)
-        self.assertEqual(myass.maximum(), (7, (4, 3)))
+        # 1. Create Bugs object with text
+        mybugs = bugs.Bugs(text=aoc_pd.from_text(P1_EXAMPLE))
 
-    def test_add_to_the_bottom(self):
-        "Test looking at the column below for asteroids"
+        # 2. Check Generation 0
+        self.assertEqual(mybugs.current, '....##..#.#..##..#..#....')
 
-        # 1. Create Intcode obhect with values
-        myass = asteroids.Asteroids(text=P1_EXP1_TEXT, knts=False)
+        # 3. Check Generation 1
+        mybugs.next_generation()
+        self.assertEqual(mybugs.current, '#..#.####.###.###.##.##..')
+
+        # 4. Check Generation 2
+        mybugs.next_generation()
+        self.assertEqual(mybugs.current, '#####....#....#...#.#.###')
+
+        # 5. Check Generation 3
+        mybugs.next_generation()
+        self.assertEqual(mybugs.current, '#....####....###.##..##.#')
+
+        # 6. Check Generation 4
+        mybugs.next_generation()
+        self.assertEqual(mybugs.current, '####.....###..#.....##...')
+
+    def test_run_until_duplicate(self):
+        "Test running until a duplicate generation"
+
+        # 1. Create Bugs object with text
+        mybugs = bugs.Bugs(text=aoc_pd.from_text(P1_EXAMPLE))
+
+        # 2. Run until there is a duplicate generation
+        generation = mybugs.run_until_duplicate()
+
+        # 3. Check the results
+        self.assertEqual(mybugs.current, P1_EXAMPLE_DUP)
+        self.assertEqual(generation, P1_EXAMPLE_GEN)
+
+    def test_biodiversity_rating(self):
+        """Test biodiversity rating using part one example"""
+
+        # 1. Create Bugs object with text
+        mybugs = bugs.Bugs(text=aoc_pd.from_text(P1_EXAMPLE))
+
+        # 2. Replace current with part one example final state
+        mybugs.current = P1_EXAMPLE_DUP
+
+        # 3. Check biodiversity rating
+        self.assertEqual(mybugs.get_biodiversity_rating(),
+                         P1_EXAMPLE_BIODIVERSITY)
+
+    def test_smaller_recursive(self):
+        "Test Creating a smaller grid"
+
+        # 1. Create a world with only a 3x3 grid
+        mybugs = bugs.Bugs(size=3, recursive=True)
 
         # 2. Make sure it has the specified values
-        self.assertEqual(myass.rows, 5)
-        self.assertEqual(myass.cols, 5)
-        self.assertEqual(len(myass.amap), 5)
-        self.assertEqual(len(myass.knts), 5)
+        self.assertEqual(mybugs.size, 3)
+        self.assertEqual(mybugs.length, 9)
+        self.assertEqual(mybugs.current, '.........')
+        self.assertEqual(mybugs.minute, 0)
+        self.assertEqual(mybugs.adjacent,
+                         [[1, -103, 3, -101], [2, 0, 100, 101, 102, -101], [-105, 1, 5, -101],
+                          [100, 103, 106, -103, 6, 0], [5, 3, 7, 1], [-105, 102, 105, 108, 8, 2],
+                          [7, -103, -107, 3], [8, 6, -107, 106, 107, 108], [-105, 7, -107, 5]])
+        self.assertEqual(len(mybugs.levels), 1)
 
-        # 3. Look to the bottom for all
-        for rnum in range(myass.rows - 1):
-            #print("add_to_the_bottom(%d)" % (rnum))
-            myass.add_to_the_bottom(rnum)
-            #print(myass.str_knts())
+    def test_part_two_ten_genertions(self):
+        "Test the first few generations of the part one example"
 
-        # 3. Check methods
-        self.assertEqual(myass.knts, P1_EXP1_BOTTOM_KNTS)
-        self.assertEqual(myass.maximum(), (1, (1, 0)))
+        # 1. Create Bugs object with text
+        mybugs = bugs.Bugs(text=aoc_pd.from_text(P1_EXAMPLE), recursive=True)
 
-    def test_part_one_examples(self):
-        """Test Asteroids object with examples from the part 1 problem"""
+        # 2. Run the simulation for 10 generations
+        mybugs.run_until(10)
 
-        # 1. Example 1
-        myass = asteroids.Asteroids(text=P1_EXP1_TEXT)
-        self.assertEqual(myass.maximum(), (8, (3, 4)))
+        # 3. Check the levels
+        for key, current in P2_GEN_10.items():
+            self.assertEqual(mybugs.levels[key], current)
 
-        # 2. Example 2
-        myass = asteroids.Asteroids(text=P1_EXP2_TEXT)
-        self.assertEqual(myass.maximum(), (33, (5, 8)))
-
-        # 3. Example 3
-        myass = asteroids.Asteroids(text=P1_EXP3_TEXT)
-        self.assertEqual(myass.maximum(), (35, (1, 2)))
-
-        # 4. Example 4
-        myass = asteroids.Asteroids(text=P1_EXP4_TEXT)
-        self.assertEqual(myass.maximum(), (41, (6, 3)))
-
-        # 5. Example 5
-        myass = asteroids.Asteroids(text=P1_EXP5_TEXT)
-        self.assertEqual(myass.maximum(), (210, (11, 13)))
+        # 4. And the total number of bugs
+        self.assertEqual(mybugs.total_bug_count(), P2_GEN_10_KNT)
 
 
 # ----------------------------------------------------------------------

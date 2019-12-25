@@ -21,6 +21,7 @@ import bugs
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
+PART_TWO_MINUTES = 200
 
 # ----------------------------------------------------------------------
 #                                                      parse_commnd_line
@@ -51,19 +52,20 @@ def parse_command_line():
 #                                                               part_one
 # ----------------------------------------------------------------------
 
+
 def part_one(args, input_lines):
     "Process part one of the puzzle"
 
     # 1. Create the bugs
-    eris = bugs.Bugs(text=input_lines[0])
+    eris = bugs.Bugs(text=input_lines)
 
-    # 2. Run them until a duplicate
-    duplicate = bugs.run_until_duplicate(watch=args.verbose, maxtime=args.maxtime)
+    # 2. Run them until specified generation
+    duplicate = eris.run_until_duplicate(watch=args.verbose, maxtime=args.maxtime)
     if duplicate is None:
         print("No duplicate pattern of bugs on Eris was found")
         solution = None
     else:
-        solution = bugs.biodiversity_rating(duplicate)
+        solution = eris.get_biodiversity_rating()
         print("The biodiversity rating is %d" % (solution))
 
     # 3. Return result
@@ -77,17 +79,17 @@ def part_one(args, input_lines):
 def part_two(args, input_lines):
     "Process part two of the puzzle"
 
-    # 1. Create the bugs
-    eris = bugs.Bugs(text=input_lines[0])
+    # 1. Create the whose next of bugs
+    eris = bugs.Bugs(text=input_lines, recursive=True)
 
-    # 2. Run them until a duplicate
-    duplicate = bugs.run_until_duplicate(watch=args.verbose, maxtime=args.maxtime)
-    if duplicate is None:
-        print("No duplicate pattern of bugs on Eris was found")
-        solution = None
-    else:
-        solution = bugs.biodiversity_rating(duplicate)
-        print("The biodiversity rating is %d" % (solution))
+    # 2. Run them until the specified time
+    minutes = PART_TWO_MINUTES
+    if args.maxtime > 0:
+        minutes = args.maxtime
+    eris.run_until(minutes, watch=args.verbose)
+    solution = eris.total_bug_count()
+    print("The number of bugs present after %d minutes is %d" %
+          (minutes, solution))
 
     # 3. Return result
     return solution is not None
@@ -120,7 +122,7 @@ def from_text(text):
         line = line.rstrip(' \r')
         if not line:
             continue
-        if line.startswith('#'):
+        if line.startswith('!'):
             continue
 
         # 4. Add the line
