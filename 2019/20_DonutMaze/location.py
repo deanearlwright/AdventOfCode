@@ -39,6 +39,7 @@ REV_DIR = {
 
 IS_WALL = '#'
 IS_PATH = '.'
+
 IS_VALUES = frozenset([IS_WALL, IS_PATH])
 
 # ======================================================================

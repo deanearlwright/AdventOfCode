@@ -50,7 +50,6 @@ class Solver():
         # 2. Find the path to all of the portals
         self.portal_paths = self.get_portol_paths(verbose=verbose)
 
-
     def get_shortest_path(self, from_portal, to_portal):
         "Get the short path from one portal to another"
 
@@ -78,13 +77,13 @@ class Solver():
                 break
 
             # 7. If there is a door, we have more to unlock
-            if here in self.vault.door_at:
+            if here in self.donut.door_at:
                 doors = doors.copy()
-                doors.add(self.vault.door_at[here])
+                doors.add(self.donut.door_at[here])
 
             # 8. We need to explore all exits from here
-            for direction in self.vault.locs[here].exits_at():
-                delta = vault.DELTA[direction]
+            for direction in self.donut.locs[here].exits_at():
+                delta = donut.DELTA[direction]
                 nxt = (here[0] + delta[0], here[1] + delta[1])
                 if nxt not in path:
                     heapq.heappush(priority_queue, (steps + 1, nxt, doors))
@@ -105,7 +104,6 @@ class Solver():
             self.get_portal_to_portal_paths(paths, portal, plocs[0])
             self.get_portal_to_portal_paths(paths, portal, plocs[1])
 
-
         # 4. Return the direct paths beteeen different portals
         return paths
 
@@ -114,7 +112,7 @@ class Solver():
 
         # 1. If part2, Use multiple origins
         if self.part2:
-            start_from = {'@%d' % _: '@%d' % _ for _ in range(len(self.vault.origins))}
+            start_from = {'@%d' % _: '@%d' % _ for _ in range(len(self.donut.origins))}
         else:
             start_from = {ORIGIN_KEY: ORIGIN_KEY}
         if verbose:
@@ -187,7 +185,7 @@ class Solver():
 #                                                                   Path
 # ======================================================================
 class Path():
-    """Object representing a path to an item in the Neptune vault"""
+    """Object representing a path to an item in the Neptune donut"""
 
     def __init__(self, loc=(0, 0), steps=0, doors=None):
 

@@ -22,75 +22,65 @@ import donut
 #                                                              constants
 # ----------------------------------------------------------------------
 EXAMPLES = ["""
-!0: 8 steps
-#########
-#b.A.@.a#
-#########""", """
-!1: 86 steps
-########################
-#f.D.E.e.C.b.A.@.a.B.c.#
-######################.#
-#d.....................#
-########################""", """
-!2: 132 steps
-########################
-#...............b.C.D.f#
-#.######################
-#.....@.a.B.c.d.A.e.F.g#
-########################""", """
-!3: 136 steps
-#################
-#i.G..c...e..H.p#
-########.########
-#j.A..b...f..D.o#
-########@########
-#k.E..a...g..B.n#
-########.########
-#l.F..d...h..C.m#
-#################""", """
-!4: 81 steps
-########################
-#@..............ac.GI.b#
-###d#e#f################
-###A#B#C################
-###g#h#i################
-########################"""]
+! 8 labels, 23 steps
+         A
+         A
+  #######.#########
+  #######.........#
+  #######.#######.#
+  #######.#######.#
+  #######.#######.#
+  #####  B    ###.#
+BC...##  C    ###.#
+  ##.##       ###.#
+  ##...DE  F  ###.#
+  #####    G  ###.#
+  #########.#####.#
+DE..#######...###.#
+  #.#########.###.#
+FG..#########.....#
+  ###########.#####
+             Z
+             Z       """, """
+! 22 labels, 58 steps
 
-EXAMPLES_PART2 = ["""
-!0: 8 steps
-#######
-#a.#Cd#
-##...##
-##.@.##
-##...##
-#cB#Ab#
-#######""", """
-!1: 24 steps
-###############
-#d.ABC.#.....a#
-######...######
-######.@.######
-######...######
-#b.....#.....c#
-###############""", """
-!2: 32 steps
-#############
-#DcBa.#.GhKl#
-#.###...#I###
-#e#d#.@.#j#k#
-###C#...###J#
-#fEbA.#.FgHi#
-#############""", """
-!3: 72 steps
-#############
-#g#f.D#..h#l#
-#F###e#E###.#
-#dCba...BcIJ#
-#####.@.#####
-#nK.L...G...#
-#M###N#H###.#
-#o#m..#i#jk.#
-#############"""]
+                   A
+                   A
+  #################.#############
+  #.#...#...................#.#.#
+  #.#.#.###.###.###.#########.#.#
+  #.#.#.......#...#.....#.#.#...#
+  #.#########.###.#####.#.#.###.#
+  #.............#.#.....#.......#
+  ###.###########.###.#####.#.#.#
+  #.....#        A   C    #.#.#.#
+  #######        S   P    #####.#
+  #.#...#                 #......VT
+  #.#.#.#                 #.#####
+  #...#.#               YN....#.#
+  #.###.#                 #####.#
+DI....#.#                 #.....#
+  #####.#                 #.###.#
+ZZ......#               QG....#..AS
+  ###.###                 #######
+JO..#.#.#                 #.....#
+  #.#.#.#                 ###.#.#
+  #...#..DI             BU....#..LF
+  #####.#                 #.#####
+YN......#               VT..#....QG
+  #.###.#                 #.###.#
+  #.#...#                 #.....#
+  ###.###    J L     J    #.#.###
+  #.....#    O F     P    #.#...#
+  #.###.#####.#.#####.#####.###.#
+  #...#.#.#...#.....#.....#.#...#
+  #.#####.###.###.#.#.#########.#
+  #...#.#.....#...#.#.#.#.....#.#
+  #.###.#####.###.###.#.#.#######
+  #.#.........#...#.............#
+  #########.###.###.#############
+           B   J   C
+           U   P   P               """]
 
 # ======================================================================
 #                                                              TestDonut
@@ -98,65 +88,104 @@ EXAMPLES_PART2 = ["""
 
 
 class TestDonut(unittest.TestCase):  # pylint: disable=R0904
-    """Test Hull object"""
+    """Test Donut object"""
 
     def test_empty_init(self):
-        """Test default vault object creation"""
+        """Test default donut mazet object creation"""
 
         # 1. Create default Vault object
-        myvault = vault.Vault()
+        mydonut = donut.Donut()
 
         # 2. Make sure it has the default values
-        self.assertEqual(myvault.text, None)
-        self.assertEqual(myvault.clean, None)
-        self.assertEqual(myvault.rows, 0)
-        self.assertEqual(myvault.cols, 0)
-        self.assertEqual(myvault.keys, {})
-        self.assertEqual(myvault.doors, {})
-        self.assertEqual(myvault.key_at, {})
-        self.assertEqual(myvault.door_at, {})
-        self.assertEqual(myvault.origin, None)
-        self.assertEqual(myvault.origins, None)
-        self.assertEqual(myvault.locs, {})
+        self.assertEqual(mydonut.text, None)
+        self.assertEqual(mydonut.rows, 0)
+        self.assertEqual(mydonut.cols, 0)
+        self.assertEqual(mydonut.portals, {})
+        self.assertEqual(mydonut.start, donut.START)
+        self.assertEqual(mydonut.finish, donut.FINISH)
+        self.assertEqual(mydonut.portals_at, {})
+        self.assertEqual(mydonut.part2, False)
+        self.assertEqual(mydonut.locs, {})
 
-
-    def test_text_init(self):
+    def test_text_0_init(self):
         """Test vault object creation with text"""
 
-        # 1. Create default Vault object
-        myvault = vault.Vault(text=from_text(EXAMPLES[3]))
-
+        # 1. Create default donut object
+        mydonut = donut.Donut(text=from_text(EXAMPLES[0]))
         # 2. Make sure it has the expected values
-        self.assertEqual(len(myvault.text), 9)
-        self.assertEqual(len(myvault.clean), 9)
-        self.assertEqual(myvault.rows, 9)
-        self.assertEqual(myvault.cols, 17)
-        self.assertEqual(len(myvault.keys), 16)
-        self.assertEqual(len(myvault.doors), 8)
-        self.assertEqual(len(myvault.key_at), 16)
-        self.assertEqual(len(myvault.door_at), 8)
-        self.assertEqual(myvault.origin, (8, 4))
-        self.assertEqual(myvault.origins, None)
-        self.assertEqual(len(myvault.locs), 4*15+3)
+        self.assertEqual(len(mydonut.text), 19)
+        self.assertEqual(mydonut.rows, 19)
+        self.assertEqual(mydonut.cols, 19)
+        self.assertEqual(mydonut.portals, {
+            'AA': {(9, 2)},
+            'BC': {(2, 8), (9, 6)},
+            'DE': {(2, 13), (6, 10)},
+            'FG': {(2, 15), (11, 12)},
+            'ZZ': {(13, 16)}})
+        self.assertEqual(mydonut.finish, donut.FINISH)
+        self.assertEqual(mydonut.portals_at, {
+            (2, 8): 'BC',
+            (2, 13): 'DE',
+            (2, 15): 'FG',
+            (6, 10): 'DE',
+            (9, 2): 'AA',
+            (9, 6): 'BC',
+            (11, 12): 'FG',
+            (13, 16): 'ZZ'})
+        self.assertEqual(mydonut.part2, False)
+        self.assertEqual(len(mydonut.locs), 47)
 
-    def test_text_init_part2(self):
+    def test_text_1_init(self):
         """Test vault object creation with text"""
 
-        # 1. Create default Vault object
-        myvault = vault.Vault(text=from_text(EXAMPLES_PART2[0]), part2=True)
+        # 1. Create default donut object
+        mydonut = donut.Donut(text=from_text(EXAMPLES[1]))
 
         # 2. Make sure it has the expected values
-        self.assertEqual(len(myvault.text), 7)
-        self.assertEqual(len(myvault.clean), 7)
-        self.assertEqual(myvault.rows, 7)
-        self.assertEqual(myvault.cols, 7)
-        self.assertEqual(len(myvault.keys), 4)
-        self.assertEqual(len(myvault.doors), 3)
-        self.assertEqual(len(myvault.key_at), 4)
-        self.assertEqual(len(myvault.door_at), 3)
-        #self.assertEqual(myvault.origin, (3, 3))
-        self.assertEqual(myvault.origins, [(2, 2), (4, 2), (2, 4), (4, 4)])
-        self.assertEqual(len(myvault.locs), 12)
+        self.assertEqual(len(mydonut.text), 37)
+        self.assertEqual(mydonut.rows, 37)
+        self.assertEqual(mydonut.cols, 35)
+        self.assertEqual(mydonut.portals, {
+            'AA': {(19, 2)},
+            'AS': {(32, 17), (17, 8)},
+            'BU': {(26, 21), (11, 34)},
+            'CP': {(19, 34), (21, 8)},
+            'DI': {(2, 15), (8, 21)},
+            'JO': {(13, 28), (2, 19)},
+            'JP': {(21, 28), (15, 34)},
+            'LF': {(15, 28), (32, 21)},
+            'QG': {(32, 23), (26, 17)},
+            'VT': {(26, 23), (32, 11)},
+            'YN': {(2, 23), (26, 13)},
+            'ZZ': {(2, 17)}})
+        self.assertEqual(mydonut.start, donut.START)
+        self.assertEqual(mydonut.finish, donut.FINISH)
+        self.assertEqual(mydonut.portals_at, {
+            (2, 15): 'DI',
+            (2, 17): 'ZZ',
+            (2, 19): 'JO',
+            (2, 23): 'YN',
+            (8, 21): 'DI',
+            (11, 34): 'BU',
+            (13, 28): 'JO',
+            (15, 28): 'LF',
+            (15, 34): 'JP',
+            (17, 8): 'AS',
+            (19, 2): 'AA',
+            (19, 34): 'CP',
+            (21, 8): 'CP',
+            (21, 28): 'JP',
+            (26, 13): 'YN',
+            (26, 17): 'QG',
+            (26, 21): 'BU',
+            (26, 23): 'VT',
+            (32, 11): 'VT',
+            (32, 17): 'AS',
+            (32, 21): 'LF',
+            (32, 23): 'QG'})
+        self.assertEqual(mydonut.part2, False)
+        self.assertEqual(len(mydonut.locs), 313)
+
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

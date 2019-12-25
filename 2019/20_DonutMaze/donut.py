@@ -76,7 +76,9 @@ class Donut():
         # 4. Set Rows and Columns
         self.rows = len(self.text)
         #print("[%s]" % (self.text[0]))
-        self.cols = len(self.text[0])
+        self.cols = max([len(self.text[_]) for _ in range(self.rows)])
+        for rnum in range(self.rows):
+            self.text[rnum] = self.text[rnum].ljust(self.cols)
 
         # 5. Loop for all the rows and process them
         for rnum, row in enumerate(self.text):
@@ -84,7 +86,10 @@ class Donut():
 
         # 6. Loop for all of the columns and process them for portals
         for cnum in range(self.cols):
-            self.process_col(cnum, ''.join([self.text[range(self.rows)][cnum]]))
+            cdata = []
+            for rrnum in range(self.rows):
+                cdata.append(self.text[rrnum][cnum])
+            self.process_col(cnum, ''.join(cdata))
 
         # 7. Connect the path squares
         self.process_path()
@@ -95,7 +100,8 @@ class Donut():
         # 1. Start with no label in the works
         second = None
         label = None
-        last_loc = None
+        last_passage = -1
+        last_void = -1
 
         # 2. Loop for all of the columns
         for cnum, col in enumerate(row):
@@ -108,24 +114,29 @@ class Donut():
             # 4. If we find a passage square, add that location
             if col == PASSAGE:
                 self.add_loc(cnum, rnum)
-                last_loc = cnum
+                last_passage = cnum
 
                 # 5. If we are processing a left hand portal, add it
                 if label:
                     self.add_portal(label, cnum, rnum)
                     label = None
-                    last_loc = None
 
-            # 6. If this is the start of a label, get it
-            elif col.isupper():
-                label = col + row[cnum+1]
-                second = col + 1
+            # 6. if a void, remember it
+            elif col == VOID:
+                last_void = cnum
 
-                # 7. If we are processing a right hand portal, add it
-                if last_loc:
-                    self.add_portal(label, last_loc, rnum)
+            # 7. If this is the start of a label, get it
+            elif col.isupper() and row[cnum + 1].isupper():
+                label = col + row[cnum + 1]
+                second = cnum + 1
+
+                # 8. If we are processing a right hand portal, add it
+                if last_passage > last_void:
+                    self.add_portal(label, last_passage, rnum)
                     label = None
-                    last_loc = None
+                elif last_void > last_passage:
+                    self.add_portal(label, cnum + 2, rnum)
+                    label = None
 
     def process_col(self, cnum, col):
         "Process one col of the text"
@@ -133,7 +144,8 @@ class Donut():
         # 1. Start with no label in the works
         second = None
         label = None
-        last_loc = None
+        last_passage = -1
+        last_void = -1
 
         # 2. Loop for all of the rows
         for rnum, row in enumerate(col):
@@ -145,24 +157,29 @@ class Donut():
 
             # 4. If we find a passage square, remember it (but don't add it)
             if row == PASSAGE:
-                last_loc = rnum
+                last_passage = rnum
 
                 # 5. If we are processing a top portal, add it
                 if label:
                     self.add_portal(label, cnum, rnum)
                     label = None
-                    last_loc = None
 
-            # 6. If this is the start of a label, get it
-            elif row.isupper():
-                label = row + col[rnum+1]
+            # 6. If this is in the void, remember it
+            elif row == VOID:
+                last_void = rnum
+
+            # 7. If this is the start of a label, get it
+            elif row.isupper() and col[rnum + 1].isupper():
+                label = row + col[rnum + 1]
                 second = rnum + 1
 
                 # 7. If we are processing a bottom portal, add it
-                if last_loc:
-                    self.add_portal(label, cnum, last_loc)
+                if last_passage > last_void:
+                    self.add_portal(label, cnum, last_passage)
                     label = None
-                    last_loc = None
+                elif last_void > last_passage:
+                    self.add_portal(label, cnum, rnum + 2)
+                    label = None
 
     def add_portal(self, label, col, row):
         "Add a portal"
@@ -199,8 +216,34 @@ class Donut():
                 d_col = l_col + delta[0]
                 d_row = l_row + delta[1]
 
-                # 4. Set direction in locatation
-                loc.set_dir(direction, self.at_loc(d_col, d_row))
+                # 4. Set direction in location
+                at_delta = self.at_loc(d_col, d_row)
+                if at_delta.isalpha():
+                    other = self.other_end(l_col, l_row)
+                    if other is not None:
+                        loc.set_dir(direction, PASSAGE)
+                    else:
+                        loc.set_dir(direction, WALL)
+                else:
+                    loc.set_dir(direction, self.at_loc(d_col, d_row))
+
+    def other_end(self, col, row):
+        "Return what is at the other end of the portal"
+
+        # 1. Get the name of the portal
+        name = self.portals_at[(col, row)]
+
+        # 2. Look up the ends of this portal
+        ends = self.portals[name]
+
+        # 3. Get the other end of the portal
+        other = None
+        for end in ends:
+            if end != (col, row):
+                other = end
+
+        # 4. Return the other end (if any)
+        return other
 
     def add_loc(self, col, row):
         "Add a passage square at this location"
