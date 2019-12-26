@@ -51,6 +51,7 @@ def parse_command_line():
 #                                                               part_one
 # ----------------------------------------------------------------------
 
+
 def part_one(args, input_lines):
     "Process part one of the puzzle"
 
@@ -71,6 +72,7 @@ def part_one(args, input_lines):
 #                                                               part_two
 # ----------------------------------------------------------------------
 
+
 def part_two(args, input_lines):
     "Process part two of the puzzle"
 
@@ -78,11 +80,9 @@ def part_two(args, input_lines):
     cards = deck.Deck()
 
     # 2. Execute the instructions
-    cards.instructions(text=input_lines, verbose=args.verbose)
+    solution = cards.part_two(text=input_lines)
 
-    # 3. Get the location of card of the year
-    solution = cards.position(2019)
-    print("Card 2019 is in position %d" % (solution))
+    print("Card in position 2020 is %d" % (solution))
 
     # 4. Return result
     return solution is not None

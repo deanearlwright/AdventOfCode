@@ -21,7 +21,8 @@
 DEFAULT_SIZE = 10007
 
 PART2_SIZE = 119315717514047  # Don't create a deck with this size!!!
-PART2_TIMES = 101741582076661 # Or execute the input this many times!!!
+PART2_TIMES = 101741582076661  # Or execute the input this many times!!!
+PART2_POSITION = 2020
 
 DISPLAY_SIZE = 10
 
@@ -104,8 +105,6 @@ class Deck():
         # 6. The table becomes the new deck
         self.cards = table
 
-
-
     def position(self, number):
         "Return the position of the card with the specified value"
 
@@ -140,12 +139,45 @@ class Deck():
                 if watch is not None:
                     print(", [%d] = %d, [%d] = %d" %
                           (watch, self.cards[watch],
-                           self.size-(watch+1), self.cards[self.size-(watch+1)]))
+                           self.size - (watch + 1), self.cards[self.size - (watch + 1)]))
                 else:
                     print()
             elif watch is not None:
                 print('"%s", %d, %d' %
-                      (inst, self.cards[watch], self.cards[self.size-(watch+1)]))
+                      (inst, self.cards[watch], self.cards[self.size - (watch + 1)]))
+
+    def part_two(self, text,
+                 size=PART2_SIZE,
+                 repeat=PART2_TIMES,
+                 position=PART2_POSITION):
+        "Compute the solution for part two --- much use of spoilers involved"
+
+        # 1, Define the actions
+        actions = {'deal with increment ': lambda x, m, a, b: (a * x % m, b * x % m),
+                   'deal into new stack': lambda _, m, a, b: (-a % m, (m - 1 - b) % m),
+                   'cut ': lambda x, m, a, b: (a, (b - x) % m)}
+
+	# 2. Starting low and slow
+        a, b = 1, 0
+
+	# 3. Loop for all of the instructions (only once)
+        for instruction in text:
+
+	    # 4. Loop for all if the actions to find the one to use
+            for act_name, act_function in actions.items():
+
+	        # 5. If this is the one, execute it
+                if instruction.startswith(act_name):
+                    arg = int(instruction[len(act_name):]) if act_name[-1] == ' ' else 0
+                    a, b = act_function(arg, size, a, b)
+                    break
+
+        # 6. Computer remainder
+        r = (b * pow(1 - a, size - 2, size)) % size
+
+        # 7. Return result
+        return ((position - r) * pow(a, repeat * (size - 2), size) + r) % size
+
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

@@ -9,5 +9,5 @@ proj.file-list = [loc('aoc_ss.py'),
                   loc('test/test_deck.py')]
 proj.file-type = 'shared'
 proj.launch-config = {loc('aoc_ss.py'): ('project',
-        (u'-p1 -t 2020 input.txt',
+        (u'-p2 input.txt',
          ''))}
