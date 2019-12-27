@@ -78,7 +78,13 @@ def part_two(args, input_lines):
     "Process part two of the puzzle"
 
     # 1. Create the donut solver
-    krispy_kreme = solver.Solver(text=input_lines, verbose=args.verbose)
+    depth = 100
+    if args.maxtime > 0:
+        depth = args.maxtime
+    krispy_kreme = solver.Solver(text=input_lines,
+                                 verbose=args.verbose,
+                                 depth=depth,
+                                 part2=True)
 
     # 2. Solve the donut maze
     krispy_kreme.solve_donut_maze()

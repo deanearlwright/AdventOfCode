@@ -80,7 +80,47 @@ YN......#               VT..#....QG
   #.#.........#...#.............#
   #########.###.###.#############
            B   J   C
-           U   P   P               """]
+           U   P   P               """, """
+
+! For part 1, takes 11 levels for 396 steps
+
+             Z L X W       C
+             Z P Q B       K
+  ###########.#.#.#.#######.###############
+  #...#.......#.#.......#.#.......#.#.#...#
+  ###.#.#.#.#.#.#.#.###.#.#.#######.#.#.###
+  #.#...#.#.#...#.#.#...#...#...#.#.......#
+  #.###.#######.###.###.#.###.###.#.#######
+  #...#.......#.#...#...#.............#...#
+  #.#########.#######.#.#######.#######.###
+  #...#.#    F       R I       Z    #.#.#.#
+  #.###.#    D       E C       H    #.#.#.#
+  #.#...#                           #...#.#
+  #.###.#                           #.###.#
+  #.#....OA                       WB..#.#..ZH
+  #.###.#                           #.#.#.#
+CJ......#                           #.....#
+  #######                           #######
+  #.#....CK                         #......IC
+  #.###.#                           #.###.#
+  #.....#                           #...#.#
+  ###.###                           #.#.#.#
+XF....#.#                         RF..#.#.#
+  #####.#                           #######
+  #......CJ                       NM..#...#
+  ###.#.#                           #.###.#
+RE....#.#                           #......RF
+  ###.###        X   X       L      #.#.#.#
+  #.....#        F   Q       P      #.#.#.#
+  ###.###########.###.#######.#########.###
+  #.....#...#.....#.......#...#.....#.#...#
+  #####.#.###.#######.#######.###.###.#.#.#
+  #.......#.......#.#.#.#.#...#...#...#.#.#
+  #####.###.#####.#.#.#.#.###.###.#.###.###
+  #.......#.....#.#...#...............#...#
+  #############.#.#.###.###################
+               A O F   N
+               A A D   M """]
 
 # ======================================================================
 #                                                              TestDonut
@@ -153,6 +193,15 @@ class TestDonut(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(mydonut.exit_locs(9, 5), [(9, 4), (9, 6)])
         self.assertEqual(mydonut.exit_locs(9, 6), [(9, 5)])
 
+        self.assertEqual(mydonut.inner_portal((2, 8)), False)
+        self.assertEqual(mydonut.inner_portal((2, 13)), False)
+        self.assertEqual(mydonut.inner_portal((2, 15)), False)
+        self.assertEqual(mydonut.inner_portal((6, 10)), True)
+        self.assertEqual(mydonut.inner_portal((9, 2)), False)
+        self.assertEqual(mydonut.inner_portal((9, 6)), True)
+        self.assertEqual(mydonut.inner_portal((11, 12)), True)
+        self.assertEqual(mydonut.inner_portal((13, 16)), False)
+
     def test_text_1_init(self):
         """Test vault object creation with text"""
 
@@ -203,6 +252,117 @@ class TestDonut(unittest.TestCase):  # pylint: disable=R0904
             (32, 23): 'QG'})
         self.assertEqual(mydonut.part2, False)
         self.assertEqual(len(mydonut.locs), 313)
+
+        self.assertEqual(mydonut.outer_portal((2, 15)), True)
+        self.assertEqual(mydonut.outer_portal((2, 17)), True)
+        self.assertEqual(mydonut.outer_portal((2, 19)), True)
+        self.assertEqual(mydonut.outer_portal((2, 23)), True)
+        self.assertEqual(mydonut.outer_portal((8, 21)), False)
+        self.assertEqual(mydonut.outer_portal((11, 34)), True)
+        self.assertEqual(mydonut.outer_portal((13, 28)), False)
+        self.assertEqual(mydonut.outer_portal((15, 28)), False)
+        self.assertEqual(mydonut.outer_portal((15, 34)), True)
+        self.assertEqual(mydonut.outer_portal((17, 8)), False)
+        self.assertEqual(mydonut.outer_portal((19, 2)), True)
+        self.assertEqual(mydonut.outer_portal((19, 34)), True)
+        self.assertEqual(mydonut.outer_portal((21, 8)), False)
+        self.assertEqual(mydonut.outer_portal((21, 28)), False)
+        self.assertEqual(mydonut.outer_portal((26, 13)), False)
+        self.assertEqual(mydonut.outer_portal((26, 17)), False)
+        self.assertEqual(mydonut.outer_portal((26, 21)), False)
+        self.assertEqual(mydonut.outer_portal((26, 23)), False)
+        self.assertEqual(mydonut.outer_portal((32, 11)), True)
+        self.assertEqual(mydonut.outer_portal((32, 17)), True)
+        self.assertEqual(mydonut.outer_portal((32, 21)), True)
+        self.assertEqual(mydonut.outer_portal((32, 23)), True)
+
+    def test_text_2_init(self):
+        """Test vault object creation with text"""
+
+        # 1. Create default donut object
+        mydonut = donut.Donut(text=from_text(EXAMPLES[2]), part2=True)
+
+        # 2. Make sure it has the expected values
+        self.assertEqual(len(mydonut.text), 37)
+        self.assertEqual(mydonut.rows, 37)
+        self.assertEqual(mydonut.cols, 45)
+        self.assertEqual(mydonut.portals, {
+            'OA': {(17, 34), (8, 13)},
+            'WB': {(36, 13), (19, 2)},
+            'ZH': {(42, 13), (31, 8)},
+            'CJ': {(2, 15), (8, 23)},
+            'CK': {(8, 17), (27, 2)},
+            'IC': {(23, 8), (42, 17)},
+            'XF': {(2, 21), (17, 28)},
+            'RF': {(36, 21), (42, 25)},
+            'NM': {(36, 23), (23, 34)},
+            'RE': {(21, 8), (2, 25)},
+            'ZZ': {(13, 2)},
+            'FD': {(19, 34), (13, 8)},
+            'LP': {(29, 28), (15, 2)},
+            'AA': {(15, 34)},
+            'XQ': {(17, 2), (21, 28)}})
+        self.assertEqual(mydonut.start, donut.START)
+        self.assertEqual(mydonut.finish, donut.FINISH)
+        self.assertEqual(mydonut.portals_at, {
+            (8, 13): 'OA',
+            (36, 13): 'WB',
+            (42, 13): 'ZH',
+            (2, 15): 'CJ',
+            (8, 17): 'CK',
+            (42, 17): 'IC',
+            (2, 21): 'XF',
+            (36, 21): 'RF',
+            (8, 23): 'CJ',
+            (36, 23): 'NM',
+            (2, 25): 'RE',
+            (42, 25): 'RF',
+            (13, 2): 'ZZ',
+            (13, 8): 'FD',
+            (15, 2): 'LP',
+            (15, 34): 'AA',
+            (17, 2): 'XQ',
+            (17, 28): 'XF',
+            (17, 34): 'OA',
+            (19, 2): 'WB',
+            (19, 34): 'FD',
+            (21, 8): 'RE',
+            (21, 28): 'XQ',
+            (23, 8): 'IC',
+            (23, 34): 'NM',
+            (27, 2): 'CK',
+            (29, 28): 'LP',
+            (31, 8): 'ZH'})
+        self.assertEqual(mydonut.part2, True)
+        self.assertEqual(len(mydonut.locs), 376)
+        self.assertEqual(mydonut.outer_portal((8, 13)), False)
+        self.assertEqual(mydonut.outer_portal((36, 13)), False)
+        self.assertEqual(mydonut.outer_portal((42, 13)), True)
+        self.assertEqual(mydonut.outer_portal((2, 15)), True)
+        self.assertEqual(mydonut.outer_portal((8, 17)), False)
+        self.assertEqual(mydonut.outer_portal((42, 17)), True)
+        self.assertEqual(mydonut.outer_portal((2, 21)), True)
+        self.assertEqual(mydonut.outer_portal((36, 21)), False)
+        self.assertEqual(mydonut.outer_portal((8, 23)), False)
+        self.assertEqual(mydonut.outer_portal((36, 23)), False)
+        self.assertEqual(mydonut.outer_portal((2, 25)), True)
+        self.assertEqual(mydonut.outer_portal((42, 25)), True)
+
+        self.assertEqual(mydonut.inner_portal((13, 2)), False)
+        self.assertEqual(mydonut.inner_portal((13, 8)), True)
+        self.assertEqual(mydonut.inner_portal((15, 2)), False)
+        self.assertEqual(mydonut.inner_portal((15, 24)), True)
+        self.assertEqual(mydonut.inner_portal((17, 2)), False)
+        self.assertEqual(mydonut.inner_portal((17, 28)), True)
+        self.assertEqual(mydonut.inner_portal((17, 34)), False)
+        self.assertEqual(mydonut.inner_portal((19, 2)), False)
+        self.assertEqual(mydonut.inner_portal((19, 34)), False)
+        self.assertEqual(mydonut.inner_portal((21, 8)), True)
+        self.assertEqual(mydonut.inner_portal((23, 8)), True)
+        self.assertEqual(mydonut.inner_portal((23, 34)), False)
+        self.assertEqual(mydonut.inner_portal((27, 2)), False)
+        self.assertEqual(mydonut.inner_portal((29, 28)), True)
+        self.assertEqual(mydonut.inner_portal((31, 8)), True)
 
 
 # ----------------------------------------------------------------------

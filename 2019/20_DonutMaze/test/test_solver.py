@@ -131,6 +131,27 @@ class TestSolver(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(len(mysolver.path), 10)
         self.assertEqual(mysolver.cost, 58)
 
+    def test_p2e2_solve(self):
+        "Test Solver object creation with text of part 2 example 2"
+
+        # 1. Test Solver object creation with text of part 2 example 2
+        mysolver = solver.Solver(text=from_text(test_donut.EXAMPLES[2]),
+                                 depth=15,
+                                 part2=True)
+
+        # 2. Make sure it has the specified values
+        self.assertEqual(mysolver.donut.rows, 37)
+        self.assertEqual(mysolver.donut.cols, 45)
+        print(mysolver.portal_paths.keys())
+        self.assertEqual(len(mysolver.portal_paths), 15)
+        print(mysolver.graph.edges)
+        self.assertEqual(len(mysolver.graph.edges), 964)
+
+        # 3. Solve the donut maze
+        mysolver.solve_donut_maze()
+        self.assertEqual(len(mysolver.path), 12)
+        self.assertEqual(mysolver.cost, 396)
+
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

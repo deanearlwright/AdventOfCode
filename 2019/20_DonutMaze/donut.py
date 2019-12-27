@@ -32,6 +32,8 @@ DELTA = {
     'E': (1, 0)
 }
 
+INNER_OUTER = 5
+
 # ======================================================================
 #                                                                  Donut
 # ======================================================================
@@ -277,6 +279,19 @@ class Donut():
         # 2. Return non-portal exits
         return [exit for exit in exits
                 if Donut.delta_loc(col, row, exit) not in self.portals_at]
+
+    def inner_portal(self, loc):
+        "Return True is an inner portal"
+
+        return not self.outer_portal(loc)
+
+    def outer_portal(self, loc):
+        "Return True if an outer portal"
+
+        return loc[0] < INNER_OUTER or \
+            loc[1] < INNER_OUTER or \
+            loc[0] > self.cols - INNER_OUTER or \
+            loc[1] > self.rows - INNER_OUTER
 
 
 # ----------------------------------------------------------------------

@@ -40,7 +40,7 @@ RDIR = ['?', 'S', 'N', 'E', 'W']
 class Solver():
     """Object representing a donut maze solver"""
 
-    def __init__(self, text=None, verbose=False, part2=False):
+    def __init__(self, text=None, verbose=False, depth=1, part2=False):
 
         # 1. Set the initial values
         self.donut = donut.Donut(text=text, part2=part2)
@@ -48,7 +48,7 @@ class Solver():
 
         # 2. Find the paths to all of the portals
         self.portal_paths = self.get_direct_paths_between_portals()
-        self.graph = self.portal_paths_to_graph()
+        self.graph = self.portal_paths_to_graph(depth=depth, verbose=True)
         self.path = None
         self.cost = None
 
@@ -139,24 +139,63 @@ class Solver():
         # 8. Return the results
         return results
 
-    def portal_paths_to_graph(self, verbose=False):
+    def portal_paths_to_graph(self, depth=1, verbose=False):
         "Rework portal paths in to a graph of locations suitable for find_shortest_path"
 
-        # 1. Start with nothing
+        # 1. Start with nothing, and thats all you get if there are no portals defined
         result = []
+        if not self.donut.portals:
+            return graph.Graph(result)
 
-        # 2. Loop for all of the entries in the portal paths
-        for portal, paths in self.portal_paths.items():
-            if verbose:
-                print("PP2G: portal %s paths %s" % (portal, paths))
+        # 2. Part 2 ignores AA and ZZ for inner mazes
+        ignore_AAZZ_portals = frozenset([self.donut.start, self.donut.finish])
+        ignore_AAZZ_locs = frozenset([list(self.donut.portals[portal])[0]
+                                      for portal in ignore_AAZZ_portals])
+        if verbose and self.part2:
+            print("PP2G: Ignoring portals %s, locations %s" %
+                  (ignore_AAZZ_portals, ignore_AAZZ_locs))
 
-            # 3. Loop for all the paths
-            for path in paths:
+        # 3. Part 2 ignores outer portal on level 0 except for AA and ZZ
+        ignore_0_portals = frozenset([])
+        ignore_0_locs = frozenset([])
+        if verbose and self.part2:
+            print("PP2G: Ignoring portals %s, locations %s" %
+                  (ignore_0_portals, ignore_0_locs))
 
-                # 4. Add this path
-                result.append((path.from_loc, path.to_loc, path.steps))
+        # 2. Loop for recursive levels
+        for level in range(depth):
 
-        # 5. return the graph
+            # 3. Loop for all of the entries in the portal paths
+            for portal, paths in self.portal_paths.items():
+                if verbose:
+                    print("PP2G: level %d portal %s paths %s" % (level, portal, paths))
+
+                # 4. for part2, on inner levels we ignore AA and ZZ,
+                #               on level 0, we ignore outer portals except for AA and ZZ
+                if self.part2:
+                    if (level > 0 and portal in ignore_AAZZ_portals) or \
+                       (level == 0 and portal in ignore_0_portals):
+                        if verbose:
+                            print("PP2G: Ignoring portal %s on level %d" % (portal, level))
+                        continue
+
+                # 5. Loop for all the paths
+                for path in paths:
+                    if verbose:
+                        print("PP2G: Level %d Portal %s path %s" % (level, portal, path))
+
+                    # 6. On inner levels we ignore AA and ZZ, and others on the outer level
+                    # if level > 0 and path.from_loc
+
+                    # 7. Determine the to and from levels
+                    from_level = level
+                    to_level = level
+
+                    # 8. Add this path
+                    result.append(((from_level, path.from_loc[0], path.from_loc[1]),
+                                   (to_level, path.to_loc[0], path.to_loc[1]), path.steps))
+
+        # 9. return the graph
         if verbose:
             for edge in result:
                 print("PP2G: Edge(s=%s, e=%s, c=%d)" %
@@ -171,7 +210,8 @@ class Solver():
         finish = list(self.donut.portals[self.donut.finish])[0]
 
         # 2. Find the path
-        result = self.graph.dijkstra(start, finish)
+        result = self.graph.dijkstra((0, start[0], start[1]),
+                                     (0, finish[0], finish[1]))
 
         # 3. If you found it, save the results
         if result is not None:
