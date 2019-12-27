@@ -14,6 +14,7 @@
 #                                                                 import
 # ----------------------------------------------------------------------
 import unittest
+from collections import Counter
 
 import solver
 import donut
@@ -97,11 +98,25 @@ class TestSolver(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(len(mysolver.path), 8)
         self.assertEqual(mysolver.cost, 23)
 
+        # 6. Test part2 graph generation
+        mysolver.part2 = True
+        mysolver.graph = mysolver.portal_paths_to_graph(depth=1)
+        self.assertCountEqual(Counter([(_.start[0], _.end[0]) for _ in mysolver.graph.edges]),
+                              {(0, 0): 22})
+
+        mysolver.graph = mysolver.portal_paths_to_graph(depth=2)
+        self.assertCountEqual(Counter([(_.start[0], _.end[0]) for _ in mysolver.graph.edges]),
+                              {(0, 0): 12, (1, 1): 6, (0, 1): 3, (1, 0): 3})
+
+        mysolver.graph = mysolver.portal_paths_to_graph(depth=3)
+        self.assertCountEqual(Counter([(_.start[0], _.end[0]) for _ in mysolver.graph.edges]),
+                              {(0, 0): 12, (1, 1): 6, (2, 2): 6, (0, 1): 3, (1, 2): 3, (1, 0): 3, (2, 1): 3})
+
     def test_p1e0_solve(self):
         "Test Solver object creation with text of part 1 example 0"
 
         # 1. Create Donut Maze solver object from part one example 0
-        mysolver = solver.Solver(text=from_text(test_donut.EXAMPLES[0]), verbose=True)  # verbose=True
+        mysolver = solver.Solver(text=from_text(test_donut.EXAMPLES[0]))
 
         # 2. Make sure it has the specified values
         self.assertEqual(mysolver.donut.rows, 19)
@@ -142,14 +157,12 @@ class TestSolver(unittest.TestCase):  # pylint: disable=R0904
         # 2. Make sure it has the specified values
         self.assertEqual(mysolver.donut.rows, 37)
         self.assertEqual(mysolver.donut.cols, 45)
-        print(mysolver.portal_paths.keys())
         self.assertEqual(len(mysolver.portal_paths), 15)
-        print(mysolver.graph.edges)
-        self.assertEqual(len(mysolver.graph.edges), 964)
+        self.assertEqual(len(mysolver.graph.edges), 846)
 
         # 3. Solve the donut maze
         mysolver.solve_donut_maze()
-        self.assertEqual(len(mysolver.path), 12)
+        self.assertEqual(len(mysolver.path), 66)
         self.assertEqual(mysolver.cost, 396)
 
 

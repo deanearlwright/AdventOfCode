@@ -8,6 +8,7 @@ proj.file-list = [loc('aoc_dm.py'),
                   loc('donut.py'),
                   loc('example0.txt'),
                   loc('example1.txt'),
+                  loc('example2.txt'),
                   loc('graph.py'),
                   loc('location.py'),
                   loc('prob_two.txt'),
@@ -17,5 +18,5 @@ proj.file-list = [loc('aoc_dm.py'),
                   loc('test/test_solver.py')]
 proj.file-type = 'shared'
 proj.launch-config = {loc('aoc_dm.py'): ('project',
-        (u'-p1 input.txt',
+        (u'-p2 -t 50 input.txt',
          ''))}

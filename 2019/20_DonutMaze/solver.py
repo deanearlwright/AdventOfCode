@@ -48,7 +48,7 @@ class Solver():
 
         # 2. Find the paths to all of the portals
         self.portal_paths = self.get_direct_paths_between_portals()
-        self.graph = self.portal_paths_to_graph(depth=depth, verbose=True)
+        self.graph = self.portal_paths_to_graph(depth=depth, verbose=verbose)
         self.path = None
         self.cost = None
 
@@ -147,60 +147,106 @@ class Solver():
         if not self.donut.portals:
             return graph.Graph(result)
 
-        # 2. Part 2 ignores AA and ZZ for inner mazes
-        ignore_AAZZ_portals = frozenset([self.donut.start, self.donut.finish])
-        ignore_AAZZ_locs = frozenset([list(self.donut.portals[portal])[0]
-                                      for portal in ignore_AAZZ_portals])
-        if verbose and self.part2:
-            print("PP2G: Ignoring portals %s, locations %s" %
-                  (ignore_AAZZ_portals, ignore_AAZZ_locs))
+        # 2. Part 2 ignores AA and ZZ for inner mazes and outer portals on level 0
+        if self.part2:
+            ignore_aazz_portals = frozenset([self.donut.start, self.donut.finish])
+            ignore_aazz_locs = frozenset([list(self.donut.portals[portal])[0]
+                                          for portal in ignore_aazz_portals])
+            ignore_0_locs = frozenset([_ for _ in self.donut.portals_at
+                                       if self.donut.outer_portal(_) and
+                                       _ not in ignore_aazz_locs])
+            if verbose:
+                print("PP2G: Ignoring level 0 outer portal locations %s" %
+                      (ignore_0_locs))
+                print("PP2G: For levels > 0, ignoring portals %s, locations %s" %
+                      (ignore_aazz_portals, ignore_aazz_locs))
+        else:
+            ignore_aazz_portals = frozenset()
+            ignore_aazz_locs = frozenset()
+            ignore_0_locs = frozenset()
 
-        # 3. Part 2 ignores outer portal on level 0 except for AA and ZZ
-        ignore_0_portals = frozenset([])
-        ignore_0_locs = frozenset([])
-        if verbose and self.part2:
-            print("PP2G: Ignoring portals %s, locations %s" %
-                  (ignore_0_portals, ignore_0_locs))
-
-        # 2. Loop for recursive levels
+        # 3. Loop for recursive levels
         for level in range(depth):
 
-            # 3. Loop for all of the entries in the portal paths
+            # 4. Loop for all of the entries in the portal paths
             for portal, paths in self.portal_paths.items():
-                if verbose:
-                    print("PP2G: level %d portal %s paths %s" % (level, portal, paths))
 
-                # 4. for part2, on inner levels we ignore AA and ZZ,
-                #               on level 0, we ignore outer portals except for AA and ZZ
+                # 5. for part2, on inner levels we ignore AA and ZZ,
                 if self.part2:
-                    if (level > 0 and portal in ignore_AAZZ_portals) or \
-                       (level == 0 and portal in ignore_0_portals):
+                    if (level > 0 and portal in ignore_aazz_portals):
                         if verbose:
                             print("PP2G: Ignoring portal %s on level %d" % (portal, level))
                         continue
 
-                # 5. Loop for all the paths
+                # 6. Loop for all the paths
                 for path in paths:
                     if verbose:
                         print("PP2G: Level %d Portal %s path %s" % (level, portal, path))
 
-                    # 6. On inner levels we ignore AA and ZZ, and others on the outer level
-                    # if level > 0 and path.from_loc
+                    # 7. On inner levels we ignore AA and ZZ, and others on the outer level
+                    if level > 0 and (path.from_loc in ignore_aazz_locs or
+                                      path.to_loc in ignore_aazz_locs):
+                        if verbose:
+                            print("PP2G: Ignoring path %s on level %d" % (path, level))
+                        continue
+                    if level == 0 and not path.used and \
+                        (path.from_loc in ignore_0_locs or
+                         path.to_loc in ignore_0_locs):
+                        if verbose:
+                            print("PP2G: Ignoring path %s on level %d" % (path, level))
+                        continue
 
-                    # 7. Determine the to and from levels
-                    from_level = level
-                    to_level = level
+                    # 8. Determine the to and from levels
+                    if self.part2:
+                        from_level = level  # self.level_num(level, path.from_loc, path.used, depth)
+                        to_level = self.level_num(level, path.from_loc, path.used, depth)
+                        if from_level is None or to_level is None:
+                            if verbose:
+                                print("PP2G: Ignoring path %s on level %d due to depth" % (path, level))
+                            continue
+                    else:
+                        from_level = level
+                        to_level = level
 
-                    # 8. Add this path
+                    # 9. Add this path
                     result.append(((from_level, path.from_loc[0], path.from_loc[1]),
                                    (to_level, path.to_loc[0], path.to_loc[1]), path.steps))
 
-        # 9. return the graph
+        # 10. return the graph
         if verbose:
             for edge in result:
                 print("PP2G: Edge(s=%s, e=%s, c=%d)" %
                       (edge[0], edge[1], edge[2]))
         return graph.Graph(result)
+
+    def level_num(self, level, loc, used, depth):
+        "Determine level number for this end of path"
+
+        # 1. Assume we stay on this level
+        result = level
+
+        # 1. If not a portal to portal connection, level is the level
+        if not used:
+            return result
+
+        # 2. Add one for inner portals, subtrack one for outer portals
+        if self.donut.inner_portal(loc):
+            result += 1
+        else:
+            result -= 1
+
+        # 3. Can't go past outermost level
+        if result < 0:
+            result = None
+
+        # 4. Or the limit of recursine
+        elif result >= depth:
+            result = None
+
+        # 5. Return adjusted level
+        # print("level_num: level=%d loc=%s used=%s depth=%d result=%s" %
+        #      (level, loc, used, depth, result))
+        return result
 
     def solve_donut_maze(self):
         "Solve the donut maze"
