@@ -13,9 +13,10 @@
 # ----------------------------------------------------------------------
 #                                                                 import
 # ----------------------------------------------------------------------
-import heapq
 
 import donut
+
+import graph
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -31,8 +32,6 @@ REVERSE = {
 DIRS = ['?', 'N', 'S', 'W', 'E']
 RDIR = ['?', 'S', 'N', 'E', 'W']
 
-ORIGIN_KEY = '@0'
-
 # ======================================================================
 #                                                                 Solver
 # ======================================================================
@@ -47,155 +46,195 @@ class Solver():
         self.donut = donut.Donut(text=text, part2=part2)
         self.part2 = part2
 
-        # 2. Find the path to all of the portals
-        self.portal_paths = self.get_portol_paths(verbose=verbose)
+        # 2. Find the paths to all of the portals
+        self.portal_paths = self.get_direct_paths_between_portals()
+        self.graph = self.portal_paths_to_graph()
+        self.path = None
+        self.cost = None
 
-    def get_shortest_path(self, from_portal, to_portal):
-        "Get the short path from one portal to another"
-
-        # 1. Start with no path found, no portals used, and nothing in the path
-        path_steps = None
-        used = set()
-        path = set()
-
-        # 2. Start the queue from where we are
-        priority_queue = []
-        heapq.heappush(priority_queue, (0, from_fortal, set()))
-
-        # 3. Loop while there is somewhere to explore
-        while priority_queue:
-
-            # 4. Take the minimum (steps) item from the queue
-            steps, here, used = heapq.heappop(priority_queue)
-
-            # 5. We are here
-            path.add(here)
-
-            # 6. If here is there, we are done
-            if here == to_portal:
-                path_steps = steps
-                break
-
-            # 7. If there is a door, we have more to unlock
-            if here in self.donut.door_at:
-                doors = doors.copy()
-                doors.add(self.donut.door_at[here])
-
-            # 8. We need to explore all exits from here
-            for direction in self.donut.locs[here].exits_at():
-                delta = donut.DELTA[direction]
-                nxt = (here[0] + delta[0], here[1] + delta[1])
-                if nxt not in path:
-                    heapq.heappush(priority_queue, (steps + 1, nxt, doors))
-
-        # 9. Return the number if steps in path (or None if no path found) and keys needed
-        return path_steps, doors
-
-    def get_direct_portal_paths(self, verbose=False):
+    def get_direct_paths_between_portals(self, verbose=False):
         "Get paths between portals"
 
         # 1. Start with nothing
-        paths = {portal: {} for portal in self.donut.portals}
+        paths = {portal: Paths() for portal in self.donut.portals}
 
         # 2. Loop for all of the portals
-        for portal, plocs in self.portals.keys.items():
+        for from_portal, from_plocs in self.donut.portals.items():
+            if verbose:
+                print("Portal %s locs=%s" % (from_portal, str(from_plocs)))
 
-            # 3. Add the shortest path to each key from that key (if any)
-            self.get_portal_to_portal_paths(paths, portal, plocs[0])
-            self.get_portal_to_portal_paths(paths, portal, plocs[1])
+            # 3. It only takes one step to go from one end of the portal to the other
+            if len(from_plocs) > 1:
+                list_plocs = list(from_plocs)
+                if verbose:
+                    print("Adding portal path for %s between %s and %s" %
+                          (from_portal, list_plocs[0], list_plocs[1]))
+
+                paths[from_portal].append(Path(from_loc=list_plocs[0], to_loc=list_plocs[1],
+                                               steps=1, used=[from_portal]))
+                paths[from_portal].append(Path(from_loc=list_plocs[1], to_loc=list_plocs[0],
+                                               steps=1, used=[from_portal]))
+
+            # 4. Loop for the (one or two) end of this portal
+            for from_ploc in from_plocs:
+
+                # 5. Explore from here, collecting portal locations and path length
+                portal_locs = self.explore_from(from_ploc)
+                if verbose:
+                    print("From portal %s %s there are %s locations/steps" %
+                          (from_portal, from_ploc, str(portal_locs)))
+
+                # 6. Record the portal ends found
+                if portal_locs:
+                    for to_loc, steps in portal_locs.items():
+                        to_portal = self.donut.portals_at[to_loc]
+                        if verbose:
+                            print("Adding direct path from portal %s at %s to portal %s at %s for %d steps" %
+                                  (from_portal, from_ploc, to_portal, to_loc, steps))
+                        paths[from_portal].append(Path(from_loc=from_ploc, to_loc=to_loc,
+                                                       steps=steps, used=[]))
+                elif verbose:
+                    print("No portals found from portal %s at %s" %
+                          (from_portal, from_ploc))
 
         # 4. Return the direct paths beteeen different portals
+        if verbose:
+            for portal, p_paths in paths.items():
+                print("Portal %s: paths = %s" %
+                      (portal, ', '.join(str(one_path) for one_path in p_paths)))
         return paths
 
-    def get_start_to_finish_path(self, verbose=False):
-        "Return the number of steps to find all key recursively"
+    def explore_from(self, from_loc, visited=None, steps=0):
+        "Explore the local maze from the specificed location without using portals"
 
-        # 1. If part2, Use multiple origins
-        if self.part2:
-            start_from = {'@%d' % _: '@%d' % _ for _ in range(len(self.donut.origins))}
-        else:
-            start_from = {ORIGIN_KEY: ORIGIN_KEY}
+        # 1. Start with nothing
+        results = {}
+        if visited is None:
+            visited = set()
+
+        # 2. Record being here
+        visited.add(from_loc)
+        steps += 1
+
+        # 3. Oh, the places you'll go (that we have't been before)
+        locs_to_visit = [loc for loc in self.donut.exit_locs(from_loc[0], from_loc[1])
+                         if loc not in visited]
+
+        # 4. Loop for the locations
+        for loc in locs_to_visit:
+
+            # 5. If this is a portal, record it
+            if loc in self.donut.portals_at:
+                if loc not in results or steps < results[loc]:
+                    results[loc] = steps
+
+            # 6. Else explore from here
+            exp_results = self.explore_from(loc, visited, steps)
+
+            # 7. Add in those results (if any)
+            for exp_loc, exp_steps in exp_results.items():
+                if exp_loc not in results or exp_steps < results[exp_loc]:
+                    results[exp_loc] = exp_steps
+
+        # 8. Return the results
+        return results
+
+    def portal_paths_to_graph(self, verbose=False):
+        "Rework portal paths in to a graph of locations suitable for find_shortest_path"
+
+        # 1. Start with nothing
+        result = []
+
+        # 2. Loop for all of the entries in the portal paths
+        for portal, paths in self.portal_paths.items():
+            if verbose:
+                print("PP2G: portal %s paths %s" % (portal, paths))
+
+            # 3. Loop for all the paths
+            for path in paths:
+
+                # 4. Add this path
+                result.append((path.from_loc, path.to_loc, path.steps))
+
+        # 5. return the graph
         if verbose:
-            print("get_all_keys starting with %s" % start_from)
+            for edge in result:
+                print("PP2G: Edge(s=%s, e=%s, c=%d)" %
+                      (edge[0], edge[1], edge[2]))
+        return graph.Graph(result)
 
-        # 2. Solve with maze (maybe from multiple origins)
-        return self.get_keys(start_from, robot=ORIGIN_KEY, key=ORIGIN_KEY,
-                             found=None, cache=None, verbose=verbose)
+    def solve_donut_maze(self):
+        "Solve the donut maze"
 
-    def get_keys(self, at_key, robot, key, found=None, cache=None, verbose=False):
-        "Get the keys (recursive)"
+        # 1. Get the locations of the start and finish
+        start = list(self.donut.portals[self.donut.start])[0]
+        finish = list(self.donut.portals[self.donut.finish])[0]
 
-        # 1. If nothing found, get the keys obtainable from the origin
-        if found is None:
-            found = set(_ for _ in self.key_paths if _[0] == ORIGIN_KEY[0])
-            if verbose:
-                print("Setting found to %s" % found)
-                print(self.key_paths)
+        # 2. Find the path
+        result = self.graph.dijkstra(start, finish)
 
-        # 2. Start a cache if there is none
-        if cache is None:
-            if verbose:
-                print("Setting cache to empty")
-            cache = {}
-
-        # 3. Start with the initial key (origin)
-        at_key[robot] = key
-        if verbose:
-            print("Setting at_key[%s] to %s" % (robot, key))
-
-        # 4. If we have what we want, we are done
-        if len(found) == len(self.key_paths):
-            if verbose:
-                print("length of found (%d) == length of key_paths, returning 0,%s" %
-                      (len(found), key))
-            return 0, [key]
-
-        # 5. If we haven't done this before, so much to explore
-        ckey = "".join(sorted(at_key.values())) + '|' + \
-            "".join(sorted(set(self.key_paths.keys()) - found))
-        if verbose:
-            print("Checking cache for %s" % (ckey))
-        if ckey not in cache:
-
-            # 6. Start with no paths from here
-            paths = []
-
-            # 7. Loop for all the runners and all the possible paths
-            for bot, bot_key in at_key.items():
-                for pkey in self.key_paths[bot]:
-
-                    # 8. Ignore if we already explored this path or don't have the keys for it
-                    if pkey in found or self.key_paths[bot_key][pkey].doors - found != set():
-                        continue
-
-                    #  9. Explore this path and remember it
-                    ksteps, kpaths = self.get_keys(at_key.copy(), bot, pkey, found | {pkey}, cache, verbose=verbose)
-                    paths.append((self.key_paths[bot_key][pkey].steps + ksteps, [key] + kpaths))
-
-            # 10. Remember only the best
-            cache[ckey] = min(paths)
-            if verbose:
-                print("Setting cache for %s to %s" % (ckey, min(paths)))
-
-        # 11. Return the best from here
-        return cache[ckey]
+        # 3. If you found it, save the results
+        if result is not None:
+            self.path = result
+            self.cost = self.graph.cost(result)
 
 
 # ======================================================================
 #                                                                   Path
 # ======================================================================
-class Path():
-    """Object representing a path to an item in the Neptune donut"""
 
-    def __init__(self, loc=(0, 0), steps=0, doors=None):
+
+class Path():
+    """Object representing a path in the Neptune donut maze"""
+
+    def __init__(self, from_loc=(0, 0), to_loc=(0, 0), steps=0, used=None):
 
         # 1. Set the initial values
-        self.loc = loc
+        self.from_loc = from_loc
+        self.to_loc = to_loc
         self.steps = steps
-        if doors is None:
-            self.doors = set()
+        if used is None:
+            self.used = set()
         else:
-            self.doors = set(doors)
+            self.used = set(used)
+
+    def __str__(self):
+        if self.used:
+            using = ' using ' + ','.join(self.used)
+        else:
+            using = ''
+        if self.steps == 1:
+            steps = 'step'
+        else:
+            steps = 'steps'
+        return "%s to %s takes %d %s%s" % \
+               (self.from_loc, self.to_loc, self.steps, steps, using)
+
+# ======================================================================
+#                                                                  Paths
+# ======================================================================
+
+
+class Paths():
+    """Object representing multiple paths in the Neptune donut maze"""
+
+    def __init__(self):
+
+        # 1. Set the initial values
+        self.paths = []
+
+    def __str__(self):
+        return ', '.join(str(path) for path in self.paths)
+
+    def __len__(self):
+        return len(self.paths)
+
+    def __iter__(self):
+        return iter(self.paths)
+
+    def append(self, path):
+        "Append a path"
+        self.paths.append(path)
 
 
 # ----------------------------------------------------------------------

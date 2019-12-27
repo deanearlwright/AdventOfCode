@@ -250,6 +250,33 @@ class Donut():
 
         self.locs[(col, row)] = location.Location((col, row))
 
+    @staticmethod
+    def delta_loc(col, row, exit_dir):
+        "return the col and row in that direction"
+
+        return (col + DELTA[exit_dir][0], row + DELTA[exit_dir][1])
+
+    def exit_dirs(self, col, row):
+        "Return the directions to non-portal locations"
+
+        # 1. Return  the exits from this location
+        return self.locs[(col, row)].exits_at()
+
+    def exit_locs(self, col, row):
+        # Return were you can go
+
+        return [Donut.delta_loc(col, row, exit) for exit in self.exit_dirs(col, row)
+                if Donut.delta_loc(col, row, exit) in self.locs]
+
+    def non_portals(self, col, row):
+        "Return the directions to non-portal locations"
+
+        # 1. Get the exits from this location
+        exits = self.locs[(col, row)].exits_at()
+
+        # 2. Return non-portal exits
+        return [exit for exit in exits
+                if Donut.delta_loc(col, row, exit) not in self.portals_at]
 
 
 # ----------------------------------------------------------------------

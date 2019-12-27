@@ -112,6 +112,7 @@ class TestDonut(unittest.TestCase):  # pylint: disable=R0904
 
         # 1. Create default donut object
         mydonut = donut.Donut(text=from_text(EXAMPLES[0]))
+
         # 2. Make sure it has the expected values
         self.assertEqual(len(mydonut.text), 19)
         self.assertEqual(mydonut.rows, 19)
@@ -134,6 +135,23 @@ class TestDonut(unittest.TestCase):  # pylint: disable=R0904
             (13, 16): 'ZZ'})
         self.assertEqual(mydonut.part2, False)
         self.assertEqual(len(mydonut.locs), 47)
+
+        # 3. Check methods (not used by init)
+        self.assertEqual(mydonut.exit_dirs(9, 2), ['S'])
+        self.assertEqual(mydonut.exit_dirs(9, 3), ['N', 'S', 'E'])
+        self.assertEqual(mydonut.exit_dirs(9, 4), ['N', 'S'])
+        self.assertEqual(mydonut.exit_dirs(9, 5), ['N', 'S'])
+        self.assertEqual(mydonut.exit_dirs(9, 6), ['N', 'S'])
+        self.assertEqual(mydonut.non_portals(9, 2), ['S'])
+        self.assertEqual(mydonut.non_portals(9, 3), ['S', 'E'])
+        self.assertEqual(mydonut.non_portals(9, 4), ['N', 'S'])
+        self.assertEqual(mydonut.non_portals(9, 5), ['N'])
+        self.assertEqual(mydonut.non_portals(9, 6), ['N', 'S'])
+        self.assertEqual(mydonut.exit_locs(9, 2), [(9, 3)])
+        self.assertEqual(mydonut.exit_locs(9, 3), [(9, 2), (9, 4), (10, 3)])
+        self.assertEqual(mydonut.exit_locs(9, 4), [(9, 3), (9, 5)])
+        self.assertEqual(mydonut.exit_locs(9, 5), [(9, 4), (9, 6)])
+        self.assertEqual(mydonut.exit_locs(9, 6), [(9, 5)])
 
     def test_text_1_init(self):
         """Test vault object creation with text"""

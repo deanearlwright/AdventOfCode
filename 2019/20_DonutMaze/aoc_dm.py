@@ -51,14 +51,16 @@ def parse_command_line():
 #                                                               part_one
 # ----------------------------------------------------------------------
 
+
 def part_one(args, input_lines):
     "Process part one of the puzzle"
 
     # 1. Create the donut solver
     krispy_kreme = solver.Solver(text=input_lines, verbose=args.verbose)
 
-    # 2. Get the maximum of the amplifiers without feedback
-    solution, _ = krispy_kreme.get_from_here_to_there(verbose=args.verbose)
+    # 2. Solve the donut maze
+    krispy_kreme.solve_donut_maze()
+    solution = krispy_kreme.cost
     if solution is None:
         print("Your could not solve the maze")
     else:
@@ -71,14 +73,16 @@ def part_one(args, input_lines):
 #                                                               part_two
 # ----------------------------------------------------------------------
 
+
 def part_two(args, input_lines):
     "Process part two of the puzzle"
 
     # 1. Create the donut solver
     krispy_kreme = solver.Solver(text=input_lines, verbose=args.verbose)
 
-    # 2. Get the maximum of the amplifiers without feedback
-    solution, _ = krispy_kreme.get_from_here_to_there(verbose=args.verbose)
+    # 2. Solve the donut maze
+    krispy_kreme.solve_donut_maze()
+    solution = krispy_kreme.cost
     if solution is None:
         print("Your could not solve the maze")
     else:
