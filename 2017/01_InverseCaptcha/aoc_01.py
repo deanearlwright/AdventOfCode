@@ -78,7 +78,7 @@ def part_two(args, input_lines):
     "Process part two of the puzzle"
 
     # 1. Create the captcha solver
-    solver = captcha.Captcha(text=input_lines[0])
+    solver = captcha.Captcha(part2=True, text=input_lines[0])
 
     # 2. Solve the captcha
     solution = solver.solve(verbose=args.verbose)

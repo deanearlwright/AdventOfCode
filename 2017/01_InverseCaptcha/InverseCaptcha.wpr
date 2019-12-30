@@ -7,8 +7,9 @@
 proj.file-list = [loc('aoc_01.py'),
                   loc('captcha.py'),
                   loc('prob_one.txt'),
+                  loc('prob_two.txt'),
                   loc('test/test_captcha.py')]
 proj.file-type = 'shared'
 proj.launch-config = {loc('aoc_01.py'): ('project',
-        (u'-p1 input.txt',
+        (u'-p2 input.txt',
          ''))}
