@@ -13,7 +13,6 @@
 # ----------------------------------------------------------------------
 #                                                                 import
 # ----------------------------------------------------------------------
-from collections import Counter
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -47,22 +46,36 @@ class Spreadsheet():
         for rnum, row in enumerate(self.text):
 
             # 4. Get the number in the row
-            row_knt = Counter(int(_) for _ in row.split())
+            row_int = [int(_) for _ in row.split()]
 
-            # 5. Get the min and max from the row
-            row_min = min(row_knt.keys())
-            row_max = max(row_knt.keys())
+            # 5. Part one or part 2
+            if not self.part2:
 
-            # 6. Computer the difference
-            row_chk = row_max - row_min
-            if verbose:
-                print("For row %d, min=%d, max=%d, diff=%d" %
-                      (rnum, row_min, row_max, row_chk))
+                # 6. part1: row checksom is diff between min and max
+                row_min = min(row_int)
+                row_max = max(row_int)
+                row_chk = row_max - row_min
+                if verbose:
+                    print("For row %d, min=%d, max=%d, diff=%d" %
+                          (rnum, row_min, row_max, row_chk))
+            else:
+                # 7. Part 2: row checksum is common divisor of two numbers
+                row_chk = 0
+                for cnum, num1 in enumerate(row_int[:-1]):
+                    for num2 in row_int[cnum+1:]:
+                        if num1 % num2 == 0:
+                            row_chk = num1 // num2
+                        elif num2 % num1 == 0:
+                            row_chk = num2 // num1
+                if verbose:
+                    print("For row %d, chk=%d" %
+                          (rnum, row_chk))
 
-            # 7. Cumulate the checksum
+
+            # 8. Cumulate the checksum
             chk_sum += row_chk
 
-        # 8. Return the total checksum
+        # 9. Return the total checksum
         if verbose:
             print("Checksum is %d" % (chk_sum))
         return chk_sum

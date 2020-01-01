@@ -11,5 +11,5 @@ proj.file-list = [loc('aoc_02.py'),
                   loc('test/test_spreadsheet.py')]
 proj.file-type = 'shared'
 proj.launch-config = {loc('aoc_02.py'): ('project',
-        (u'-p1 input.txt',
+        (u'-p2 input.txt',
          ''))}

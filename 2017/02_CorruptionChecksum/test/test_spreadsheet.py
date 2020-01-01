@@ -32,6 +32,15 @@ P1_EXAMPLE_TEXT = """
 ! Solution = 8 + 4 + 6 = 18
 """
 
+P2_EXAMPLE_TEXT = """
+! Example 1 from part 2
+
+5 9 2 8
+9 4 7 3
+3 8 6 5
+
+! Solution = 4 + 3 + 2 = 9
+"""
 
 # ======================================================================
 #                                                        TestSpreadsheet
@@ -80,6 +89,19 @@ class TestSpreadsheet(unittest.TestCase):  # pylint: disable=R0904
         # 3. Check methods
         self.assertEqual(myss.checksum(), 18)
 
+    def test_text_two_init(self):
+        """Test Spreadsheet object creation from text"""
+
+        # 1. Create Spreadsheet object from text
+        myss = spreadsheet.Spreadsheet(part2=True,
+                                       text=aoc_02.from_text(P2_EXAMPLE_TEXT))
+
+        # 2. Make sure it has the specified values
+        self.assertEqual(len(myss.text), 3)
+        self.assertEqual(myss.part2, True)
+
+        # 3. Check methods
+        self.assertEqual(myss.checksum(verbose=False), 9)
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
