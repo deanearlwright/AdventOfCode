@@ -1,0 +1,13 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_09.py'),
+                  loc('groups.py'),
+                  loc('test/test_groups.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_09.py'): ('project',
+        (u'-p2 input.txt',
+         ''))}
