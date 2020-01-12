@@ -13,17 +13,20 @@
 # ----------------------------------------------------------------------
 #                                                                 import
 # ----------------------------------------------------------------------
+from functools import reduce
+from operator import xor
 
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
+PART2_LENGTHS = [17, 31, 73, 47, 23]
 
 # ======================================================================
 #                                                                  Knots
 # ======================================================================
 
 
-class Knots(object):
+class Knots(object):   # pylint: disable=R0902, R0205
     """Knotty String Object"""
 
     def __init__(self, part2=False, length=0):
@@ -35,6 +38,11 @@ class Knots(object):
         self.current = 0
         self.skip = 0
         self.values = list(range(length))
+        self.knots = []
+        if part2:
+            self.rounds = 64
+        else:
+            self.rounds = 1
 
     def process_knots(self, text=None, verbose=False, limit=0):
         "Process the text of knots"
@@ -43,20 +51,32 @@ class Knots(object):
         if text is None:
             return None
 
-        # 2. Loop for all of the knot lengths
-        for knum, klen in enumerate([int(_) for _ in text.split(',')]):
+        # 2. Get the knot lengths
+        if self.part2:
+            self.knots = [ord(_) for _ in text] + PART2_LENGTHS
+        else:
+            self.knots = [int(_) for _ in text.split(',')]
 
-            # 3. Process the character
-            self.process_one_knot(klen, verbose=verbose)
+        # 3. Loop for all of the rounds
+        for rnum in range(self.rounds):
 
-            # 4. Check if processing limit reached
-            if knum > limit > 0:
-                break
+            # 4. Loop for all of the knot lengths
+            for knum, klen in enumerate(self.knots):
 
-        # 5. Return the product of the first two values
+                # 5. Process the one knot of the set of knots
+                self.process_one_knot(klen, rnum=rnum, verbose=verbose)
+
+                # 6. Check if processing limit reached
+                if knum > limit > 0:
+                    break
+
+        # 7. Return the part1: product of the first two values
+        #    or for part2: the dense hash as hexidecimal
+        if self.part2:
+            return self.dense_hash()
         return self.values[0] * self.values[1]
 
-    def process_one_knot(self, klen, verbose=False):
+    def process_one_knot(self, klen, rnum=1, verbose=False):
         "Process a single know"
 
         # 1. Reverse the order of length elements in the list,
@@ -71,8 +91,8 @@ class Knots(object):
 
         # 4. Descibe the changes
         if verbose:
-            print("klen=%d, cur=%d, skip=%d, newc=%d, news=%d, v=%s" %
-                  (klen, self.current, self.skip, new_current, new_skip, new_values))
+            print("klen=%d, rnum=%d, cur=%d, skip=%d, newc=%d, news=%d, v=%s" %
+                  (klen, rnum, self.current, self.skip, new_current, new_skip, new_values))
 
         # 5. Update the values and the skip size
         self.values = new_values
@@ -82,32 +102,43 @@ class Knots(object):
     def reverse(self, klen):
         "Reverse a portion of the values"
 
-        # 1. Get beginning and ending offsets of the values to reverse
-        rev_beg = self.current
-        rev_end = self.current + klen
-
-        # 2. Pretty easy if not past end of string
+        # 1. Make all changes to a copy of the values
         result = self.values.copy()
-        if rev_end < self.length:
-            rev_vals = self.values[rev_beg:rev_end]
-            rev_vals.reverse()
-            result = self.values[:rev_beg] + rev_vals + self.values[rev_end:]
 
-        # 3. Else: Take some from the back and the front
-        else:
-            rev_mod = rev_end % self.length
-            rev_len = rev_end - self.length
-            rev_vals = self.values[rev_beg:] + self.values[:rev_mod]
-            rev_vals.reverse()
-            #print("l=%d b=%d e=%d m=%d l=%d" %
-            #      (klen, rev_beg, rev_end, rev_mod, rev_len))
-            #print("%s: %s %s %s" %
-            #      (str(rev_vals), str(rev_vals[-rev_len:]),
-            #       str(self.values[rev_mod:rev_beg]), str(rev_vals[:-rev_len])))
-            result = rev_vals[-rev_len:] + self.values[rev_mod:rev_beg] + rev_vals[:-rev_len]
+        # 2. Collect the characters to reverse
+        reversing = [result[(self.current + _) % self.length] for _ in range(klen)]
 
-        # 4. Return the modified values
+        # 3. Reverse what needs to be reversed
+        reversing.reverse()
+
+        # 4. Put them back in the copy of the values
+        for index in range(klen):
+            result[(self.current + index) % self.length] = reversing[index]
+
+        # 5. Return the new values
         return result
+
+
+    def dense_hash(self):
+        "Return a dense hash of the sparse hash"
+
+        # 0. Precondition axioms
+        assert len(self.values) == 256
+
+        # 1. Start with nothing
+        result = []
+
+        # 2. Loop for sixteen blocks
+        for bnum in range(0, len(self.values), 16):
+
+            # 3. Exclusive or the 16 number in the block
+            block = reduce(xor, self.values[bnum:bnum+16])
+
+            # 4. Convert to hexidecimal and add to result
+            result.append('%02x' % (block))
+
+        # 5. Return the complete hash
+        return ''.join(result)
 
 # ----------------------------------------------------------------------
 #                                                  module initialization

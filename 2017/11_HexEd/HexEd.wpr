@@ -4,12 +4,12 @@
 # Wing IDE project file                                          #
 ##################################################################
 [project attributes]
-proj.file-list = [loc('aoc_10.py'),
-                  loc('knots.py'),
+proj.file-list = [loc('aoc_11.py'),
+                  loc('hexes.py'),
                   loc('part_one.txt'),
                   loc('part_two.txt'),
-                  loc('test/test_knots.py')]
+                  loc('test/test_hexes.py')]
 proj.file-type = 'shared'
-proj.launch-config = {loc('aoc_10.py'): ('project',
+proj.launch-config = {loc('aoc_11.py'): ('project',
         (u'-p2 input.txt',
          ''))}

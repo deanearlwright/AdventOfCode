@@ -1,14 +1,14 @@
 # ======================================================================
-# Knot Hash
-#   Advent of Code 2017 Day 10 -- Eric Wastl -- https://adventofcode.com
+# Hex Ed
+#   Advent of Code 2017 Day 11 -- Eric Wastl -- https://adventofcode.com
 #
 # Computer simulation by Dr. Dean Earl Wright III
 # ======================================================================
 
 # ======================================================================
-#                           a o c _ 1 0 . p y
+#                           a o c _ 1 1 . p y
 # ======================================================================
-"Solve the Knot Hash problem for Advent of Code 2017 day 10"
+"Solve the Hex Ed problem for Advent of Code 2017 day 11"
 
 # ----------------------------------------------------------------------
 #                                                                 import
@@ -16,7 +16,7 @@
 import argparse
 import sys
 
-import knots
+import hexes
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -31,8 +31,8 @@ def parse_command_line():
     "Parse the command line options"
 
     # 1. Create the command line parser
-    desc = 'Knot Hash - Day 10 of Advent of Code 2017'
-    sample = 'sample: python aoc_10.py input.txt'
+    desc = 'Hex Ed - Day 11 of Advent of Code 2017'
+    sample = 'sample: python aoc_11.py input.txt'
     parser = argparse.ArgumentParser(description=desc,
                                      epilog=sample)
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
@@ -57,15 +57,15 @@ def part_one(args, input_lines):
     "Process part one of the puzzle"
 
     # 1. Create the puzzle solver
-    solver = knots.Knots(part2=False, length=256)
+    solver = hexes.Hexes(part2=False)
 
-    # 2. know up the string and get the product of the first two values
-    solution = solver.process_knots(text=input_lines[0],
-                                    verbose=args.verbose, limit=args.limit)
+    # 2. Determine the number of steps to the child process
+    solution = solver.steps(text=input_lines[0],
+                            verbose=args.verbose, limit=args.limit)
     if solution is None:
         print("There is no solution")
     else:
-        print("The product of the first two numbers in the list is %d" % (solution))
+        print("The number of steps to the child process is %d" % (solution))
 
     # 3. Return result
     return solution is not None
@@ -79,15 +79,15 @@ def part_two(args, input_lines):
     "Process part two of the puzzle"
 
     # 1. Create the puzzle solver
-    solver = knots.Knots(part2=True, length=256)
+    solver = hexes.Hexes(part2=False)
 
-    # 2. know up the string and get the product of the first two values
-    solution = solver.process_knots(text=input_lines[0],
-                                    verbose=args.verbose, limit=args.limit)
+    # 2. Determine the number of steps to the child process
+    solution = solver.furthest(text=input_lines[0],
+                            verbose=args.verbose, limit=args.limit)
     if solution is None:
         print("There is no solution")
     else:
-        print("The dense hash is %s" % (solution))
+        print("The furthest number of steps the child process ever got from the start was %d" % (solution))
 
     # 3. Return result
     return solution is not None
@@ -163,5 +163,5 @@ if __name__ == '__main__':
     main()
 
 # ======================================================================
-# end                         a o c _ 1 0 . p y                      end
+# end                         a o c _ 1 1 . p y                      end
 # ======================================================================

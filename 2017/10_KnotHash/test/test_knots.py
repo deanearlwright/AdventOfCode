@@ -32,6 +32,12 @@ P1_CURRENT = [0, 3, 3, 1, 4]
 P1_SKIP = [0, 1, 2, 3, 4]
 P1_RESULT = 12
 
+P2_EXAMPLES = [
+    ('', 'a2582a3a0e66e6e86e3812dcb672a272'),
+    ('AoC 2017', '33efeb34ea91902bb2f59c9920caa6cd'),
+    ('1,2,3', '3efbe78a8d82f29979031a4aa0b16a9d'),
+    ('1,2,4', '63960835bcdc130f0b66d7ff4f6a5a8e')
+    ]
 # ======================================================================
 #                                                              TestKnots
 # ======================================================================
@@ -52,6 +58,8 @@ class TestKnots(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(myknot.current, 0)
         self.assertEqual(myknot.skip, 0)
         self.assertEqual(myknot.values, [])
+        self.assertEqual(myknot.rounds, 1)
+        self.assertEqual(myknot.knots, [])
 
 
     def test_value_init(self):
@@ -123,6 +131,19 @@ class TestKnots(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(myknot.current, P1_CURRENT[4])
         self.assertEqual(myknot.skip, P1_SKIP[4])
         self.assertEqual(myknot.values, P1_VALUES[4])
+
+    def test_part2(self):
+        """Test Knots part two examples"""
+
+        # 1. Loop for all of the part two examples
+        for p2example in P2_EXAMPLES:
+
+            # 2. Create the knot object
+            myknot = knots.Knots(length=256, part2=True)
+
+            # 3. Knot it up, and check result
+            self.assertEqual(myknot.process_knots(text=p2example[0], verbose=False),
+                             p2example[1])
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
