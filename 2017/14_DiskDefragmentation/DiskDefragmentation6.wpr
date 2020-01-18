@@ -1,0 +1,13 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_14.py'),
+                  loc('defrag.py'),
+                  loc('knots.py'),
+                  loc('part_one.txt'),
+                  loc('test/test_defrag.py'),
+                  loc('test/test_knots.py')]
+proj.file-type = 'shared'

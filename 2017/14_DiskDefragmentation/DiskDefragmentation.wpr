@@ -1,0 +1,17 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_14.py'),
+                  loc('defrag.py'),
+                  loc('knots.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test/test_defrag.py'),
+                  loc('test/test_knots.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_14.py'): ('project',
+        (u'-p2 input.txt',
+         ''))}
