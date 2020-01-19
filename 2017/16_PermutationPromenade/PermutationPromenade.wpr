@@ -1,0 +1,18 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_16.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('promenade.py'),
+                  loc('test/test_promenade.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_16.py'): ('project',
+        (u'-p1 input.txt',
+         '')),
+                      loc('promenade.py'): ('project',
+        (u'-p2 -v input.txt',
+         ''))}
