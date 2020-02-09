@@ -306,7 +306,7 @@ class TestCLASS(unittest.TestCase):  # pylint: disable=R0904
         "Test the CLASS object creation from text"
 
         # 1. Create CLASS object from text
-        myobj = MODULE.CLASS(text=EXAMPLE_TEXT)
+        myobj = MODULE.CLASS(text=aoc_DD.from_text(EXAMPLE_TEXT))
 
         # 2. Make sure it has the expected values
         self.assertEqual(myobj.part2, False)
@@ -316,7 +316,7 @@ class TestCLASS(unittest.TestCase):  # pylint: disable=R0904
         "Test part one example of CLASS object"
 
         # 1. Create Spinlock object from text
-        myobj = MODULE.CLASS(text=PART_ONE_TEXT)
+        myobj = MODULE.CLASS(text=aoc_DD.from_text(PART_ONE_TEXT))
 
         # 2. Check the part one result
         self.assertEqual(myobj.part_one(verbose=False), PART_ONE_RESULT)
@@ -326,7 +326,7 @@ class TestCLASS(unittest.TestCase):  # pylint: disable=R0904
         "Test part two example of CLASS object"
 
         # 1. Create Spinlock object from text
-        myobj = MODULE.CLASS(part2=True, text=PART_TWO_TEXT)
+        myobj = MODULE.CLASS(part2=True, text=aoc_DD.from_text(PART_TWO_TEXT))
 
         # 2. Check the part two
         self.assertEqual(myobj.part_two(verbose=False), PART_TWO_RESULT)
@@ -343,10 +343,22 @@ if __name__ == '__main__':
 # ======================================================================
 """
 
+WINGWARE_PY = """#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_DD.py'),
+                  loc('MODULE.py'),
+                  loc('test_MODULE.py')]
+proj.file-type = 'shared'
+"""
 PYTHON_FILES = {
     'aoc_DD.py': AOC_DD_PY,
     'MODULE.py': CLASS_PY,
-    'test_MODULE.py': TEST_CLASS_PY
+    'test_MODULE.py': TEST_CLASS_PY,
+    'MODULE.wpr': WINGWARE_PY,
 }
 
 
@@ -426,8 +438,6 @@ def parse_command_line():
                                      epilog=sample)
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
                         dest='verbose', help='Print status messages to stdout')
-    parser.add_argument('-o', '--one', action='store_true', default=False,
-                        dest='oneline', help='Puzzle input is single line')
     parser.add_argument('-l', '--language', action='store', default="python", dest='language',
                         help='Programming language (python)')
     parser.add_argument('-i', '--input', action='store', default="", dest='inval',
@@ -498,7 +508,6 @@ def copy_files(args, day_directory):
     # 2. Loop for all the files
     for file_info in files.items():
         raw_file_name, raw_file_text = file_info
-        print(raw_file_name)
 
         # 3. Convert the text for this file
         converted_text = convert_text(text_converters, raw_file_text)
@@ -557,7 +566,6 @@ def main():
 
     # 1. Get the command line options
     args = parse_command_line()
-    print(args)
 
     # 2. Create the day directory
     base_year_day = os.path.join(args.base, str(args.year),
