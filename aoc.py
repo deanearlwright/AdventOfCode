@@ -281,8 +281,8 @@ EXAMPLE_TEXT = ""
 PART_ONE_TEXT = ""
 PART_TWO_TEXT = ""
 
-PART_ONE_RESULT = NONE
-PART_TWO_RESULT = NONE
+PART_ONE_RESULT = None
+PART_TWO_RESULT = None
 
 # ======================================================================
 #                                                                  CLASS
