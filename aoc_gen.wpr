@@ -1,0 +1,11 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc.py'): ('project',
+                                      (u'-y 2020 -d 20 A Small Change',
+                                       ''))}
