@@ -353,7 +353,11 @@ proj.file-list = [loc('aoc_DD.py'),
                   loc('MODULE.py'),
                   loc('test_MODULE.py')]
 proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_DD.py'): ('project',
+        (u'-p1 -v input.txt',
+         ''))}
 """
+
 PYTHON_FILES = {
     'aoc_DD.py': AOC_DD_PY,
     'MODULE.py': CLASS_PY,
