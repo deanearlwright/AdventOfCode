@@ -1,0 +1,15 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_20.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('swarm.py'),
+                  loc('test_swarm.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_20.py'): ('project',
+        (u'-p2 -v input.txt',
+         ''))}
