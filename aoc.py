@@ -220,7 +220,7 @@ CLASS_PY = """# ================================================================
 class CLASS(object):   # pylint: disable=R0902, R0205
     "Object for TITLE"
 
-    def __init__(self, steps=None, text=None, part2=False):
+    def __init__(self, text=None, part2=False):
 
         # 1. Set the initial values
         self.part2 = part2
@@ -285,7 +285,7 @@ PART_ONE_RESULT = None
 PART_TWO_RESULT = None
 
 # ======================================================================
-#                                                                  CLASS
+#                                                              TestCLASS
 # ======================================================================
 
 
