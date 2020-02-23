@@ -1,0 +1,5 @@
+--- Day 21: Fractal Art ---
+
+--- Part Two ---
+
+How many pixels stay on after 18 iterations?
