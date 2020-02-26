@@ -343,6 +343,24 @@ if __name__ == '__main__':
 # ======================================================================
 """
 
+PART_ONE_TXT = """
+From https://adventofcode.com/YYYY/day/DD by Eric Wastl
+
+----- TITLE -----
+
+----- Part One -----
+
+"""
+
+PART_TWO_TXT = """
+From https://adventofcode.com/YYYY/day/DD by Eric Wastl
+
+----- TITLE -----
+
+----- Part Two -----
+
+"""
+
 WINGWARE_PY = """#!wing
 #!version=7.0
 ##################################################################
@@ -350,6 +368,8 @@ WINGWARE_PY = """#!wing
 ##################################################################
 [project attributes]
 proj.file-list = [loc('aoc_DD.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
                   loc('MODULE.py'),
                   loc('test_MODULE.py')]
 proj.file-type = 'shared'
@@ -363,6 +383,8 @@ PYTHON_FILES = {
     'MODULE.py': CLASS_PY,
     'test_MODULE.py': TEST_CLASS_PY,
     'MODULE.wpr': WINGWARE_PY,
+    'part_one.txt': PART_ONE_TXT,
+    'part_two.txt': PART_TWO_TXT,
 }
 
 
