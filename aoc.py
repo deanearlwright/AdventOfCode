@@ -86,7 +86,7 @@ def part_one(args, input_lines):
     solver = MODULE.CLASS(part2=False, text=input_lines)
 
     # 2. Determine the solution for part one
-    solution = solver.part_one(verbose=args.verbose)
+    solution = solver.part_one(verbose=args.verbose, limit=args.limit)
     if solution is None:
         print("There is no solution")
     else:
@@ -107,7 +107,7 @@ def part_two(args, input_lines):
     solver = MODULE.CLASS(part2=True, text=input_lines)
 
     # 2. Determine the solution for part two
-    solution = solver.part_two(verbose=args.verbose)
+    solution = solver.part_two(verbose=args.verbose, limit=args.limit)
     if solution is None:
         print("There is no solution")
     else:
@@ -315,7 +315,7 @@ class TestCLASS(unittest.TestCase):  # pylint: disable=R0904
     def test_part_one(self):
         "Test part one example of CLASS object"
 
-        # 1. Create Spinlock object from text
+        # 1. Create CLASS object from text
         myobj = MODULE.CLASS(text=aoc_DD.from_text(PART_ONE_TEXT))
 
         # 2. Check the part one result
@@ -325,7 +325,7 @@ class TestCLASS(unittest.TestCase):  # pylint: disable=R0904
     def test_part_two(self):
         "Test part two example of CLASS object"
 
-        # 1. Create Spinlock object from text
+        # 1. Create CLASS object from text
         myobj = MODULE.CLASS(part2=True, text=aoc_DD.from_text(PART_TWO_TEXT))
 
         # 2. Check the part two
@@ -478,6 +478,8 @@ def parse_command_line():
                         help="base direcotory of Advent of Code", dest='base')
     parser.add_argument('title', action='store', type=str, nargs='+',
                         help="Title of puzzle")
+    parser.add_argument('-a', '--add', action='store_true', default=False,
+                        dest='add', help='Add files to existing directory')
 
     # 3. Get the options and arguments
     args = parser.parse_args()
@@ -507,7 +509,7 @@ def parse_command_line():
     day_begins = '%02d_' % (args.day)
     with os.scandir(base_year) as it:
         for entry in it:
-            if entry.name.startswith(day_begins) and entry.is_dir():
+            if entry.name.startswith(day_begins) and entry.is_dir() and not args.add:
                 parser.error("Day directory (%s) already exists" % (entry.name))
 
     # 6. If there is no class name, use last word in title
@@ -535,16 +537,21 @@ def copy_files(args, day_directory):
     for file_info in files.items():
         raw_file_name, raw_file_text = file_info
 
-        # 3. Convert the text for this file
-        converted_text = convert_text(text_converters, raw_file_text)
-
-        # 4. Do any final clear up on the file
-        final_text = conv_after(args, text_converters, converted_text)
-
-        # 5. Get full path of output file
+        # 3. Get full path of output file
         out_file_name = get_file_name(day_directory, raw_file_name, text_converters)
 
-        # 6. Write file
+        # 4. Don't write if the file already exists
+        if os.path.isfile(out_file_name):
+            print("File %s already exists, skipping" % out_file_name)
+            continue
+
+        # 5. Convert the text for this file
+        converted_text = convert_text(text_converters, raw_file_text)
+
+        # 6. Do any final clear up on the file
+        final_text = conv_after(args, text_converters, converted_text)
+
+        # 7. Write file
         with open(out_file_name, 'w') as output_file:
             output_file.write(final_text)
 

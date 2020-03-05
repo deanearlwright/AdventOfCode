@@ -1,0 +1,15 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_22.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_virus.py'),
+                  loc('virus.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_22.py'): ('project',
+        (u'-p1 -v input.txt',
+         ''))}
