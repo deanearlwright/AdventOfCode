@@ -1,0 +1,15 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_25.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_turing.py'),
+                  loc('turing.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_25.py'): ('project',
+        (u'-p1 -v -l 100000 input.txt',
+         ''))}
