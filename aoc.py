@@ -22,19 +22,19 @@ import os
 # ----------------------------------------------------------------------
 INPUT_FILE_NAME = 'input.txt'
 
-# ----- python
+# ----- python -----
 
 AOC_DD_PY = """# ======================================================================
 # TITLE
 #   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 #
-# Computer implementation by Dr. Dean Earl Wright III
+# Python implementation by Dr. Dean Earl Wright III
 # ======================================================================
 
 # ======================================================================
 #                           a o c _ D D . p y
 # ======================================================================
-"Solve the MODULE problem for Advent of Code YYYY day DD"
+"Solve the puzzles for Advent of Code YYYY day DD"
 
 # ----------------------------------------------------------------------
 #                                                                 import
@@ -196,13 +196,13 @@ CLASS_PY = """# ================================================================
 # TITLE
 #   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 #
-# Computer implementation by Dr. Dean Earl Wright III
+# Python implementation by Dr. Dean Earl Wright III
 # ======================================================================
 
 # ======================================================================
 #                         M O D U L E . p y
 # ======================================================================
-"A solver for MODULE for Advent of Code YYYY Day DD"
+"A solver for the Advent of Code YYYY Day DD puzzle"
 
 # ----------------------------------------------------------------------
 #                                                                 import
@@ -328,7 +328,7 @@ class TestCLASS(unittest.TestCase):  # pylint: disable=R0904
         # 1. Create CLASS object from text
         myobj = MODULE.CLASS(part2=True, text=aoc_DD.from_text(PART_TWO_TEXT))
 
-        # 2. Check the part two
+        # 2. Check the part two result
         self.assertEqual(myobj.part_two(verbose=False), PART_TWO_RESULT)
 
 
@@ -343,19 +343,21 @@ if __name__ == '__main__':
 # ======================================================================
 """
 
-PART_ONE_TXT = """
+PART_ONE_TXT = """Advent of Code YYYY Day DD Part One
+
 From https://adventofcode.com/YYYY/day/DD by Eric Wastl
 
------ TITLE -----
+----- Day DD: TITLE -----
 
 ----- Part One -----
 
 """
 
-PART_TWO_TXT = """
+PART_TWO_TXT = """Advent of Code YYYY Day DD Part Two
+
 From https://adventofcode.com/YYYY/day/DD by Eric Wastl
 
------ TITLE -----
+----- Day DD: TITLE -----
 
 ----- Part Two -----
 
@@ -420,11 +422,239 @@ def python_after(args, converters, text):
     # 9. Return the input text
     return text
 
+# ----- javascript -----
+
+
+AOC_DD_JS = """
+// ======================================================================
+// TITLE
+//   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
+//
+// Javascript implementation by Dr. Dean Earl Wright III
+// ======================================================================
+
+// ======================================================================
+//                             a o c _ D D . j s
+//
+// Solve the puzzles for Advent of Code YYYY day DD
+// ======================================================================
+
+// ======================================================================
+// end                         a o c _ D D . j s                      end
+// ======================================================================
+"""
+
+CLASS_JS = """// ======================================================================
+// TITLE
+//   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
+//
+// JavaScript implementation by Dr. Dean Earl Wright III
+// ========================================================================
+
+// ======================================================================
+//                           M O D U L E . j s
+//
+// A solver for MODULE for Advent of Code YYYY Day DD
+// ======================================================================
+
+// ----------------------------------------------------------------------
+//                                                                 import
+// ----------------------------------------------------------------------
+
+// ----------------------------------------------------------------------
+//                                                              constants
+// ----------------------------------------------------------------------
+
+// ======================================================================
+//                                                                  CLASS
+// ======================================================================
+
+
+class CLASS{
+  // Object for TITLE
+
+  constructor(text=null, part2=false) {
+
+    // 1. Set the initial values
+    this.part2 = part2;
+    this.text = text;
+
+    // 2. Process text (if any)
+    if (this.text != null) {
+       // TODO process the text
+    }
+  }
+
+  part_one(verbose=False, limit=0) {
+    // Returns the solution for part one
+
+    // 1. Return the solution for part one
+    return null;
+  }
+
+  part_two(self, verbose=False, limit=0) {
+     // Returns the solution for part two
+
+     // 1. Return the solution for part two
+     return null;
+  }
+}
+
+// ======================================================================
+// end                      M O D U L E . j s                     end
+// ======================================================================
+"""
+
+TEST_CLASS_JS = """// ======================================================================
+// TITLE
+//   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
+//
+// Javascript implementation by Dr. Dean Earl Wright III
+//  ======================================================================
+
+// ======================================================================
+//                      M O D U L E . t e s t . j s
+//
+// Test the solver for Advent of Code YYYY day DD, TITLE
+// ======================================================================
+
+// ----------------------------------------------------------------------
+//                                                                 import
+// ----------------------------------------------------------------------
+
+const aoc_DD = require('./aoc_DD');
+const MODULE = require('./MODULE');
+
+// ----------------------------------------------------------------------
+//                                                              constants
+// ----------------------------------------------------------------------
+const EXAMPLE_TEXT = '';
+const PART_ONE_TEXT = EXAMPLE_TEXT;
+const PART_TWO_TEXT = EXAMPLE_TEXT;
+
+const PART_ONE_RESULT = None;
+const PART_TWO_RESULT = None;
+
+// ======================================================================
+//                                                              TestCLASS
+// ======================================================================
+
+describe('CLASS', () => {
+  test('Test the default CLASS creation', () => {
+
+    // 1. Create default CLASS object
+    const myobj = MODULE.CLASS();
+
+    // 2. Make sure it has the default values
+    expect(myobj.part2).toBe(false);
+    expect(myobj.text).toBe(None);
+  });
+
+  test('Test the CLASS object creation from text', () => {
+
+    // 1. Create CLASS object from text
+    const myobj = MODULE.CLASS(text=aoc_DD.from_text(EXAMPLE_TEXT));
+
+    // 2. Make sure it has the expected values
+    expect(myobj.part2).toBe(false);
+    expect(myobj.text).toBe(None);
+  });
+
+  test('Test part one example of CLASS object', () => {
+
+    // 1. Create CLASS object from text
+    const myobj = MODULE.CLASS(text=aoc_DD.from_text(PART_ONE_TEXT);
+
+    // 2. Check the part one result
+    expect(myobj.part_one(verbose=False)).toBe(PART_ONE_RESULT));
+  });
+
+  test('Test part two example of CLASS object', () => {
+
+    // 1. Create CLASS object from text
+    const myobj = MODULE.CLASS(part2=true, text=aoc_DD.from_text(PART_TWO_TEXT);
+
+    // 2. Check the part two result
+    expect(myobj.part_two(verbose=False)).toBe(PART_TWO_RESULT));
+  });
+});
+
+// ======================================================================
+// end                    t e s t _ M O D U L E . j s                 end
+// ======================================================================
+"""
+
+PACKAGE_JSON = """
+{
+  "name": "DIRLOWER",
+  "version": "1.0.0",
+  "description": "Advent of Code YYYY Day DD, TITLE",
+  "main": "aoc_DD.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+"""
+
+ESLINT_JS = """
+module.exports = {
+  "extends": "airbnb-base"
+};
+"""
+
+JAVASCRIPT_FILES = {
+    'aoc_DD.js': AOC_DD_JS,
+    'MODULE.js': CLASS_JS,
+    'MODULE.test.js': TEST_CLASS_JS,
+    'part_one.txt': PART_ONE_TXT,
+    'part_two.txt': PART_TWO_TXT,
+    'package.json': PACKAGE_JSON,
+    '.eslint.js': ESLINT_JS,
+}
+
+
+def js_before(args):
+    "Build text converters"
+
+    # 0. Precondition axioms
+    assert args
+
+    # 1. Start with simple conversions
+    result = {
+        "YYYY": "%4d" % args.year,
+        "DD": "%02d" % args.day,
+        "D D": ' '.join(list("%02d" % args.day)),
+        "TITLE": ' '.join(args.title),
+        "MODULE": args.cname.lower(),
+        "CLASS": args.cname.capitalize(),
+        "M O D U L E": ' '.join(list(args.cname.lower())),
+        "DIRLOWER": "%2d_%S" % (args.day, ''.join(args.title).lower())
+    }
+
+    # 9. Return the text converters
+    return result
+
+
+def js_after(args, converters, text):
+    "Cleanup text"
+
+    # 0. Precondition axioms
+    assert args
+    assert converters
+    assert text
+
+    # 9. Return the input text
+    return text
 
 # ----- languages
 
+
 LANGUAGES = {
-    'python': (PYTHON_FILES, python_before, python_after)
+    'python': (PYTHON_FILES, python_before, python_after),
+    'javascript': (JAVASCRIPT_FILES, js_before, js_after)
 }
 
 # ----- Substitions
@@ -432,6 +662,7 @@ LANGUAGES = {
 SUBSTITUTIONS = {
     'DD': 'DD',
     'D D': 'D D',
+    'DIR': 'DIR',
     'YYYY': 'YYYY',
     'TITLE': 'TITLE',
     'CLASS': 'CLASS',
@@ -464,8 +695,8 @@ def parse_command_line():
                                      epilog=sample)
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
                         dest='verbose', help='Print status messages to stdout')
-    parser.add_argument('-l', '--language', action='store', default="python", dest='language',
-                        help='Programming language (python)')
+    parser.add_argument('-l', '--language', choices=['python', 'javascript'],
+                        help='Programming language (python or javascript)')
     parser.add_argument('-i', '--input', action='store', default="", dest='inval',
                         help='Puzzle input from web page')
     parser.add_argument('-c', '--class', action='store', default="", dest='cname',
@@ -480,6 +711,10 @@ def parse_command_line():
                         help="Title of puzzle")
     parser.add_argument('-a', '--add', action='store_true', default=False,
                         dest='add', help='Add files to existing directory')
+    parser.add_argument('--py', dest='language', action='store_const', const='python',
+                        help='Programming language is python')
+    parser.add_argument('--js', dest='language', action='store_const', const='javascript',
+                        help='Programming language is javascript')
 
     # 3. Get the options and arguments
     args = parser.parse_args()
@@ -497,8 +732,6 @@ def parse_command_line():
         parser.error("Day must be 1-25")
     if not args.language:
         parser.error("Programming language is required")
-    if args.language not in LANGUAGES:
-        parser.error("Unkown programming language (%s)." % (', '.join(LANGUAGES.keys())))
 
     # 5. Ensure base and year directories exist but not the day
     if not os.path.isdir(args.base):

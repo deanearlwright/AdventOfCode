@@ -1,0 +1,8 @@
+Advent of Code 2015 day 01 Part Two
+
+From https://adventofcode.com/2015/day/01 by Eric Wastl
+
+----- Not Quite Lisp -----
+
+----- Part Two -----
+
