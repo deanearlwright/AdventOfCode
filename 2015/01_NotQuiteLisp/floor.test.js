@@ -1,22 +1,23 @@
+/* eslint-disable linebreak-style */
 // ======================================================================
 // Not Quite Lisp
 //   Advent of Code 2015 Day 01 -- Eric Wastl -- https://adventofcode.com
 //
 // Javascript implementation by Dr. Dean Earl Wright III
-//  ======================================================================
+// ======================================================================
 
 // ======================================================================
 //                      f l o o r . t e s t . j s
 //
 // Test the solver for Advent of Code 2015 day 01, Not Quite Lisp
-//   ======================================================================
+// ======================================================================
 
 // ----------------------------------------------------------------------
 //                                                                 import
 // ----------------------------------------------------------------------
 
-const aoc_01 = require('./aoc_01');
-const floor = require('./floor');
+var aoc01 = require('./aoc_01');
+var floor = require('./floor');
 
 // ----------------------------------------------------------------------
 //                                                              constants
@@ -46,29 +47,29 @@ describe('Floor', () => {
   test('Test the Floor object creation from text', () => {
 
     // 1. Create Floor object from text
-    const myobj = new floor.Floor(text=aoc_01.from_text(EXAMPLE_TEXT));
+    const myobj = new floor.Floor(text = aoc01.fromText(EXAMPLE_TEXT));
 
     // 2. Make sure it has the expected values
     expect(myobj.part2).toBe(false);
-    expect(myobj.text).toBe(null);
+    expect(myobj.text).toBe('');
   });
 
   test('Test part one example of Floor object', () => {
 
     // 1. Create Floor object from text
-    const myobj = new floor.Floor(text=aoc_01.from_text(PART_ONE_TEXT));
+    const myobj = new floor.Floor(text = aoc01.fromText(PART_ONE_TEXT));
 
     // 2. Check the part one result
-    expect(myobj.part_one(verbose=False)).toBe(PART_ONE_RESULT);
+    expect(myobj.partOne(verbose=false)).toBe(PART_ONE_RESULT);
   });
 
   test('Test part two example of Floor object', () => {
 
     // 1. Create Floor object from text
-    const myobj = new floor.Floor(part2=true, text=aoc_01.from_text(PART_TWO_TEXT));
+    const myobj = new floor.Floor(part2 = true, text = aoc01.fromText(PART_TWO_TEXT));
 
     // 2. Check the part two result
-    expect(myobj.part_two(verbose=False)).toBe(PART_TWO_RESULT);
+    expect(myobj.partTwo(verbose = false)).toBe(PART_TWO_RESULT);
   });
 });
 

@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 
 // ======================================================================
 // Not Quite Lisp
@@ -12,9 +13,11 @@
 // Solve the floor problem for Advent of Code 2015 day 01
 // ======================================================================
 
-function from_text(text) {
-    return text;
+function fromText(text) {
+  return text;
 }
+
+module.exports.fromText = fromText;
 
 // ======================================================================
 // end                         a o c _ 0 1 . j s                      end

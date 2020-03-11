@@ -425,7 +425,7 @@ def python_after(args, converters, text):
 # ----- javascript -----
 
 
-AOC_DD_JS = """
+AOC_DD_JS = """/* eslint-disable linebreak-style */
 // ======================================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
@@ -439,12 +439,19 @@ AOC_DD_JS = """
 // Solve the puzzles for Advent of Code YYYY day DD
 // ======================================================================
 
+function fromText(text) {
+  return text;
+}
+
+module.export = fromText;
+
 // ======================================================================
 // end                         a o c _ D D . j s                      end
 // ======================================================================
 """
 
-CLASS_JS = """// ======================================================================
+CLASS_JS = """/* eslint-disable linebreak-style */
+// ======================================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 //
@@ -473,7 +480,7 @@ CLASS_JS = """// ===============================================================
 class CLASS{
   // Object for TITLE
 
-  constructor(text=null, part2=false) {
+  constructor(text = none, part2 = false) {
 
     // 1. Set the initial values
     this.part2 = part2;
@@ -485,27 +492,29 @@ class CLASS{
     }
   }
 
-  part_one(verbose=False, limit=0) {
+  partOne(verbose = False, limit = 0) {
     // Returns the solution for part one
-
+    this.todo = 'TODO';
     // 1. Return the solution for part one
     return null;
   }
 
-  part_two(self, verbose=False, limit=0) {
+  partTwo(self, verbose = False, limit = 0) {
      // Returns the solution for part two
-
+     this.todo = 'TODO';
      // 1. Return the solution for part two
      return null;
   }
 }
 
+module.exports = Floor;
 // ======================================================================
 // end                      M O D U L E . j s                     end
 // ======================================================================
 """
 
-TEST_CLASS_JS = """// ======================================================================
+TEST_CLASS_JS = """/* eslint-disable linebreak-style */
+// ======================================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 //
@@ -599,9 +608,25 @@ PACKAGE_JSON = """
 }
 """
 
-ESLINT_JS = """
+ESLINTRC_JS = """
 module.exports = {
-  "extends": "airbnb-base"
+  env: {
+    browser: true,
+    commonjs: true,
+    es6: true,
+  },
+  extends: [
+    'airbnb-base',
+  ],
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
+  parserOptions: {
+    ecmaVersion: 2018,
+  },
+  rules: {
+  },
 };
 """
 
@@ -612,7 +637,7 @@ JAVASCRIPT_FILES = {
     'part_one.txt': PART_ONE_TXT,
     'part_two.txt': PART_TWO_TXT,
     'package.json': PACKAGE_JSON,
-    '.eslint.js': ESLINT_JS,
+    '.eslintrc.js': ESLINTRC_JS,
 }
 
 
