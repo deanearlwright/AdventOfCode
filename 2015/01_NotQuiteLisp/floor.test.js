@@ -16,8 +16,8 @@
 //                                                                 import
 // ----------------------------------------------------------------------
 
-var aoc01 = require('./aoc_01');
-var floor = require('./floor');
+const aoc01 = require('./aoc_01');
+const floor = require('./floor');
 
 // ----------------------------------------------------------------------
 //                                                              constants
@@ -35,41 +35,32 @@ const PART_TWO_RESULT = null;
 
 describe('Floor', () => {
   test('Test the default Floor creation', () => {
-
-    // 1. Create default Floor object
-    const myobj = new floor.Floor();
-
+    const myobj = new floor.Floor({});
     // 2. Make sure it has the default values
     expect(myobj.part2).toBe(false);
     expect(myobj.text).toBe(null);
   });
 
   test('Test the Floor object creation from text', () => {
-
     // 1. Create Floor object from text
-    const myobj = new floor.Floor(text = aoc01.fromText(EXAMPLE_TEXT));
-
+    const myobj = new floor.Floor({ text: aoc01.fromText(EXAMPLE_TEXT) });
     // 2. Make sure it has the expected values
     expect(myobj.part2).toBe(false);
-    expect(myobj.text).toBe('');
+    expect(myobj.text).toHaveLength(0);
   });
 
   test('Test part one example of Floor object', () => {
-
     // 1. Create Floor object from text
-    const myobj = new floor.Floor(text = aoc01.fromText(PART_ONE_TEXT));
-
+    const myobj = new floor.Floor({ text: aoc01.fromText(PART_ONE_TEXT) });
     // 2. Check the part one result
-    expect(myobj.partOne(verbose=false)).toBe(PART_ONE_RESULT);
+    expect(myobj.partOne({ verbose: false })).toBe(PART_ONE_RESULT);
   });
 
   test('Test part two example of Floor object', () => {
-
     // 1. Create Floor object from text
-    const myobj = new floor.Floor(part2 = true, text = aoc01.fromText(PART_TWO_TEXT));
-
+    const myobj = new floor.Floor({ part2: true, text: aoc01.fromText(PART_TWO_TEXT) });
     // 2. Check the part two result
-    expect(myobj.partTwo(verbose = false)).toBe(PART_TWO_RESULT);
+    expect(myobj.partTwo({ verbose: false })).toBe(PART_TWO_RESULT);
   });
 });
 
