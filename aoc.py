@@ -426,6 +426,7 @@ def python_after(args, converters, text):
 
 
 AOC_DD_JS = """/* eslint-disable linebreak-style */
+
 // ======================================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
@@ -436,18 +437,189 @@ AOC_DD_JS = """/* eslint-disable linebreak-style */
 // ======================================================================
 //                             a o c _ D D . j s
 //
-// Solve the puzzles for Advent of Code YYYY day DD
+// Solve the Advent of Code YYYY day DD problem
 // ======================================================================
 
-function fromText(text) {
-  return text;
+// ----------------------------------------------------------------------
+//                                                                 import
+// ----------------------------------------------------------------------
+
+const yargs = require('yargs');
+const fs = require('fs');
+const process = require('process');
+
+const MODULE = require('./MODULE');
+
+// ----------------------------------------------------------------------
+//                                                        parseCommndLine
+// ----------------------------------------------------------------------
+
+function parseCommandLine() {
+  // Parse the command line options"
+
+  // 1. Create the command line parser
+  const { argv } = yargs
+    .command('aoc_DD', 'TITLE - Day DD of Advent of Code YYYY', { })
+    .option('verbose', {
+      alias: 'v',
+      default: false,
+      describe: 'Print status messages to stdout',
+      type: 'boolean',
+    })
+    .option('part', {
+      alias: 'p',
+      default: 1,
+      describe: 'Puzzle Part (1 or 2)',
+      type: 'number',
+    })
+    .option('limit', {
+      alias: 'l',
+      default: 0,
+      describe: 'Maximum limit (e.g., time, size, recursion) before stopping',
+      type: 'number',
+    })
+    .option('filepath', {
+      alias: 'f',
+      default: 'input.txt',
+      describe: 'Location of puzzle input',
+      type: 'string',
+    })
+    .example('$0 -p 1 input.txt', 'Solve part one of the puzzle')
+    .help()
+    .alias('help', 'h');
+
+  // 2. Get the options and arguments
+  return argv;
 }
 
-module.export = fromText;
+// ----------------------------------------------------------------------
+//                                                                partOne
+// ----------------------------------------------------------------------
+
+function partOne(args, inputLines) {
+  // Process part one of the puzzle
+
+  // 1. Create the puzzle solver
+  const solver = new MODULE.CLASS(inputLines);
+
+  // 2. Determine the solution for part two
+  const solution = solver.partOne(args.verbose, args.limit);
+  if (solution == null) {
+    console.log('There is no solution'); // eslint-disable-line no-console
+  } else {
+    console.log('The solution for part two is ', solution); // eslint-disable-line no-console
+  }
+
+  // 3. Return result
+  return solution != null;
+}
+
+// ----------------------------------------------------------------------
+//                                                                partTwo
+// ----------------------------------------------------------------------
+
+function partTwo(args, inputLines) {
+  // Process part two of the puzzle
+
+  // 1. Create the puzzle solver
+  const solver = new MODULE.CLASS({ part2: true, text: inputLines });
+
+  // 2. Determine the solution for part two
+  const solution = solver.partTwo({ verbose: args.verbose, limit: args.limit });
+  if (solution == null) {
+    console.log('There is no solution'); // eslint-disable-line no-console
+  } else {
+    console.log('The solution for part two is ', solution); // eslint-disable-line no-console
+  }
+
+  // 3. Return result
+  return solution != null;
+}
+
+// ----------------------------------------------------------------------
+//                                                              from_text
+// ----------------------------------------------------------------------
+
+function fromText(text) {
+  // Break the text into trimed, non-comment lines"
+
+  // 1. We start with no lines
+  const lines = [];
+
+  // 2. Loop for lines in the text
+  text.split(/\r?\n/).forEach((line) => {
+    // 3. But ignore blank and non-claim lines
+    const cleaned = line.trimEnd();
+    if (cleaned.length > 0 && !cleaned.startsWith('!')) {
+      // 4. Add the line
+      lines.push(cleaned);
+    }
+  });
+
+  // 5. Return a list of clean lines
+  return lines;
+}
+
+// ----------------------------------------------------------------------
+//                                                              from_file
+// ----------------------------------------------------------------------
+
+function fromFile(filepath) {
+  // Read the file
+  try {
+    const data = fs.readFileSync(filepath, 'utf8');
+    return fromText(data);
+  } catch (e) {
+    console.log('Error', e.stack); // eslint-disable-line no-console
+    return '';
+  }
+}
+
+// ----------------------------------------------------------------------
+//                                                                   main
+// ----------------------------------------------------------------------
+
+function main() {
+  // Read the Advent of Code problem and solve it
+  let result = null;
+
+  // 1. Get the command line options
+  const argv = parseCommandLine();
+
+  // 2. Read the puzzle file
+  const inputText = fromFile(argv.filepath);
+
+  // 3. Process the appropiate part of the puzzle
+  if (argv.part === 1) {
+    result = partOne(argv, inputText);
+  } else {
+    result = partTwo(argv, inputText);
+  }
+
+  // 5. Set return code (0 if solution found, 2 if not)
+  if (result != null) {
+    process.exit(0);
+  }
+  process.exit(2);
+}
+
+// ----------------------------------------------------------------------
+//                                                  module initialization
+// ----------------------------------------------------------------------
+if (typeof require !== 'undefined' && require.main === module) {
+  main();
+}
+
+// ----------------------------------------------------------------------
+//                                                                 export
+// ----------------------------------------------------------------------
+
+module.exports.fromText = fromText;
 
 // ======================================================================
 // end                         a o c _ D D . j s                      end
 // ======================================================================
+
 """
 
 CLASS_JS = """/* eslint-disable linebreak-style */
@@ -461,7 +633,7 @@ CLASS_JS = """/* eslint-disable linebreak-style */
 // ======================================================================
 //                           M O D U L E . j s
 //
-// A solver for MODULE for Advent of Code YYYY Day DD
+// A solver for the Advent of Code YYYY Day DD problem
 // ======================================================================
 
 // ----------------------------------------------------------------------
@@ -480,34 +652,49 @@ CLASS_JS = """/* eslint-disable linebreak-style */
 class CLASS{
   // Object for TITLE
 
-  constructor(text = none, part2 = false) {
+  constructor(options) {
+    // Create a CLASS object
 
     // 1. Set the initial values
-    this.part2 = part2;
-    this.text = text;
+    this.text = options.text === undefined ? null : options.text;
+    this.part2 = options.part2 === undefined ? false : options.part2;
 
     // 2. Process text (if any)
-    if (this.text != null) {
-       // TODO process the text
+    if (this.text === null) {
+      // TODO process the test
     }
   }
 
-  partOne(verbose = False, limit = 0) {
+  partOne(options) {
     // Returns the solution for part one
+
+    // 0. Function arguments
+    // eslint-disable-next-line no-unused-vars
+    const verbose = options.verbose === undefined ? false : options.verbose;
+    // eslint-disable-next-line no-unused-vars
+    const limit = options.limit === undefined ? 0 : options.limit;
     this.todo = 'TODO';
+
     // 1. Return the solution for part one
     return null;
   }
 
-  partTwo(self, verbose = False, limit = 0) {
-     // Returns the solution for part two
-     this.todo = 'TODO';
-     // 1. Return the solution for part two
-     return null;
+  partTwo(options) {
+    // Returns the solution for part two
+
+    // 0. Function arguments
+    // eslint-disable-next-line no-unused-vars
+    const verbose = options.verbose === undefined ? false : options.verbose;
+    // eslint-disable-next-line no-unused-vars
+    const limit = options.limit === undefined ? 0 : options.limit;
+    this.todo = 'TODO';
+
+    // 1. Return the solution for part two
+    return null;
   }
 }
 
-module.exports = Floor;
+module.exports = CLASS;
 // ======================================================================
 // end                      M O D U L E . j s                     end
 // ======================================================================
@@ -524,14 +711,14 @@ TEST_CLASS_JS = """/* eslint-disable linebreak-style */
 // ======================================================================
 //                      M O D U L E . t e s t . j s
 //
-// Test the solver for Advent of Code YYYY day DD, TITLE
+// Test the solver for Advent of Code YYYY day DD problem
 // ======================================================================
 
 // ----------------------------------------------------------------------
 //                                                                 import
 // ----------------------------------------------------------------------
 
-const aoc_DD = require('./aoc_DD');
+const aocDD = require('./aoc_DD');
 const MODULE = require('./MODULE');
 
 // ----------------------------------------------------------------------
@@ -541,8 +728,8 @@ const EXAMPLE_TEXT = '';
 const PART_ONE_TEXT = EXAMPLE_TEXT;
 const PART_TWO_TEXT = EXAMPLE_TEXT;
 
-const PART_ONE_RESULT = None;
-const PART_TWO_RESULT = None;
+const PART_ONE_RESULT = null;
+const PART_TWO_RESULT = null;
 
 // ======================================================================
 //                                                              TestCLASS
@@ -550,41 +737,33 @@ const PART_TWO_RESULT = None;
 
 describe('CLASS', () => {
   test('Test the default CLASS creation', () => {
-
     // 1. Create default CLASS object
-    const myobj = MODULE.CLASS();
-
+    const myobj = new MODULE.CLASS({});
     // 2. Make sure it has the default values
     expect(myobj.part2).toBe(false);
-    expect(myobj.text).toBe(None);
+    expect(myobj.text).toBe(null);
   });
 
   test('Test the CLASS object creation from text', () => {
-
     // 1. Create CLASS object from text
-    const myobj = MODULE.CLASS(text=aoc_DD.from_text(EXAMPLE_TEXT));
-
+    const myobj = new MODULE.CLASS({ text: aocDD.fromText(EXAMPLE_TEXT) });
     // 2. Make sure it has the expected values
     expect(myobj.part2).toBe(false);
-    expect(myobj.text).toBe(None);
+    expect(myobj.text).toHaveLength(0);
   });
 
   test('Test part one example of CLASS object', () => {
-
     // 1. Create CLASS object from text
-    const myobj = MODULE.CLASS(text=aoc_DD.from_text(PART_ONE_TEXT);
-
+    const myobj = new MODULE.CLASS({ text: aocDD.fromText(PART_ONE_TEXT) });
     // 2. Check the part one result
-    expect(myobj.part_one(verbose=False)).toBe(PART_ONE_RESULT));
+    expect(myobj.partOne({ verbose: false)})).toBe(PART_ONE_RESULT);
   });
 
   test('Test part two example of CLASS object', () => {
-
     // 1. Create CLASS object from text
-    const myobj = MODULE.CLASS(part2=true, text=aoc_DD.from_text(PART_TWO_TEXT);
-
+    const myobj = new MODULE.CLASS({ part2: true, text: aocDD.fromText(PART_TWO_TEXT) });
     // 2. Check the part two result
-    expect(myobj.part_two(verbose=False)).toBe(PART_TWO_RESULT));
+    expect(myobj.partTwo({ verbose=False })).toBe(PART_TWO_RESULT);
   });
 });
 
@@ -602,19 +781,32 @@ PACKAGE_JSON = """
   "scripts": {
     "test": "jest"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "keywords": ['Advent of Code'],
+    "author": "Dr. Dean Earl Wright III",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^23.8.2",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^25.1.0"
+  }
 }
 """
 
 ESLINTRC_JS = """
 module.exports = {
   env: {
-    browser: true,
     commonjs: true,
-    es6: true,
+    'jest/globals': true,
   },
+  plugins: [
+    'jest',
+  ],
   extends: [
     'airbnb-base',
   ],
@@ -626,8 +818,27 @@ module.exports = {
     ecmaVersion: 2018,
   },
   rules: {
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error"
+
   },
 };
+"""
+
+JEST_CONFIG_JS = """
+// For a detailed explanation regarding each configuration property, visit:
+// https://jestjs.io/docs/en/configuration.html
+
+module.exports = {
+  testEnvironment: "Node",
+};
+"""
+
+GITIGNORE_JS = """
+node_modules/
 """
 
 JAVASCRIPT_FILES = {
@@ -638,6 +849,8 @@ JAVASCRIPT_FILES = {
     'part_two.txt': PART_TWO_TXT,
     'package.json': PACKAGE_JSON,
     '.eslintrc.js': ESLINTRC_JS,
+    'jest.config.js': JEST_CONFIG_JS,
+    '.gitignore': GITIGNORE_JS,
 }
 
 
@@ -688,6 +901,7 @@ SUBSTITUTIONS = {
     'DD': 'DD',
     'D D': 'D D',
     'DIR': 'DIR',
+    'DIRLOWER': 'DIRLOWER',
     'YYYY': 'YYYY',
     'TITLE': 'TITLE',
     'CLASS': 'CLASS',
