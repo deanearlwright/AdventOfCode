@@ -547,7 +547,7 @@ function fromText(text) {
   const lines = [];
 
   // 2. Loop for lines in the text
-  text.split(/\r?\n/).forEach((line) => {
+  text.split(/\\r?\\n/).forEach((line) => {
     // 3. But ignore blank and non-claim lines
     const cleaned = line.trimEnd();
     if (cleaned.length > 0 && !cleaned.startsWith('!')) {
@@ -628,7 +628,7 @@ CLASS_JS = """/* eslint-disable linebreak-style */
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 //
 // JavaScript implementation by Dr. Dean Earl Wright III
-// ========================================================================
+// ======================================================================
 
 // ======================================================================
 //                           M O D U L E . j s
@@ -649,7 +649,8 @@ CLASS_JS = """/* eslint-disable linebreak-style */
 // ======================================================================
 
 
-class CLASS{
+A
+class CLASS {
   // Object for TITLE
 
   constructor(options) {
@@ -694,7 +695,7 @@ class CLASS{
   }
 }
 
-module.exports = CLASS;
+module.exports.CLASS = CLASS;
 // ======================================================================
 // end                      M O D U L E . j s                     end
 // ======================================================================
@@ -756,14 +757,14 @@ describe('CLASS', () => {
     // 1. Create CLASS object from text
     const myobj = new MODULE.CLASS({ text: aocDD.fromText(PART_ONE_TEXT) });
     // 2. Check the part one result
-    expect(myobj.partOne({ verbose: false)})).toBe(PART_ONE_RESULT);
+    expect(myobj.partOne({ verbose: false })).toBe(PART_ONE_RESULT);
   });
 
   test('Test part two example of CLASS object', () => {
     // 1. Create CLASS object from text
     const myobj = new MODULE.CLASS({ part2: true, text: aocDD.fromText(PART_TWO_TEXT) });
     // 2. Check the part two result
-    expect(myobj.partTwo({ verbose=False })).toBe(PART_TWO_RESULT);
+    expect(myobj.partTwo({ verbose: false })).toBe(PART_TWO_RESULT);
   });
 });
 
@@ -869,7 +870,7 @@ def js_before(args):
         "MODULE": args.cname.lower(),
         "CLASS": args.cname.capitalize(),
         "M O D U L E": ' '.join(list(args.cname.lower())),
-        "DIRLOWER": "%2d_%S" % (args.day, ''.join(args.title).lower())
+        "DIRLOWER": "%2d_%s" % (args.day, ''.join(args.title).lower())
     }
 
     # 9. Return the text converters
