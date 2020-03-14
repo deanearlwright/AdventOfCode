@@ -22,12 +22,31 @@ const floor = require('./floor');
 // ----------------------------------------------------------------------
 //                                                              constants
 // ----------------------------------------------------------------------
-const EXAMPLE_TEXT = '';
-const PART_ONE_TEXT = EXAMPLE_TEXT;
-const PART_TWO_TEXT = EXAMPLE_TEXT;
+const EXAMPLE_TEXT = '\n(())\n';
 
-const PART_ONE_RESULT = null;
-const PART_TWO_RESULT = null;
+const EXAMPLES_PART_ONE = {
+  '(())': 0,
+  '()()': 0,
+  '(((': 3,
+  '(()(()(': 3,
+  '))(((((': 3,
+  '())': -1,
+  '))(': -1,
+  ')))': -3,
+  ')())())': -3,
+};
+
+const EXAMPLES_PART_TWO = {
+  ')': 1,
+  '()())': 5,
+};
+
+const PART_ONE_TEXT = '\n(()(()(\n';
+const PART_TWO_TEXT = '\n()())\n';
+
+const EXAMPLE_RESULT = 0;
+const PART_ONE_RESULT = 3;
+const PART_TWO_RESULT = 5;
 
 // ======================================================================
 //                                                              TestFloor
@@ -39,6 +58,9 @@ describe('Floor', () => {
     // 2. Make sure it has the default values
     expect(myobj.part2).toBe(false);
     expect(myobj.text).toBe(null);
+    expect(myobj.level).toBe(null);
+    expect(myobj.toBasement).toBe(null);
+    expect(myobj.directions).toBe('');
   });
 
   test('Test the Floor object creation from text', () => {
@@ -46,7 +68,45 @@ describe('Floor', () => {
     const myobj = new floor.Floor({ text: aoc01.fromText(EXAMPLE_TEXT) });
     // 2. Make sure it has the expected values
     expect(myobj.part2).toBe(false);
-    expect(myobj.text).toHaveLength(0);
+    expect(myobj.text).toHaveLength(1);
+    expect(myobj.level).toBe(null);
+    expect(myobj.toBasement).toBe(null);
+    expect(myobj.directions).toHaveLength(4);
+    // 3. Check methods
+    myobj.followDirections();
+    expect(myobj.level).toBe(EXAMPLE_RESULT);
+  });
+
+  test('Test all of the part one examples', () => {
+    // 1. Loop for all of the examples
+    Object.keys(EXAMPLES_PART_ONE).forEach((key) => {
+      // 2. Create Floor object using the key at text
+      const myobj = new floor.Floor({ text: [key] });
+      expect(myobj.part2).toBe(false);
+      expect(myobj.text).toHaveLength(1);
+      expect(myobj.level).toBe(null);
+      expect(myobj.toBasement).toBe(null);
+      expect(myobj.directions).toHaveLength(key.length);
+      // 3. Follow the instructions
+      myobj.followDirections();
+      expect(myobj.level).toBe(EXAMPLES_PART_ONE[key]);
+    });
+  });
+
+  test('Test all of the part two examples', () => {
+    // 1. Loop for all of the examples
+    Object.keys(EXAMPLES_PART_TWO).forEach((key) => {
+      // 2. Create Floor object using the key at text
+      const myobj = new floor.Floor({ part2: true, text: [key] });
+      expect(myobj.part2).toBe(true);
+      expect(myobj.text).toHaveLength(1);
+      expect(myobj.level).toBe(null);
+      expect(myobj.toBasement).toBe(null);
+      expect(myobj.directions).toHaveLength(key.length);
+      // 3. Follow the instructions
+      myobj.followDirections();
+      expect(myobj.toBasement).toBe(EXAMPLES_PART_TWO[key]);
+    });
   });
 
   test('Test part one example of Floor object', () => {

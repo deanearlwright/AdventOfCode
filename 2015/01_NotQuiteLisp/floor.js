@@ -33,11 +33,36 @@ class Floor {
     // 1. Set the initial values
     this.text = options.text === undefined ? null : options.text;
     this.part2 = options.part2 === undefined ? false : options.part2;
+    this.level = null;
+    this.directions = '';
+    this.toBasement = null;
 
     // 2. Process text (if any)
-    if (this.text === null) {
-      // TODO process the test
+    if (this.text !== null) {
+      [this.directions] = this.text;
     }
+  }
+
+  followDirections() {
+    // 1. Start at the ground floor
+    let number = 0;
+    this.level = 0;
+    // 2. Loop for each character in the instructions
+    this.directions.split('').forEach((paren) => {
+      number += 1;
+      // 3. Go up or down a level
+      if (paren === '(') {
+        this.level += 1;
+      } else if (paren === ')') {
+        this.level -= 1;
+        // 4. Remenber when we enter the basement
+        if (this.level < 0 && this.toBasement === null) {
+          this.toBasement = number;
+        }
+      } else {
+        console.log('Unexpected direction ', paren); // eslint-disable-line no-console
+      }
+    });
   }
 
   partOne(options) {
@@ -48,10 +73,12 @@ class Floor {
     const verbose = options.verbose === undefined ? false : options.verbose;
     // eslint-disable-next-line no-unused-vars
     const limit = options.limit === undefined ? 0 : options.limit;
-    this.todo = 'TODO';
 
-    // 1. Return the solution for part one
-    return null;
+    // 1. Follow the directions
+    this.followDirections();
+
+    // 2. Return the solution for part one
+    return this.level;
   }
 
   partTwo(options) {
@@ -62,10 +89,12 @@ class Floor {
     const verbose = options.verbose === undefined ? false : options.verbose;
     // eslint-disable-next-line no-unused-vars
     const limit = options.limit === undefined ? 0 : options.limit;
-    this.todo = 'TODO';
 
-    // 1. Return the solution for part two
-    return null;
+    // 1. Follow the directions
+    this.followDirections();
+
+    // 2. Return the solution for part one
+    return this.toBasement;
   }
 }
 

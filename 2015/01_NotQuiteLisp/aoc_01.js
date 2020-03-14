@@ -73,14 +73,14 @@ function partOne(args, inputLines) {
   // Process part one of the puzzle
 
   // 1. Create the puzzle solver
-  const solver = new floor.Floor(inputLines);
+  const solver = new floor.Floor({ text: inputLines });
 
   // 2. Determine the solution for part two
-  const solution = solver.partOne(args.verbose, args.limit);
+  const solution = solver.partOne({ verbose: args.verbose, limit: args.limit });
   if (solution == null) {
-    console.log('There is no solution'); // eslint-disable-line no-console
+    console.log('There is no solution for part one'); // eslint-disable-line no-console
   } else {
-    console.log('The solution for part two is ', solution); // eslint-disable-line no-console
+    console.log('The solution for part one is', solution); // eslint-disable-line no-console
   }
 
   // 3. Return result
@@ -100,9 +100,9 @@ function partTwo(args, inputLines) {
   // 2. Determine the solution for part two
   const solution = solver.partTwo({ verbose: args.verbose, limit: args.limit });
   if (solution == null) {
-    console.log('There is no solution'); // eslint-disable-line no-console
+    console.log('There is no solution for part two'); // eslint-disable-line no-console
   } else {
-    console.log('The solution for part two is ', solution); // eslint-disable-line no-console
+    console.log('The solution for part two is', solution); // eslint-disable-line no-console
   }
 
   // 3. Return result
@@ -122,9 +122,11 @@ function fromText(text) {
   // 2. Loop for lines in the text
   text.split(/\r?\n/).forEach((line) => {
     // 3. But ignore blank and non-claim lines
+    // eslint-disable-next-line no-console
     const cleaned = line.trimEnd();
     if (cleaned.length > 0 && !cleaned.startsWith('!')) {
       // 4. Add the line
+      // eslint-disable-next-line no-console
       lines.push(cleaned);
     }
   });
