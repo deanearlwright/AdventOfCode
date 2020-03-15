@@ -22,12 +22,14 @@ const paper = require('./paper');
 // ----------------------------------------------------------------------
 //                                                              constants
 // ----------------------------------------------------------------------
-const EXAMPLE_TEXT = '';
-const PART_ONE_TEXT = EXAMPLE_TEXT;
-const PART_TWO_TEXT = EXAMPLE_TEXT;
+const EXAMPLE_TEXT = '2x3x4';
+const PART_ONE_TEXT = '2x3x4\n1x1x10\n';
+const PART_TWO_TEXT = PART_ONE_TEXT;
 
-const PART_ONE_RESULT = null;
-const PART_TWO_RESULT = null;
+const EXAMPLE_WRAPPING = 58;
+const EXAMPLE_RIBBON = 34;
+const PART_ONE_RESULT = 58 + 43;
+const PART_TWO_RESULT = 34 + 14;
 
 // ======================================================================
 //                                                              TestPaper
@@ -40,6 +42,8 @@ describe('Paper', () => {
     // 2. Make sure it has the default values
     expect(myobj.part2).toBe(false);
     expect(myobj.text).toBe(null);
+    expect(myobj.wrapping).toBe(0);
+    expect(myobj.ribbon).toBe(0);
   });
 
   test('Test the Paper object creation from text', () => {
@@ -47,7 +51,15 @@ describe('Paper', () => {
     const myobj = new paper.Paper({ text: aoc02.fromText(EXAMPLE_TEXT) });
     // 2. Make sure it has the expected values
     expect(myobj.part2).toBe(false);
-    expect(myobj.text).toHaveLength(0);
+    expect(myobj.text).toHaveLength(1);
+    expect(myobj.text[0]).toBe(EXAMPLE_TEXT);
+    // 3. Check methods
+    expect(paper.Paper.calculateWrapping('2x3x4')).toBe(58);
+    expect(paper.Paper.calculateWrapping('1x1x10')).toBe(43);
+    expect(myobj.wrapping).toBe(EXAMPLE_WRAPPING);
+    expect(paper.Paper.calculateRibbon('2x3x4')).toBe(34);
+    expect(paper.Paper.calculateRibbon('1x1x10')).toBe(14);
+    expect(myobj.ribbon).toBe(EXAMPLE_RIBBON);
   });
 
   test('Test part one example of Paper object', () => {
