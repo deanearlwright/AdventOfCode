@@ -1081,7 +1081,7 @@ def main():
 
     # 4. Create input file for sepecified input (if any)
     if args.inval:
-        with open(os.path(base_year_day, INPUT_FILE_NAME), 'w') as input_txt:
+        with open(os.path.join(base_year_day, INPUT_FILE_NAME), 'w') as input_txt:
             input_txt.write(args.inval)
             input_txt.write('\n')
 
