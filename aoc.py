@@ -648,8 +648,6 @@ CLASS_JS = """/* eslint-disable linebreak-style */
 //                                                                  CLASS
 // ======================================================================
 
-
-A
 class CLASS {
   // Object for TITLE
 
@@ -661,7 +659,7 @@ class CLASS {
     this.part2 = options.part2 === undefined ? false : options.part2;
 
     // 2. Process text (if any)
-    if (this.text === null) {
+    if (this.text !== null) {
       // TODO process the test
     }
   }
@@ -782,7 +780,7 @@ PACKAGE_JSON = """
   "scripts": {
     "test": "jest"
   },
-  "keywords": ['Advent of Code'],
+  "keywords": ["Advent of Code"],
     "author": "Dr. Dean Earl Wright III",
   "license": "MIT",
   "devDependencies": {
