@@ -1,0 +1,11 @@
+Advent of Code 2015 Day 07 Part Two
+
+From https://adventofcode.com/2015/day/07 by Eric Wastl
+
+----- Day 07: Some Assembly Required -----
+
+----- Part Two -----
+
+Now, take the signal you got on wire a, override wire b to that signal, and 
+reset the other wires (including wire a). What new signal is ultimately 
+provided to wire a?
