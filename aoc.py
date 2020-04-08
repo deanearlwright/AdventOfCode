@@ -723,6 +723,10 @@ const MODULE = require('./MODULE');
 //                                                              constants
 // ----------------------------------------------------------------------
 const EXAMPLE_TEXT = '';
+
+const EXAMPLES_PART_ONE = {};
+const EXAMPLES_PART_TWO = {};
+
 const PART_ONE_TEXT = EXAMPLE_TEXT;
 const PART_TWO_TEXT = EXAMPLE_TEXT;
 
@@ -748,6 +752,30 @@ describe('CLASS', () => {
     // 2. Make sure it has the expected values
     expect(myobj.part2).toBe(false);
     expect(myobj.text).toHaveLength(0);
+  });
+
+  test('Test all of the part one examples', () => {
+    // 1. Loop for all of the examples
+    Object.keys(EXAMPLES_PART_ONE).forEach((key) => {
+      // 2. Create CLASS object using the key as text
+      const myobj = new MODULE.CLASS({ text: [key] });
+      expect(myobj.part2).toBe(false);
+      expect(myobj.text).toHaveLength(1);
+      // 3. Make sure it has the expected value
+      expect(myobj.MODULE(key)).toBe(EXAMPLES_PART_ONE[key]);
+    });
+  });
+
+  test('Test all of the part two examples', () => {
+    // 1. Loop for all of the examples for the second part
+    Object.keys(EXAMPLES_PART_TWO).forEach((key) => {
+      // 2. Create CLASS object using the key as text
+      const myobj = new MODULE.CLASS({ part2: true, text: [key] });
+      expect(myobj.part2).toBe(true);
+      expect(myobj.text).toHaveLength(1);
+      // 3. Make sure it has the expected value
+      expect(myobj.MODULE(key)).toBe(EXAMPLES_PART_TWO[key]);
+    });
   });
 
   test('Test part one example of CLASS object', () => {
