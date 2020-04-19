@@ -805,21 +805,23 @@ PACKAGE_JSON = """
   "description": "Advent of Code YYYY Day DD, TITLE",
   "main": "aoc_DD.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "part1": "node aoc_DD.js -p 1",
+    "part2": "node aoc_DD.js -p 2"
   },
   "keywords": ["Advent of Code"],
     "author": "Dr. Dean Earl Wright III",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.20.1",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jest": "^23.8.2",
-    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "jest": "^25.1.0"
+    "jest": "^25.4.0"
   }
 }
 """
