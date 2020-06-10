@@ -1,0 +1,12 @@
+Advent of Code 2015 Day 23 Part Two
+
+From https://adventofcode.com/2015/day/23 by Eric Wastl
+
+----- Day 23: Opening the Turing Lock -----
+
+----- Part Two -----
+
+The unknown benefactor is very thankful for releasi-- er, helping little 
+Jane Marie with her computer. Definitely not to distract you, what is the 
+value in register b after the program is finished executing if register a 
+starts as 1 instead?
