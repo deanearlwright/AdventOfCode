@@ -816,14 +816,15 @@ PACKAGE_JSON = """
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-jest": "^23.8.2",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^23.13.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "jest": "^25.4.0"
+    "jest": "^26.0.1"
   },
   "dependencies": {
+    "typescript": "^3.9.5",
     "yargs": "^15.3.1"
   }
 }
