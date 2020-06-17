@@ -6,8 +6,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "eslint": "eslint . --ext .ts",
-    "test": "jest -c jest.config.js",
-    "jest": "jest -c jest.config.js",
+    "jest": "jest",
     "part1": "tsc aoc_01.ts && node aoc_01.js -p 1",
     "part2": "tsc aoc_01.ts && node aoc_01.js -p 2"
   },

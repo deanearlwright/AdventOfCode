@@ -704,7 +704,7 @@ TEST_CLASS_JS = """/* eslint-disable linebreak-style */
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 //
 // Javascript implementation by Dr. Dean Earl Wright III
-//  ======================================================================
+// ======================================================================
 
 // ======================================================================
 //                      M O D U L E . t e s t . j s
@@ -923,7 +923,7 @@ def js_after(args, converters, text):
 # ----- typescript -----
 
 
-AOC_DD_TS = """/* eslint-disable linebreak-style */
+AOC_DD_TS = """
 // ======================================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
@@ -941,9 +941,11 @@ AOC_DD_TS = """/* eslint-disable linebreak-style */
 //                                                                 import
 // ----------------------------------------------------------------------
 
-import yargs from 'yargs';
 import { readFileSync } from 'fs';
+
 import { exit } from 'process';
+
+import * as yargs from 'yargs';
 
 import { CLASS } from './MODULE';
 
@@ -1008,14 +1010,14 @@ function partOne(args: aocArguments, inputLines: string[]): boolean {
 
   // 2. Determine the solution for part one
   const solution = solver.partOne(args.verbose, args.limit);
-  if (solution == NaN) {
-    console.log('There is no solution for part one'); // eslint-disable-line no-console
+  if (Number.isNaN(solution)) {
+    console.log('There is no solution for part one');
   } else {
-    console.log('The solution for part one is', solution); // eslint-disable-line no-console
+    console.log('The solution for part one is', solution);
   }
 
   // 3. Return result
-  return solution != NaN;
+  return !Number.isNaN(solution);
 }
 
 // ----------------------------------------------------------------------
@@ -1030,14 +1032,14 @@ function partTwo(args: aocArguments, inputLines: string[]): boolean) {
 
   // 2. Determine the solution for part two
   const solution = solver.partTwo(args.verbose, args.limit);
-  if (solution == NaN) {
-    console.log('There is no solution for part two'); // eslint-disable-line no-console
+  if (Number.isNaN(solution)) {
+    console.log('There is no solution for part two');
   } else {
-    console.log('The solution for part two is', solution); // eslint-disable-line no-console
+    console.log('The solution for part two is', solution);
   }
 
   // 3. Return result
-  return solution != NaN;
+  return !Number.isNaN(solution);
 }
 
 // ----------------------------------------------------------------------
@@ -1102,9 +1104,9 @@ function main() {
 
   // 5. Set return code (0 if solution found, 2 if not)
   if (result) {
-    process.exit(0);
+    exit(0);
   }
-  process.exit(2);
+  exit(2);
 }
 
 // ----------------------------------------------------------------------
@@ -1119,7 +1121,7 @@ if (typeof require !== 'undefined' && require.main === module) {
 // ======================================================================
 """
 
-CLASS_TS = """/* eslint-disable linebreak-style */
+CLASS_TS = """
 // ======================================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
@@ -1189,7 +1191,7 @@ export class CLASS {
 // ======================================================================
 """
 
-TEST_CLASS_TS = """/* eslint-disable linebreak-style */
+TEST_CLASS_TS = """
 // ======================================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
@@ -1301,9 +1303,10 @@ PACKAGE_JSON_TS = """
   "description": "Advent of Code YYYY Day DD, TITLE",
   "main": "aoc_DD.js",
   "scripts": {
+    "lint": "eslint . --ext .ts",
     "test": "jest -c jest.config.js",
-    "part1": "node aoc_DD.js -p 1",
-    "part2": "node aoc_DD.js -p 2"
+    "part1": "tsc aoc_DD.ts && node aoc_DD.js -p 1",
+    "part2": "tsc aoc_DD.ts && node aoc_DD.js -p 2",
   },
   "keywords": ["Advent of Code"],
     "author": "Dr. Dean Earl Wright III",
@@ -1328,60 +1331,79 @@ PACKAGE_JSON_TS = """
   },
   "dependencies": {
     "yargs": "^15.3.1"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
   }
 }
 """
 
 ESLINTRC_TS = """
-module.exports = {
-  extends: [
-    'airbnb-base'
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "airbnb-base",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
-  'env': {
-    'commonjs': true,
-    'jest': true,
-    'jest/globals': true
+  "env": {
+    "commonjs": true,
+    "jest": true,
+    "jest/globals": true
   },
-  plugins: [
-    'jest'
+  "plugins": [
+    "jest",
+    "@typescript-eslint"
   ],
-  globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
   },
-  parserOptions: {
-    ecmaVersion: 2018
+  "parserOptions": {
+    "ecmaVersion": 2018
   },
-  rules: {
+  "rules": {
+    "no-console": 0,
+    "linebreak-style": 0,
+    "import/prefer-default-export": 0,
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
     "jest/prefer-to-have-length": "warn",
     "jest/valid-expect": "error"
-  },
-};
+  }
+}
 """
 
-JEST_CONFIG_TS = """
-module.exports = {
-  preset: 'ts-jest',
-  transform: {
-    '^.+\\.ts$': 'ts-jest',
-  },
-};
-"""
-
-GITIGNORE_TS = """
+GITIGNORE_TS = """*.js
 node_modules/
 """
 
-TYPESCRIPT_JSON = """
+TSCONFIG_JSON = """
 {
-    "compilerOptions": {
-        "targest": "es6",
-        "module": "commonjs",
-        "sourceMap": true
-    }
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": [
+        "es6",
+        "dom"
+    ],
+    "strict": true,
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
 }
 """
 
@@ -1392,10 +1414,9 @@ TYPESCRIPT_FILES = {
     'part_one.txt': PART_ONE_TXT,
     'part_two.txt': PART_TWO_TXT,
     'package.json': PACKAGE_JSON_TS,
-    '.eslintrc.js': ESLINTRC_TS,
-    'jest.config.js': JEST_CONFIG_TS,
+    '.eslintrc': ESLINTRC_TS,
     '.gitignore': GITIGNORE_TS,
-    'typescript.json': TYPESCRIPT_JSON,
+    'tsconfig.json': TSCONFIG_JSON,
 }
 
 
