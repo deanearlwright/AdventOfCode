@@ -5,7 +5,7 @@
   "main": "aoc_02.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "test": "jest -c jest.config.js",
+    "test": "jest",
     "part1": "tsc aoc_02.ts && node aoc_02.js -p 1",
     "part2": "tsc aoc_02.ts && node aoc_02.js -p 2"
   },
