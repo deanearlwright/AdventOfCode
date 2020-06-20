@@ -1005,7 +1005,7 @@ function partOne(args: aocArguments, inputLines: string[]): boolean {
   // Process part one of the puzzle
 
   // 1. Create the puzzle solver
-  const solver = new CLASS(inputLines, false );
+  const solver = new CLASS(inputLines, false);
 
   // 2. Determine the solution for part one
   const solution = solver.partOne(args.verbose, args.limit);
@@ -1166,6 +1166,7 @@ export class CLASS {
   }
 
   solution(verbose = false, limit = 0): number {
+    if (verbose) console.log(`solution: ${limit}`);
     if (this.part2) {
       return NaN;
     }
@@ -1208,7 +1209,7 @@ TEST_CLASS_TS = """// ==========================================================
 //                                                                 import
 // ----------------------------------------------------------------------
 
-import { fromText } from'./aoc_DD';
+import { fromText } from './aoc_DD';
 import { CLASS } from './MODULE';
 
 // ----------------------------------------------------------------------
@@ -1295,8 +1296,7 @@ describe('CLASS', () => {
 // ======================================================================
 """
 
-PACKAGE_JSON_TS = """
-{
+PACKAGE_JSON_TS = """{
   "name": "DIRLOWER",
   "version": "1.0.0",
   "description": "Advent of Code YYYY Day DD, TITLE",
@@ -1344,8 +1344,16 @@ PACKAGE_JSON_TS = """
 }
 """
 
-ESLINTRC_TS = """
-{
+ESLINTRC_TS = """{
+  "settings": {
+    "'import/resolver": {
+        "node": {
+          "paths": ["."],
+          "extensions": [".js", ".jsx", ".ts", ".tsx"],
+          "moduleDirectory": ["node_modules", "."]
+        }
+    }
+  },
   "root": true,
   "parser": "@typescript-eslint/parser",
   "extends": [
@@ -1376,6 +1384,7 @@ ESLINTRC_TS = """
     "no-console": 0,
     "linebreak-style": 0,
     "import/prefer-default-export": 0,
+    "import/extensions": "off",
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
@@ -1389,8 +1398,7 @@ GITIGNORE_TS = """*.js
 node_modules/
 """
 
-TSCONFIG_JSON = """
-{
+TSCONFIG_JSON = """{
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
