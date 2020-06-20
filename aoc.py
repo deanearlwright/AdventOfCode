@@ -923,8 +923,7 @@ def js_after(args, converters, text):
 # ----- typescript -----
 
 
-AOC_DD_TS = """
-// ======================================================================
+AOC_DD_TS = """// ======================================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 //
@@ -1006,7 +1005,7 @@ function partOne(args: aocArguments, inputLines: string[]): boolean {
   // Process part one of the puzzle
 
   // 1. Create the puzzle solver
-  const solver = new CLASS(inputLines, false });
+  const solver = new CLASS(inputLines, false );
 
   // 2. Determine the solution for part one
   const solution = solver.partOne(args.verbose, args.limit);
@@ -1024,7 +1023,7 @@ function partOne(args: aocArguments, inputLines: string[]): boolean {
 //                                                                partTwo
 // ----------------------------------------------------------------------
 
-function partTwo(args: aocArguments, inputLines: string[]): boolean) {
+function partTwo(args: aocArguments, inputLines: string[]): boolean {
   // Process part two of the puzzle
 
   // 1. Create the puzzle solver
@@ -1055,7 +1054,8 @@ export function fromText(text: string): string[] {
   // 2. Loop for lines in the text
   text.split(/\\r?\\n/).forEach((line) => {
     // 3. But ignore blank and non-claim lines
-    const cleaned = line.trimEnd();
+    // eslint-disable-next-line no-control-regex
+    const cleaned = line.replace(/[\\x09\\x0a\\x0b\\x0c\\x0d\\x20\\xa0]+$/, '');
     if (cleaned.length > 0 && !cleaned.startsWith('!')) {
       // 4. Add the line
       lines.push(cleaned);
@@ -1087,7 +1087,7 @@ function fromFile(filepath: string): string[] {
 
 function main() {
   // Read the Advent of Code problem and solve it
-  let result: boolean = false;
+  let result = false;
 
   // 1. Get the command line options
   const argv: aocArguments = parseCommandLine();
@@ -1121,8 +1121,7 @@ if (typeof require !== 'undefined' && require.main === module) {
 // ======================================================================
 """
 
-CLASS_TS = """
-// ======================================================================
+CLASS_TS = """// ======================================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 //
@@ -1150,6 +1149,7 @@ CLASS_TS = """
 export class CLASS {
   // Object for TITLE
   text: string[];
+
   part2: boolean;
 
   constructor(text: string[], part2 = false) {
@@ -1191,8 +1191,7 @@ export class CLASS {
 // ======================================================================
 """
 
-TEST_CLASS_TS = """
-// ======================================================================
+TEST_CLASS_TS = """// ======================================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 //
@@ -1246,7 +1245,7 @@ describe('CLASS', () => {
 
   test('Test the CLASS object creation from text', () => {
     // 1. Create CLASS object from text
-    const myobj = new CLASS( fromText(EXAMPLE_TEXT) );
+    const myobj = new CLASS(fromText(EXAMPLE_TEXT));
     // 2. Make sure it has the expected values
     expect(myobj.part2).toBe(false);
     expect(myobj.text).toHaveLength(0);
@@ -1256,11 +1255,11 @@ describe('CLASS', () => {
     // 1. Loop for all of the examples
     EXAMPLES_PART_ONE.forEach((test) => {
       // 2. Create CLASS object
-      const myobj = new .CLASS(fromText(test.text));
+      const myobj = new CLASS(fromText(test.text));
       expect(myobj.part2).toBe(false);
       expect(myobj.text).toHaveLength(1);
       // 3. Make sure it has the expected value
-      expect(myobj.MODULE(key)).toBe(test.result);
+      expect(myobj.solution()).toBe(test.result);
     });
   });
 
@@ -1272,7 +1271,7 @@ describe('CLASS', () => {
       expect(myobj.part2).toBe(true);
       expect(myobj.text).toHaveLength(1);
       // 3. Make sure it has the expected value
-      expect(myobj.MODULE(key)).toBe(test.result);
+      expect(myobj.solution()).toBe(test.result);
     });
   });
 
@@ -1304,9 +1303,9 @@ PACKAGE_JSON_TS = """
   "main": "aoc_DD.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "test": "jest -c jest.config.js",
+    "test": "jest",
     "part1": "tsc aoc_DD.ts && node aoc_DD.js -p 1",
-    "part2": "tsc aoc_DD.ts && node aoc_DD.js -p 2",
+    "part2": "tsc aoc_DD.ts && node aoc_DD.js -p 2"
   },
   "keywords": ["Advent of Code"],
     "author": "Dr. Dean Earl Wright III",
@@ -1352,7 +1351,10 @@ ESLINTRC_TS = """
   "extends": [
     "airbnb-base",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
   ],
   "env": {
     "commonjs": true,
@@ -1393,8 +1395,7 @@ TSCONFIG_JSON = """
     "target": "es6",
     "module": "commonjs",
     "lib": [
-        "es6",
-        "dom"
+        "es6"
     ],
     "strict": true,
     "moduleResolution": "node",
@@ -1435,7 +1436,7 @@ def ts_before(args):
         "MODULE": args.cname.lower(),
         "CLASS": args.cname.capitalize(),
         "M O D U L E": ' '.join(list(args.cname.lower())),
-        "DIRLOWER": "%2d_%s" % (args.day, ''.join(args.title).lower())
+        "DIRLOWER": "%02d_%s" % (args.day, ''.join(args.title).lower())
     }
 
     # 9. Return the text converters
