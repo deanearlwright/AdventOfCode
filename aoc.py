@@ -952,14 +952,14 @@ import { CLASS } from './MODULE';
 //                                                        parseCommndLine
 // ----------------------------------------------------------------------
 
-interface aocArguments {
+interface Arguments {
   verbose: boolean;
   part: number;
   limit: number;
   filepath: string;
 }
 
-function parseCommandLine(): aocArguments {
+function parseCommandLine(): Arguments {
   // Parse the command line options"
 
   // 1. Create the command line parser
@@ -1001,7 +1001,7 @@ function parseCommandLine(): aocArguments {
 //                                                                partOne
 // ----------------------------------------------------------------------
 
-function partOne(args: aocArguments, inputLines: string[]): boolean {
+function partOne(args: Arguments, inputLines: string[]): boolean {
   // Process part one of the puzzle
 
   // 1. Create the puzzle solver
@@ -1009,21 +1009,21 @@ function partOne(args: aocArguments, inputLines: string[]): boolean {
 
   // 2. Determine the solution for part one
   const solution = solver.partOne(args.verbose, args.limit);
-  if (Number.isNaN(solution)) {
+  if (RCHECK) {
     console.log('There is no solution for part one');
   } else {
     console.log('The solution for part one is', solution);
   }
 
   // 3. Return result
-  return !Number.isNaN(solution);
+  return !RCHECK;
 }
 
 // ----------------------------------------------------------------------
 //                                                                partTwo
 // ----------------------------------------------------------------------
 
-function partTwo(args: aocArguments, inputLines: string[]): boolean {
+function partTwo(args: Arguments, inputLines: string[]): boolean {
   // Process part two of the puzzle
 
   // 1. Create the puzzle solver
@@ -1031,14 +1031,14 @@ function partTwo(args: aocArguments, inputLines: string[]): boolean {
 
   // 2. Determine the solution for part two
   const solution = solver.partTwo(args.verbose, args.limit);
-  if (Number.isNaN(solution)) {
+  if (RCHECK) {
     console.log('There is no solution for part two');
   } else {
     console.log('The solution for part two is', solution);
   }
 
   // 3. Return result
-  return !Number.isNaN(solution);
+  return !RCHECK;
 }
 
 // ----------------------------------------------------------------------
@@ -1090,7 +1090,7 @@ function main() {
   let result = false;
 
   // 1. Get the command line options
-  const argv: aocArguments = parseCommandLine();
+  const argv: Arguments = parseCommandLine();
 
   // 2. Read the puzzle file
   const inputText: string[] = fromFile(argv.filepath);
@@ -1217,19 +1217,19 @@ import { CLASS } from './MODULE';
 // ----------------------------------------------------------------------
 const EXAMPLE_TEXT = '';
 
-interface exampleTests {
+interface ExampleTests {
   text: string;
-  result: number;
+  result: RTYPE;
 }
 
-const EXAMPLES_PART_ONE: exampleTests[] = [];
-const EXAMPLES_PART_TWO: exampleTests[] = [];
+const EXAMPLES_PART_ONE: ExampleTests[] = [];
+const EXAMPLES_PART_TWO: ExampleTests[] = [];
 
 const PART_ONE_TEXT = EXAMPLE_TEXT;
 const PART_TWO_TEXT = EXAMPLE_TEXT;
 
-const PART_ONE_RESULT = NaN;
-const PART_TWO_RESULT = NaN;
+const PART_ONE_RESULT = RNONE;
+const PART_TWO_RESULT = RNONE;
 
 // ======================================================================
 //                                                              TestCLASS
@@ -1313,9 +1313,10 @@ PACKAGE_JSON_TS = """{
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "@types/node": "^14.0.13",
-    "@typescript-eslint/eslint-plugin": "^3.2.0",
+    "@typescript-eslint/eslint-plugin": "^3.3.0",
     "@typescript-eslint/parser": "^3.2.0",
     "eslint": "^7.2.0",
+    "eslint-config-airbnb-typescript": "^8.0.2",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.21.2",
@@ -1357,12 +1358,7 @@ ESLINTRC_TS = """{
   "root": true,
   "parser": "@typescript-eslint/parser",
   "extends": [
-    "airbnb-base",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript"
+    "airbnb-typescript/base",
   ],
   "env": {
     "commonjs": true,
@@ -1378,7 +1374,7 @@ ESLINTRC_TS = """{
     "SharedArrayBuffer": "readonly"
   },
   "parserOptions": {
-    "ecmaVersion": 2018
+    "project": "./tsconfig.json"
   },
   "rules": {
     "no-console": 0,
@@ -1435,6 +1431,16 @@ def ts_before(args):
     # 0. Precondition axioms
     assert args
 
+    # 1. Result options
+    if args.rtype == 'int':
+        rtype = 'Number'
+        rnone = 'NaN'
+        rchk = 'Number.isNaN(solution)'
+    if args.rtype == 'str':
+        rtype = 'String'
+        rnone = ''
+        rchk = 'solution.length === 0'
+
     # 1. Start with simple conversions
     result = {
         "YYYY": "%4d" % args.year,
@@ -1444,7 +1450,10 @@ def ts_before(args):
         "MODULE": args.cname.lower(),
         "CLASS": args.cname.capitalize(),
         "M O D U L E": ' '.join(list(args.cname.lower())),
-        "DIRLOWER": "%02d_%s" % (args.day, ''.join(args.title).lower())
+        "DIRLOWER": "%02d_%s" % (args.day, ''.join(args.title).lower()),
+        'RTYPE': rtype,
+        'RNONE': rnone,
+        'RCHECK': rchk
     }
 
     # 9. Return the text converters
@@ -1484,6 +1493,8 @@ SUBSTITUTIONS = {
     'CLASS': 'CLASS',
     'MODULE': 'MODULE',
     'M O D U L E': 'M O D U L E',
+    'RESULT': 'RESULT',
+    'RCHECK': 'RCHECK'
 }
 
 # ----------------------------------------------------------------------
@@ -1517,6 +1528,8 @@ def parse_command_line():
                         help='Puzzle input from web page')
     parser.add_argument('-c', '--class', action='store', default="", dest='cname',
                         help='Name of class')
+    parser.add_argument('-r', '--result', action='store', default="int", dest='rtype',
+                        choices=['str', 'int'], help='Name of class')
     parser.add_argument('-y', '--year', action='store', default=default_year,
                         help="Year of puzzle", dest='year', type=int)
     parser.add_argument('-d', '--day', action='store', default=default_day,
