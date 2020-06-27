@@ -1,0 +1,10 @@
+Advent of Code 2016 Day 10 Part Two
+
+From https://adventofcode.com/2016/day/10 by Eric Wastl
+
+----- Day 10: Balance Bots -----
+
+----- Part Two -----
+
+What do you get if you multiply together the values of one chip in each of 
+outputs 0, 1, and 2?
