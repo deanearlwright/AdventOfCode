@@ -1,0 +1,10 @@
+Advent of Code 2016 Day 13 Part Two
+
+From https://adventofcode.com/2016/day/13 by Eric Wastl
+
+----- Day 13: A Maze of Twisty Little Cubicles -----
+
+----- Part Two -----
+
+How many locations (distinct x,y coordinates, including your starting location) 
+can you reach in at most 50 steps?
