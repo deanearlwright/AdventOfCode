@@ -1,0 +1,8 @@
+Advent of Code 2016 Day 11 Part Two
+
+From https://adventofcode.com/2016/day/11 by Eric Wastl
+
+----- Day 11: Radioisotope Thermoelectric Generators -----
+
+----- Part Two -----
+
