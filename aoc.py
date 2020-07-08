@@ -1305,11 +1305,16 @@ PACKAGE_JSON_TS = """{
     "lint": "eslint . --ext .ts",
     "test": "jest",
     "part1": "tsc aoc_DD.ts && node aoc_DD.js -p 1",
-    "part2": "tsc aoc_DD.ts && node aoc_DD.js -p 2"
+    "part2": "tsc aoc_DD.ts && node aoc_DD.js -p 2",
+    "part1v": "tsc aoc_DD.ts && node aoc_DD.js -p 1 -v",
+    "part2v": "tsc aoc_DD.ts && node aoc_DD.js -p 2 -v"
   },
   "keywords": ["Advent of Code"],
     "author": "Dr. Dean Earl Wright III",
   "license": "MIT",
+  "repository": {
+    "private": true
+    },
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "@types/node": "^14.0.13",
