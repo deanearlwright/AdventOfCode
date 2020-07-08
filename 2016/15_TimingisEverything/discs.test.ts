@@ -47,7 +47,7 @@ const PART_ONE_TEXT = EXAMPLE_TEXT;
 const PART_TWO_TEXT = EXAMPLE_TEXT;
 
 const PART_ONE_RESULT = 5;
-const PART_TWO_RESULT = NaN;
+const PART_TWO_RESULT = 85;
 
 // ======================================================================
 //                                                              TestDiscs
@@ -125,7 +125,7 @@ describe('Discs', () => {
     // 1. Create Discs object from text
     const myobj = new Discs(fromText(PART_TWO_TEXT), true);
     // 2. Check the part two result
-    expect(myobj.partTwo(false, 0)).toBe(PART_TWO_RESULT);
+    expect(myobj.partTwo(true, 0)).toBe(PART_TWO_RESULT);
   });
 });
 

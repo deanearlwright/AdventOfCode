@@ -36,6 +36,13 @@ const disc0: Disc = {
   now: 0,
 };
 
+const disc2: Disc = {
+  num: 7,
+  positions: 11,
+  time0: 0,
+  now: 0,
+};
+
 // ======================================================================
 //                                                                  Discs
 // ======================================================================
@@ -62,6 +69,11 @@ export class Discs {
     // 2. Process text (if any)
     if (this.text.length !== 0) {
       this.processText();
+    }
+
+    // 3. Part 2 adds another disc
+    if (this.part2) {
+      this.stack.push(disc2);
     }
   }
 
@@ -107,9 +119,9 @@ export class Discs {
     }
   }
 
-  firstDrop(verbose = false, limit = 0): number {
+  firstDropSlow(verbose = false, limit = 0): number {
     const maxTime = limit === 0 ? 99999999999 : limit;
-    if (verbose) console.log(`firstDrop: limit = ${maxTime}`);
+    if (verbose) console.log(`firstDropSlow: limit = ${maxTime}`);
     for (let time = 0; time < maxTime; time += 1) {
       const disc = this.drop(time);
       if (verbose) console.log(`firstDrop: time = ${time} disc=${disc}`);
@@ -118,11 +130,26 @@ export class Discs {
     return NaN;
   }
 
+  firstDrop(verbose = false, limit = 0): number {
+    const maxTime = limit === 0 ? 99999999999 : limit;
+    let time = 0;
+    let timeDelta = 1;
+    if (verbose) console.log(`firstDrop: limit = ${maxTime}`);
+    for (let index = 0; index < this.stack.length; index += 1) {
+      const disc = this.stack[index];
+      while ((time + disc.time0) % disc.positions !== 0) {
+        time += timeDelta;
+        if (time > maxTime) return NaN;
+      }
+      if (verbose) console.log(`Through disk ${index} at time ${time} delta = ${timeDelta}`);
+      time += 1;
+      timeDelta *= disc.positions;
+    }
+    return time - this.stack.length;
+  }
+
   solution(verbose = false, limit = 0): number {
     if (verbose) console.log(`solution: ${limit}`);
-    if (this.part2) {
-      return NaN;
-    }
     return this.firstDrop(verbose, limit);
   }
 

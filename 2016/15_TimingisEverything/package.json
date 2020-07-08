@@ -7,7 +7,9 @@
     "lint": "eslint . --ext .ts",
     "test": "jest",
     "part1": "tsc aoc_15.ts && node aoc_15.js -p 1",
-    "part2": "tsc aoc_15.ts && node aoc_15.js -p 2"
+    "part2": "tsc aoc_15.ts && node aoc_15.js -p 2",
+    "part1v": "tsc aoc_15.ts && node aoc_15.js -p 1 -v",
+    "part2v": "tsc aoc_15.ts && node aoc_15.js -p 2 -v"
   },
   "keywords": [
     "Advent of Code"
