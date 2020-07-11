@@ -1165,21 +1165,21 @@ export class CLASS {
     }
   }
 
-  solution(verbose = false, limit = 0): number {
+  solution(verbose = false, limit = 0): RTYPE {
     if (verbose) console.log(`solution: ${limit}`);
     if (this.part2) {
-      return NaN;
+      return RNONE;
     }
-    return NaN;
+    return RNONE;
   }
 
-  partOne(verbose = false, limit = 0): number {
+  partOne(verbose = false, limit = 0): RTYPE {
     // Returns the solution for part one
 
     return this.solution(verbose, limit);
   }
 
-  partTwo(verbose = false, limit = 0): number {
+  partTwo(verbose = false, limit = 0): RTYPE {
     // Returns the solution for part two
 
     // 1. Return the solution for part two
@@ -1437,14 +1437,16 @@ def ts_before(args):
     assert args
 
     # 1. Result options
-    if args.rtype == 'int':
-        rtype = 'Number'
-        rnone = 'NaN'
-        rchk = 'Number.isNaN(solution)'
-    if args.rtype == 'str':
-        rtype = 'String'
-        rnone = ''
-        rchk = 'solution.length === 0'
+    if args.rtype == "int":
+        rtype = "number"
+        rnone = "NaN"
+        rchk = "Number.isNaN(solution)"
+        nrchk = "!Number.isNaN(solution)"
+    if args.rtype == "str":
+        rtype = "string"
+        rnone = "''"
+        rchk = "solution.length === 0"
+        nrchk = "solution.length > 0"
 
     # 1. Start with simple conversions
     result = {
@@ -1458,7 +1460,8 @@ def ts_before(args):
         "DIRLOWER": "%02d_%s" % (args.day, ''.join(args.title).lower()),
         'RTYPE': rtype,
         'RNONE': rnone,
-        'RCHECK': rchk
+        'RCHECK': rchk,
+        'NRCHECK': nrchk
     }
 
     # 9. Return the text converters
@@ -1499,7 +1502,8 @@ SUBSTITUTIONS = {
     'MODULE': 'MODULE',
     'M O D U L E': 'M O D U L E',
     'RESULT': 'RESULT',
-    'RCHECK': 'RCHECK'
+    'RCHECK': 'RCHECK',
+    'NRCHECK': 'NRCHECK'
 }
 
 # ----------------------------------------------------------------------
