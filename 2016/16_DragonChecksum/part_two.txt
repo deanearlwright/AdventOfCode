@@ -1,0 +1,11 @@
+Advent of Code 2016 Day 16 Part Two
+
+From https://adventofcode.com/2016/day/16 by Eric Wastl
+
+----- Day 16: Dragon Checksum -----
+
+----- Part Two -----
+
+The second disk you have to fill has length 35651584. Again using the 
+initial state in your puzzle input, what is the correct checksum for this 
+disk?
