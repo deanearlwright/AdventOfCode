@@ -1,0 +1,9 @@
+Advent of Code 2016 Day 18 Part Two
+
+From https://adventofcode.com/2016/day/18 by Eric Wastl
+
+----- Day 18: Like a Rogue -----
+
+----- Part Two -----
+
+How many safe tiles are there in a total of 400000 rows?
