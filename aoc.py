@@ -1016,7 +1016,7 @@ function partOne(args: Arguments, inputLines: string[]): boolean {
   }
 
   // 3. Return result
-  return !RCHECK;
+  return NRCHECK;
 }
 
 // ----------------------------------------------------------------------
@@ -1038,7 +1038,7 @@ function partTwo(args: Arguments, inputLines: string[]): boolean {
   }
 
   // 3. Return result
-  return !RCHECK;
+  return NRCHECK;
 }
 
 // ----------------------------------------------------------------------
