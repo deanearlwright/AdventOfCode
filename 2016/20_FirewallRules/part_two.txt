@@ -1,0 +1,9 @@
+Advent of Code 2016 Day 20 Part Two
+
+From https://adventofcode.com/2016/day/20 by Eric Wastl
+
+----- Day 20: Firewall Rules -----
+
+----- Part Two -----
+
+How many IPs are allowed by the blacklist?
