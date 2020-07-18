@@ -1,0 +1,13 @@
+Advent of Code 2016 Day 21 Part Two
+
+From https://adventofcode.com/2016/day/21 by Eric Wastl
+
+----- Day 21: Scrambled Letters and Hash -----
+
+----- Part Two -----
+
+You scrambled the password correctly, but you discover that you 
+can't actually modify the password file on the system. You'll need to un-
+scramble one of the existing passwords by reversing the scrambling process.
+
+What is the un-scrambled version of the scrambled password fbgdceah?
