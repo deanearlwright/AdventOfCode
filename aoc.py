@@ -1016,7 +1016,7 @@ function partOne(args: Arguments, inputLines: string[]): boolean {
   }
 
   // 3. Return result
-  return NRCHECK;
+  return NOTCHK;
 }
 
 // ----------------------------------------------------------------------
@@ -1038,7 +1038,7 @@ function partTwo(args: Arguments, inputLines: string[]): boolean {
   }
 
   // 3. Return result
-  return NRCHECK;
+  return NOTCHK;
 }
 
 // ----------------------------------------------------------------------
@@ -1461,7 +1461,7 @@ def ts_before(args):
         'RTYPE': rtype,
         'RNONE': rnone,
         'RCHECK': rchk,
-        'NRCHECK': nrchk
+        'NOTCHK': nrchk
     }
 
     # 9. Return the text converters
@@ -1503,7 +1503,7 @@ SUBSTITUTIONS = {
     'M O D U L E': 'M O D U L E',
     'RESULT': 'RESULT',
     'RCHECK': 'RCHECK',
-    'NRCHECK': 'NRCHECK'
+    'NOTCHK': 'NOTCHK'
 }
 
 # ----------------------------------------------------------------------
