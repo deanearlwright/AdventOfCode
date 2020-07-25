@@ -1,0 +1,15 @@
+Advent of Code 2016 Day 25 Part Two
+
+From https://adventofcode.com/2016/day/25 by Eric Wastl
+
+----- Day 25: Clock Signal -----
+
+----- Part Two -----
+
+The antenna is ready. Now, all you need is the fifty stars required to 
+generate the signal for the sleigh, but you don't have enough.
+
+You look toward the sky in desperation... suddenly noticing that a lone 
+star has been installed at the top of the antenna! Only 49 more to go.
+
+You don't have enough stars to transmit the signal, though. You need 7 more.
