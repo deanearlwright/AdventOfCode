@@ -22,12 +22,14 @@ import { Assembunny } from './assembunny';
 //                                                              constants
 // ----------------------------------------------------------------------
 const EXAMPLE_TEXT = `
-cpy 41 a
-inc a
-inc a
+cpy 2 a
+tgl a
+tgl a
+tgl a
+cpy 1 a
 dec a
-jnz a 2
-dec a`;
+dec a
+`;
 
 interface ExampleTests {
   text: string;
@@ -40,8 +42,8 @@ const EXAMPLES_PART_TWO: ExampleTests[] = [];
 const PART_ONE_TEXT = EXAMPLE_TEXT;
 const PART_TWO_TEXT = EXAMPLE_TEXT;
 
-const PART_ONE_RESULT = 42;
-const PART_TWO_RESULT = 42;
+const PART_ONE_RESULT = 3;
+const PART_TWO_RESULT = 3;
 
 // ======================================================================
 //                                                         TestAssembunny
@@ -68,14 +70,31 @@ describe('Assembunny', () => {
     const myobj = new Assembunny(fromText(EXAMPLE_TEXT));
     // 2. Make sure it has the expected values
     expect(myobj.part2).toBe(false);
-    expect(myobj.text).toHaveLength(6);
-    expect(myobj.instructions).toHaveLength(6);
+    expect(myobj.text).toHaveLength(7);
+    expect(myobj.instructions).toHaveLength(7);
     expect(Object.keys(myobj.registers)).toHaveLength(4);
     expect(myobj.registers.a).toBe(0);
     expect(myobj.registers.b).toBe(0);
     expect(myobj.registers.c).toBe(0);
     expect(myobj.registers.d).toBe(0);
     expect(myobj.pc).toBe(0);
+    // 3. Step through the program
+    expect(myobj.step(true)).toBe(true); // cpy 2 a
+    expect(myobj.registers.a).toBe(2);
+    expect(myobj.pc).toBe(1);
+    expect(myobj.step(true)).toBe(true); // tgl a (tgl a => inc a)
+    expect(myobj.registers.a).toBe(2);
+    expect(myobj.pc).toBe(2);
+    expect(myobj.step(true)).toBe(true); // tgl a (cpy 1 a into jnz 1 a)
+    expect(myobj.registers.a).toBe(2);
+    expect(myobj.pc).toBe(3);
+    expect(myobj.step(true)).toBe(true); // now inc a
+    expect(myobj.registers.a).toBe(3);
+    expect(myobj.pc).toBe(4);
+    expect(myobj.step(true)).toBe(true); // now jnz 1 a
+    expect(myobj.registers.a).toBe(3);
+    expect(myobj.pc).toBe(7);
+    expect(myobj.step(true)).toBe(false); // beyond the program
   });
 
   test('Test all of the part one examples', () => {

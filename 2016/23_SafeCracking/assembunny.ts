@@ -19,7 +19,7 @@
 //                                                                  types
 // ----------------------------------------------------------------------
 type RegisterName = 'a' | 'b' | 'c' | 'd' ;
-type OpCode = 'cpy' | 'inc' | 'dec' | 'jnz';
+type OpCode = 'cpy' | 'inc' | 'dec' | 'jnz' | 'tgl';
 type Operand = RegisterName | number;
 type Registers = Record<RegisterName, number>;
 interface Instruction {
@@ -29,11 +29,20 @@ interface Instruction {
 }
 type Instructions = Instruction[];
 type ProgramCounter = number;
+type TGL = Record<OpCode, OpCode>;
 
 // ----------------------------------------------------------------------
 //                                                              constants
 // ----------------------------------------------------------------------
 const registerLetters = 'abcd';
+
+const tgl: TGL = {
+  cpy: 'jnz',
+  inc: 'dec',
+  dec: 'inc',
+  jnz: 'cpy',
+  tgl: 'inc',
+};
 
 // ======================================================================
 //                                                             Assembunny
@@ -125,35 +134,59 @@ export class Assembunny {
       case 'dec':
         return `${inst.opcode} ${inst.op1}`;
       case 'jnz':
-        return `jnz ${inst.op1} ${inst.op2} (${<number>inst.op2 + this.pc})`;
+        return `jnz ${inst.op1} ${inst.op2} (${this.getOp2(inst) + this.pc})`;
+      case 'tgl':
+        return `tgl ${inst.op1} (${this.getOp1(inst) + this.pc})`;
       default:
         break;
     }
     return `unknown opcode: ${inst.opcode}`;
   }
 
+  getOp1(inst: Instruction): number {
+    return (typeof inst.op1 === 'number') ? inst.op1 : this.registers[<RegisterName>inst.op1];
+  }
+
+  getOp2(inst: Instruction): number {
+    return (typeof inst.op2 === 'number') ? inst.op2 : this.registers[<RegisterName>inst.op2];
+  }
+
   step(verbose = false): boolean {
     if (verbose) console.log(this.currentState());
     if (this.pc < 0 || this.pc >= this.instructions.length) return false;
     const inst = this.instructions[this.pc];
+    const op1 = this.getOp1(inst);
+    let xpc = 0;
     let nextPC = this.pc + 1;
     switch (inst.opcode) {
       case 'cpy':
-        if (typeof inst.op1 === 'number') {
-          this.registers[<RegisterName>inst.op2] = inst.op1;
-        } else {
-          this.registers[<RegisterName>inst.op2] = this.registers[<RegisterName>inst.op1];
+        if (typeof inst.op2 !== 'number') {
+          this.registers[<RegisterName>inst.op2] = op1;
         }
         break;
       case 'inc':
-        this.registers[<RegisterName>inst.op1] += 1;
+        if (typeof inst.op1 !== 'number') {
+          this.registers[<RegisterName>inst.op1] += 1;
+        }
         break;
       case 'dec':
-        this.registers[<RegisterName>inst.op1] -= 1;
+        if (typeof inst.op1 !== 'number') {
+          this.registers[<RegisterName>inst.op1] -= 1;
+        }
         break;
       case 'jnz':
-        if (this.registers[<RegisterName>inst.op1] !== 0) {
-          nextPC = this.pc + <number>inst.op2;
+        if (op1 !== 0) {
+          nextPC = this.pc + this.getOp2(inst);
+        }
+        break;
+      case 'tgl':
+        xpc = this.pc + op1;
+        if (xpc >= 0 && xpc < this.instructions.length) {
+          this.instructions[xpc] = {
+            opcode: tgl[this.instructions[xpc].opcode],
+            op1: this.instructions[xpc].op1,
+            op2: this.instructions[xpc].op2,
+          };
         }
         break;
       default:
@@ -173,13 +206,17 @@ export class Assembunny {
 
   solution(verbose = false, limit = 0): number {
     if (verbose) console.log(`solution: ${limit}`);
+    if (this.part2) {
+      this.run(verbose, limit);
+      return this.registers.a;
+    }
     this.run(verbose, limit);
     return this.registers.a;
   }
 
   partOne(verbose = false, limit = 0): number {
     // Returns the solution for part one
-
+    this.registers.a = 7; // Always read and reread the instructions
     return this.solution(verbose, limit);
   }
 
@@ -187,6 +224,7 @@ export class Assembunny {
     // Returns the solution for part two
 
     // 1. Return the solution for part two
+    this.registers.a = 12; // Always read and reread the instructions
     return this.solution(verbose, limit);
   }
 }
