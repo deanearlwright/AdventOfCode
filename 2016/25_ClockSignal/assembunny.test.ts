@@ -32,6 +32,72 @@ dec c
 jnz c -5
 `;
 
+const EXAMPLE_TEXT_OUT_FAIL = `
+cpy 2728 d
+jnz 0 0
+jnz 0 0
+jnz 0 0
+jnz 0 0
+jnz 0 0
+jnz 0 0
+jnz 0 0
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+cpy 2 c
+jnz b 2
+jnz 1 6
+dec b
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz c 2
+jnz 1 4
+dec b
+dec c
+jnz 1 -4
+jnz 0 0
+out b
+jnz a -19
+jnz 1 -21
+`;
+
+const EXAMPLE_TEXT_OUT_GOOD = `
+cpy 2730 d
+jnz 0 0
+jnz 0 0
+jnz 0 0
+jnz 0 0
+jnz 0 0
+jnz 0 0
+jnz 0 0
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+cpy 2 c
+jnz b 2
+jnz 1 6
+dec b
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz c 2
+jnz 1 4
+dec b
+dec c
+jnz 1 -4
+jnz 0 0
+out b
+jnz a -19
+jnz 1 -21
+`;
+
 const EXAMPLE_TEXT_COMPLETE = `
 cpy a d
 cpy 15 c
@@ -74,10 +140,10 @@ const EXAMPLES_PART_ONE: ExampleTests[] = [];
 const EXAMPLES_PART_TWO: ExampleTests[] = [];
 
 const PART_ONE_TEXT = EXAMPLE_TEXT_COMPLETE;
-const PART_TWO_TEXT = '';
+const PART_TWO_TEXT = EXAMPLE_TEXT_COMPLETE;
 
 const PART_ONE_RESULT = 180;
-const PART_TWO_RESULT = NaN;
+const PART_TWO_RESULT = 180;
 
 // ======================================================================
 //                                                              TestAssembunny
@@ -122,6 +188,48 @@ describe('Assembunny', () => {
     expect(myobj.pc).toBe(8);
   });
 
+  test('Test tryClockValue for failure', () => {
+    // 1. Create Assembunny object from text
+    const myobj = new Assembunny(fromText(EXAMPLE_TEXT_OUT_FAIL));
+    // 2. Make sure it has the expected values
+    expect(myobj.part2).toBe(false);
+    expect(myobj.text).toHaveLength(30);
+    expect(myobj.instructions).toHaveLength(30);
+    expect(Object.keys(myobj.registers)).toHaveLength(4);
+    expect(myobj.registers.a).toBe(0);
+    expect(myobj.registers.b).toBe(0);
+    expect(myobj.registers.c).toBe(0);
+    expect(myobj.registers.d).toBe(0);
+    expect(myobj.pc).toBe(0);
+    // 3. Set register a to 1 and run until stopped
+    expect(myobj.tryClockValue(0, false)).toBe(false);
+    expect(myobj.registers.b).toBe(0);
+    expect(myobj.registers.c).toBe(0);
+    expect(myobj.registers.d).toBe(2728);
+    expect(myobj.pc).toBe(27);
+  });
+
+  test('Test tryClockValue for success', () => {
+    // 1. Create Assembunny object from text
+    const myobj = new Assembunny(fromText(EXAMPLE_TEXT_OUT_GOOD));
+    // 2. Make sure it has the expected values
+    expect(myobj.part2).toBe(false);
+    expect(myobj.text).toHaveLength(30);
+    expect(myobj.instructions).toHaveLength(30);
+    expect(Object.keys(myobj.registers)).toHaveLength(4);
+    expect(myobj.registers.a).toBe(0);
+    expect(myobj.registers.b).toBe(0);
+    expect(myobj.registers.c).toBe(0);
+    expect(myobj.registers.d).toBe(0);
+    expect(myobj.pc).toBe(0);
+    // 3. Set register a to 1 and run until stopped
+    expect(myobj.tryClockValue(0, false)).toBe(true);
+    expect(myobj.registers.b).toBe(1);
+    expect(myobj.registers.c).toBe(0);
+    expect(myobj.registers.d).toBe(2730);
+    expect(myobj.pc).toBe(28);
+  });
+
   test('Test all of the part one examples', () => {
     // 1. Loop for all of the examples
     EXAMPLES_PART_ONE.forEach((test) => {
@@ -150,7 +258,7 @@ describe('Assembunny', () => {
     // 1. Create Assembunny object from text
     const myobj = new Assembunny(fromText(PART_ONE_TEXT));
     // 2. Check the part one result
-    expect(myobj.partOne(true, 0)).toBe(PART_ONE_RESULT);
+    expect(myobj.partOne(false, 0)).toBe(PART_ONE_RESULT);
   });
 
   test('Test part two example of Assembunny object', () => {

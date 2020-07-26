@@ -53,9 +53,7 @@ export class Assembunny {
 
   pc: ProgramCounter;
 
-  nextOut: number;
-
-  clockBits: number;
+  output: number[];
 
   constructor(text: string[], part2 = false) {
     // Create a Assembunny object
@@ -69,9 +67,7 @@ export class Assembunny {
       c: 0,
       d: 0,
     };
-    this.nextOut = 0;
-    this.clockBits = 0;
-    if (this.part2) this.registers.c = 1;
+    this.output = [];
     this.instructions = [];
     this.pc = 0;
 
@@ -112,9 +108,8 @@ export class Assembunny {
       c: 0,
       d: 0,
     };
-    this.nextOut = 0;
-    this.clockBits = 0;
-    if (this.part2) this.registers.c = 1;
+    this.output = [];
+    this.pc = 0;
   }
 
   currentState(): string {
@@ -143,18 +138,19 @@ export class Assembunny {
     return `unknown opcode: ${inst.opcode}`;
   }
 
-  step(verbose = false): boolean {
-    let value = 0;
+  getOp1(inst: Instruction): number {
+    return (typeof inst.op1 === 'number') ? inst.op1 : this.registers[<RegisterName>inst.op1];
+  }
+
+  step(verbose = false, stopOnOut = false): boolean {
     if (verbose) console.log(this.currentState());
     if (this.pc < 0 || this.pc >= this.instructions.length) return false;
     const inst = this.instructions[this.pc];
+    const op1 = this.getOp1(inst);
     let nextPC = this.pc + 1;
     switch (inst.opcode) {
       case 'cpy':
-        value = (typeof inst.op1 === 'number')
-          ? <number>inst.op1
-          : this.registers[<RegisterName>inst.op1];
-        this.registers[<RegisterName>inst.op2] = value;
+        this.registers[<RegisterName>inst.op2] = op1;
         break;
       case 'inc':
         this.registers[<RegisterName>inst.op1] += 1;
@@ -163,23 +159,15 @@ export class Assembunny {
         this.registers[<RegisterName>inst.op1] -= 1;
         break;
       case 'jnz':
-        value = (typeof inst.op1 === 'number')
-          ? <number>inst.op1
-          : this.registers[<RegisterName>inst.op1];
-        if (value !== 0) {
+        if (op1 !== 0) {
           nextPC = this.pc + <number>inst.op2;
         }
         break;
       case 'out':
-        value = (typeof inst.op1 === 'number')
-          ? <number>inst.op1
-          : this.registers[<RegisterName>inst.op1];
-        console.log(`out: ${this.currentState()} value=${value} want=${this.nextOut} count=${this.clockBits}`);
-        if (value !== this.nextOut) {
+        this.output.push(op1);
+        if (stopOnOut) {
           return false;
         }
-        this.nextOut = nextOut[value];
-        this.clockBits += 1;
         break;
       default:
         console.log(`??? ${this.currentState()}`);
@@ -196,16 +184,40 @@ export class Assembunny {
     }
   }
 
-  runUntilWeGetClock(verbose = false, limit = 0) {
-    if (verbose) console.log(`runUntilWeGetClock: ${limit}`);
-    const maxA = limit === 0 ? 185 : limit;
-    for (let a = 175; a < maxA; a += 1) {
-      this.resetRegisters();
-      this.registers.a = a;
-      if (verbose) console.log(`runUntilWeGetClock a=${a}`);
-      this.run(false, 99999);
-      if (verbose) console.log(`a=${a} clockBits=${this.clockBits}`);
-      if (this.clockBits >= 10) {
+  tryClockValue(a: number, verbose = false, limit = 0): boolean {
+    if (verbose) console.log(`tryClockValue: a=${a} limit=${limit}`);
+    const numBits = 10;
+    let want = 0;
+    let lastLength = 0;
+    const maxSteps = limit > 0 ? limit : 9999;
+    let steps = 0;
+    this.resetRegisters();
+    this.registers.a = a;
+    while (this.output.length < numBits) {
+      while (this.step(false, true) && steps < maxSteps);
+      if (lastLength !== this.output.length - 1) {
+        if (verbose) console.log(`tryClockValue: stopped at ${this.currentState()}`);
+        return false;
+      }
+      if (this.output[lastLength] !== want) {
+        if (verbose) console.log(`tryClockValue: wanted ${want} at ${this.currentState()}`);
+        return false;
+      }
+      want = nextOut[want];
+      lastLength += 1;
+      this.pc += 1;
+      steps += 1;
+    }
+    if (verbose) console.log(`tryClockValue: returning true at ${this.currentState()}`);
+    return true;
+  }
+
+  findValueForClock(verbose = false, limit = 0) {
+    if (verbose) console.log(`findValueForClock: ${limit}`);
+    const maxA = limit === 0 ? 999 : limit;
+    for (let a = 0; a < maxA; a += 1) {
+      if (verbose) console.log(`findValueForClock a=${a}`);
+      if (this.tryClockValue(a, verbose)) {
         return a;
       }
     }
@@ -240,10 +252,9 @@ export class Assembunny {
   solution(verbose = false, limit = 0): number {
     if (verbose) console.log(`solution: ${limit}`);
     if (this.part2) {
-      return NaN;
+      return this.decoded(verbose, limit);
     }
-    // return this.runUntilWeGetClock(verbose, limit);
-    return this.decoded(verbose, limit);
+    return this.findValueForClock(verbose, limit);
   }
 
   partOne(verbose = false, limit = 0): number {
