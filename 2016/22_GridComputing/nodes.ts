@@ -98,7 +98,7 @@ export class Nodes {
         const xy = parts[0].split('-');
         const x = parseInt(xy[1].substring(1), 10);
         const y = parseInt(xy[2].substring(1), 10);
-        const name = `node-x${x}-y${y}`;
+        const name = Nodes.nodeName(x, y);
         const size = parseInt(parts[1].substring(0, parts[1].length - 1), 10);
         const used = parseInt(parts[2].substring(0, parts[2].length - 1), 10);
         const avail = parseInt(parts[3].substring(0, parts[3].length - 1), 10);
@@ -137,6 +137,10 @@ export class Nodes {
     });
   }
 
+  static nodeName(x: number, y: number): string {
+    return `node-x${x}-y${y}`;
+  }
+
   whoHasAvail(need: number): number {
     // 1. Loop until we find enough space
     for (let index = 0; index < this.avail.length; index += 1) {
@@ -173,9 +177,53 @@ export class Nodes {
     return result;
   }
 
+  printGrid(): number {
+    const grid: string[] = [];
+    for (let row = this.corners.minY; row <= this.corners.maxY; row += 1) {
+      const gridRow: string[] = [];
+      for (let col = this.corners.minX; col <= this.corners.maxX; col += 1) {
+        let char = '.';
+        if (row === 0 && col === 0) {
+          char = '!';
+        } else if (row === 0 && col === this.corners.maxX) {
+          char = 'G';
+        } else {
+          const name = Nodes.nodeName(col, row);
+          if (this.storage[name].used === 0) {
+            char = 'E';
+          } else if (this.storage[name].used > 100) {
+            char = '#';
+          }
+        }
+        gridRow.push(char);
+      }
+      grid.push(gridRow.join(''));
+    }
+    console.log(grid.join('\n'));
+    //
+    // !...................................G
+    // .....................................
+    // ...............######################
+    // .....................................
+    // .....................................
+    // .....................................
+    // ....................E................
+    // .....................................
+    // .....................................
+    // .....................................
+    // 1 = (0,0), G = (36, 0), E = (20, 6)
+    // The wall is from 15 to 36 on row 2.
+    // Distance = 36-20+6 = 22.
+    // To get past wall = 6 cols = 22+12=34
+    // Five step cycle = 5 * 35 = 175.
+    // Total moves = 34 + 175 = 209.
+    return 209;
+  }
+
   solution(verbose = false, limit = 0): number {
     if (verbose) console.log(`solution: ${limit}`);
     if (this.part2) {
+      this.printGrid();
       return NaN;
     }
     return this.numberViablePairs(verbose, limit);

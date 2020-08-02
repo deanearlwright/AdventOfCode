@@ -127,7 +127,7 @@ describe('Nodes', () => {
     // 1. Create Nodes object from text
     const myobj = new Nodes(fromText(PART_ONE_TEXT));
     // 2. Check the part one result
-    expect(myobj.partOne(true, 0)).toBe(PART_ONE_RESULT);
+    expect(myobj.partOne(false, 0)).toBe(PART_ONE_RESULT);
   });
 
   test('Test part two example of Nodes object', () => {
