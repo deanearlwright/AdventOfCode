@@ -153,7 +153,7 @@ F2 .  .  .  .  .
 F1 .  .  .  .  .  
 
 Bring the Lithium Microchip with you to the third floor so you can use
- the elevator:
+the elevator:
 
 F4 .  HG .  LG .  
 F3 E  .  HM .  LM 
