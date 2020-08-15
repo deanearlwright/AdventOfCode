@@ -384,7 +384,7 @@ PYTHON_FILES = {
     'aoc_DD.py': AOC_DD_PY,
     'MODULE.py': CLASS_PY,
     'test_MODULE.py': TEST_CLASS_PY,
-    'MODULE.wpr': WINGWARE_PY,
+    'aoc_DD.wpr': WINGWARE_PY,
     'part_one.txt': PART_ONE_TXT,
     'part_two.txt': PART_TWO_TXT,
 }
