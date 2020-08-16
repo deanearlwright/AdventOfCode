@@ -310,7 +310,7 @@ class TestCLASS(unittest.TestCase):  # pylint: disable=R0904
 
         # 2. Make sure it has the expected values
         self.assertEqual(myobj.part2, False)
-        self.assertEqual(myobj.text, EXAMPLE_TEXT)
+        self.assertEqual(len(myobj.text), 0)
 
     def test_part_one(self):
         "Test part one example of CLASS object"
