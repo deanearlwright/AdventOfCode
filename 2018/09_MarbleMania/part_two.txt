@@ -1,0 +1,12 @@
+Advent of Code 2018 Day 09 Part Two
+
+From https://adventofcode.com/2018/day/09 by Eric Wastl
+
+----- Day 09: Marble Mania -----
+
+----- Part Two -----
+
+Amused by the speed of your answer, the Elves are curious:
+
+What would the new winning Elf's score be if the number of the last marble
+were 100 times larger?
