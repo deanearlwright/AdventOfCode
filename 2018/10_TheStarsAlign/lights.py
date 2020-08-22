@@ -48,6 +48,10 @@ class Light(object):   # pylint: disable=R0902, R0205
         self.posX += self.velX
         self.posY += self.velY
 
+    def unstep(self):
+        self.posX -= self.velX
+        self.posY -= self.velY
+
 # ======================================================================
 #                                                                 Lights
 # ======================================================================
@@ -71,6 +75,10 @@ class Lights(object):   # pylint: disable=R0902, R0205
     def step(self):
         for point in self.points:
             point.step()
+
+    def unstep(self):
+        for point in self.points:
+            point.unstep()
 
     def rows(self):
         if len(self.points) == 0:
@@ -114,12 +122,12 @@ class Lights(object):   # pylint: disable=R0902, R0205
             numRows = self.rows()
             if verbose:
                 print("step %s rows %s" % (steps, numRows))
-            if numRows <= 10:
-                print(steps)
-                print(self.display())
             if numRows <= minRows:
                 minRows = numRows
             else:
+                self.unstep()
+                print(steps  - 1)
+                print(self.display())
                 return 'HI'
             self.step()
             steps += 1

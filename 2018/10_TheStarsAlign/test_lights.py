@@ -179,7 +179,7 @@ class TestLights(unittest.TestCase):  # pylint: disable=R0904
         myobj = lights.Lights(text=aoc_10.from_text(PART_ONE_TEXT))
 
         # 2. Check the part one result
-        self.assertEqual(myobj.part_one(verbose=True, limit=5), PART_ONE_RESULT)
+        self.assertEqual(myobj.part_one(verbose=False, limit=5), PART_ONE_RESULT)
 
 
     def test_part_two(self):
