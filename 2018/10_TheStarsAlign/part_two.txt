@@ -1,0 +1,8 @@
+Advent of Code 2018 Day 10 Part Two
+
+From https://adventofcode.com/2018/day/10 by Eric Wastl
+
+----- Day 10: The Stars Align -----
+
+----- Part Two -----
+
