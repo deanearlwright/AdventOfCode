@@ -1,0 +1,8 @@
+Advent of Code 2018 Day 16 Part Two
+
+From https://adventofcode.com/2018/day/16 by Eric Wastl
+
+----- Day 16: Chronal Classification -----
+
+----- Part Two -----
+
