@@ -1,0 +1,13 @@
+Advent of Code 2018 Day 18 Part Two
+
+From https://adventofcode.com/2018/day/18 by Eric Wastl
+
+----- Day 18: Settlers of The North Pole -----
+
+----- Part Two -----
+
+This important natural resource will need to last for at least thousands of
+years. Are the Elves collecting this lumber sustainably?
+
+What will the total resource value of the lumber collection area be after
+1000000000 minutes?
