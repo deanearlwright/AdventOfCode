@@ -1,0 +1,13 @@
+Advent of Code 2018 Day 19 Part Two
+
+From https://adventofcode.com/2018/day/19 by Eric Wastl
+
+----- Day 19: Go With The Flow -----
+
+----- Part Two -----
+
+A new background process immediately spins up in its place. It appears
+identical, but on closer inspection, you notice that this time, register 0
+started with the value 1.
+
+What value is left in register 0 when this new background process halts?

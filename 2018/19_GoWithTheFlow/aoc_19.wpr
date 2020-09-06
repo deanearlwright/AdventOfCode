@@ -1,0 +1,18 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_19.py'),
+                  loc('background.py'),
+                  loc('device.py'),
+                  loc('input.txt'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_background.py'),
+                  loc('trace_two.txt')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_19.py'): ('project',
+        (u'-p2 -v input.txt',
+         ''))}
