@@ -1,0 +1,8 @@
+Advent of Code 2018 Day 20 Part Two
+
+From https://adventofcode.com/2018/day/20 by Eric Wastl
+
+----- Day 20: A Regular Map -----
+
+----- Part Two -----
+
