@@ -13,13 +13,13 @@
 # ----------------------------------------------------------------------
 #                                                                 import
 # ----------------------------------------------------------------------
+import path
 
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
-ROW_OFFSET = 500
 COL_OFFSET = 500
-ROW_MULT = ROW_OFFSET * 2
+ROW_MULT = COL_OFFSET * 2
 START = 0
 
 DIRECTIONS = {
@@ -29,7 +29,15 @@ DIRECTIONS = {
     'W': -1,
 }
 
+ROOM_CHAR = '.'
+START_CHAR = 'X'
+WALL_CHAR = '#'
+NS_CHAR = '-'
+EW_CHAR = '|'
 
+REGEX_STR_LEN = 20
+REGEX_STR_BEG = 10
+REGEX_STR_END = 5
 # ----------------------------------------------------------------------
 #                                                      utility functions
 # ----------------------------------------------------------------------
@@ -75,12 +83,11 @@ def split_out_options(regex_string):
 
 
 def loc_to_row_col(loc):
-    loc += COL_OFFSET + ROW_OFFSET * ROW_MULT
-    row, col = divmod(loc, ROW_MULT)
-    row -= ROW_OFFSET
-    col -= COL_OFFSET
-    return row, col
+    row, col = divmod(loc + COL_OFFSET, ROW_MULT)
+    return row, col - COL_OFFSET
 
+def row_col_to_loc(row, col):
+    return row * ROW_MULT + col
 
 def check_dim(dims, loc):
     # 1. Break the location into row and column
@@ -95,6 +102,21 @@ def check_dim(dims, loc):
         dims['E'] = col
     if col < dims['W']:
         dims['W'] = col
+
+def str_loc(loc):
+    row, col = loc_to_row_col(loc)
+    return "(r%d,c%d)" % (row, col)
+
+def str_regex(regex):
+    if len(regex) <= REGEX_STR_LEN:
+        return regex
+    str_beg = regex[0:REGEX_STR_BEG]
+    str_end = regex[-REGEX_STR_END:]
+    return "%s..%d..%s" % (str_beg, len(regex)-(REGEX_STR_BEG+REGEX_STR_END), str_end)
+
+def str_item(item):
+    loc, regex = item
+    return "%s: %s" % (str_loc(loc), str_regex(regex))
 
 # ======================================================================
 #                                                                  Rooms
@@ -121,16 +143,20 @@ class Rooms(object):   # pylint: disable=R0902, R0205
         # 1. Start at the beginning with no doors and a single regex
         self.doors = set()
         queue = [(START, self.regex)]
+        processed = set()
         # 2. Loop until the queue is empty
         while queue:
             # 3. Take the first item from the queue
             item = queue.pop(0)
-            # 4. Process the item
-            more = self.process_loc_regex(item)
-            if more is not None:
-                queue.extend(more)
+            if item not in processed:
+               # 4. Process the item
+                processed.add(item)
+                more = self.process_loc_regex(queue, item)
+                if more is not None:
+                    for item in more:
+                        queue.append(item)
 
-    def process_loc_regex(self, item):
+    def process_loc_regex(self, queue, item):
         # print(item)
         # 1. Seperate the loc and regex
         loc, regex_string = item
@@ -145,13 +171,23 @@ class Rooms(object):   # pylint: disable=R0902, R0205
             return None
         # 2c. letter -- Change location and add door
         if char in DIRECTIONS:
-            new_loc = loc + DIRECTIONS[char]
-            self.doors.add((loc, new_loc))
-            self.doors.add((new_loc, loc))
-            return [(new_loc, remaining)]
+            while char in DIRECTIONS:
+                new_loc = loc + DIRECTIONS[char]
+                self.doors.add((loc, new_loc))
+                self.doors.add((new_loc, loc))
+                loc = new_loc
+                if len(remaining) > 0 and remaining[0] in DIRECTIONS:
+                    char = remaining[0]
+                    remaining = remaining[1:]
+                else:
+                    char = 'X'
+            return [(loc, remaining)]
         # 2d. left paren -- Start of options -- add them all
         if char == '(':
+            #print('Queue %d loc=%d, remaining=%d [%s]' % (len(queue), loc, len(remaining), remaining[:10]))
             options, following = split_out_options(remaining)
+            #print("  options=%d [%s...] , following=%d [%s...]" %
+            #      (len(options), options[0][:10], len(following), following[:10]))
             more = []
             for opt in options:
                 more.append((loc, opt + following))
@@ -178,17 +214,69 @@ class Rooms(object):   # pylint: disable=R0902, R0205
         # 5. Return Result
         return result
 
+    def __str__(self):
+        # 1. Start with nothing
+        result = []
+        # 2. Determine the dimensions and add top wall
+        dim = self.dimensions()
+        result.append(WALL_CHAR*(3+2*abs(dim['E']-dim['W'])))
+        # 3. Loop for all of the rows
+        for row_num in range(dim['N'], dim['S']+1):
+            rooms = ['#']
+            below = ['#']
+            # 4. Loop for all of the columns
+            for col_num in range(dim['W'], dim['E']+1):
+                loc = row_col_to_loc(row_num, col_num)
+                # 5. Add room
+                if loc == START:
+                    rooms.append(START_CHAR)
+                else:
+                    rooms.append(ROOM_CHAR)
+                # 6. Add door or wall to the east
+                east = loc + DIRECTIONS['E']
+                if (loc,east) in self.doors:
+                    rooms.append(EW_CHAR)
+                else:
+                    rooms.append(WALL_CHAR)
+                # 7. Add door or wall to the south
+                south = loc + DIRECTIONS['S']
+                if (loc,south) in self.doors:
+                    below.append(NS_CHAR)
+                else:
+                    below.append(WALL_CHAR)
+                below.append(WALL_CHAR)
+            # 8. Add the room and below rows
+            result.append(''.join(rooms))
+            result.append(''.join(below))
+        # 9. Return the north pool grid
+        return '\n'.join(result)
+
+    def furthest(self):
+        # 1. Get the paths
+        mypath = path.Path(start=START, doors=self.doors)
+        # 2. Return the length of the longest path
+        return mypath.furthest()
+
+    def at_least(self, steps=1000):
+        # 1. Get the paths
+        mypath = path.Path(start=START, doors=self.doors)
+        # 2. Return the length of the longest path
+        return mypath.at_least(steps)
+
+
     def part_one(self, verbose=False, limit=0):
         "Returns the solution for part one"
 
         # 1. Return the solution for part one
-        return None
+        if verbose:
+            print(str(self))
+        return self.furthest()
 
     def part_two(self, verbose=False, limit=0):
         "Returns the solution for part two"
 
         # 1. Return the solution for part two
-        return None
+        return self.at_least(steps=1000)
 
 
 # ----------------------------------------------------------------------
