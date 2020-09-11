@@ -1,0 +1,17 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_21.py'),
+                  loc('bitwise.py'),
+                  loc('device.py'),
+                  loc('input.txt'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_bitwise.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_21.py'): ('project',
+        (u'-p2 -v input.txt',
+         ''))}
