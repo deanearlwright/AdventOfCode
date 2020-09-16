@@ -227,7 +227,7 @@ class CLASS(object):   # pylint: disable=R0902, R0205
         self.text = text
 
         # 2. Process text (if any)
-        if text is not None:
+        if text is not None and len(text) > 0:
             pass
 
     def part_one(self, verbose=False, limit=0):
@@ -1580,8 +1580,8 @@ def parse_command_line():
     if not os.path.isdir(base_year):
         parser.error("Year directory (%s) does not exist" % (base_year))
     day_begins = '%02d_' % (args.day)
-    with os.scandir(base_year) as it:
-        for entry in it:
+    with os.scandir(base_year) as scan_dir:
+        for entry in scan_dir:
             if entry.name.startswith(day_begins) and entry.is_dir() and not args.add:
                 parser.error("Day directory (%s) already exists" % (entry.name))
 
