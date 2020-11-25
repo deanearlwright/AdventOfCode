@@ -16,6 +16,8 @@
 import argparse
 import datetime
 import os
+import sys
+import shutil
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -1546,7 +1548,7 @@ def parse_command_line():
     parser.add_argument('-b', '--base', action='store', default=default_dir,
                         help="base direcotory of Advent of Code", dest='base')
     parser.add_argument('title', action='store', type=str, nargs='+',
-                        help="Title of puzzle")
+                        help="Title of puzzle", default='')
     parser.add_argument('-a', '--add', action='store_true', default=False,
                         dest='add', help='Add files to existing directory')
     parser.add_argument('--py', dest='language', action='store_const', const='python',
@@ -1555,23 +1557,30 @@ def parse_command_line():
                         help='Programming language is javascript')
     parser.add_argument('--ts', dest='language', action='store_const', const='typescript',
                         help='Programming language is typescript')
+    parser.add_argument('--clean', dest='language', action='store_const', const='clean',
+                        help='Clean non-executables from year')
 
     # 3. Get the options and arguments
     args = parser.parse_args()
+    print(args)
 
     # 4. Ensure we have required arguments (year, day, title, and language)
-    if not args.title:
-        parser.error("Puzzle title is required")
+    if not args.language:
+        parser.error("Programming language is required")
     if not args.year:
         parser.error("Puzzle year is required")
     if args.year > 2049 or args.year < 2015:
         parser.error("Year must be 2015-2049")
-    if not args.day:
-        parser.error("Puzzle day is required")
-    if args.day > 25 or args.day < 1:
-        parser.error("Day must be 1-25")
-    if not args.language:
-        parser.error("Programming language is required")
+    if args.language != 'clean':
+        if not args.title or len(args.title) < 3:
+            parser.error("Puzzle title is required")
+            if not args.day:
+                parser.error("Puzzle day is required")
+            if args.day > 25 or args.day < 1:
+                parser.error("Day must be 1-25")
+    else:
+        if ''.join(args.title) != 'clean':
+            parser.error("Use title of 'clean' with --clean")
 
     # 5. Ensure base and year directories exist but not the day
     if not os.path.isdir(args.base):
@@ -1579,11 +1588,12 @@ def parse_command_line():
     base_year = os.path.join(args.base, str(args.year))
     if not os.path.isdir(base_year):
         parser.error("Year directory (%s) does not exist" % (base_year))
-    day_begins = '%02d_' % (args.day)
-    with os.scandir(base_year) as scan_dir:
-        for entry in scan_dir:
-            if entry.name.startswith(day_begins) and entry.is_dir() and not args.add:
-                parser.error("Day directory (%s) already exists" % (entry.name))
+    if args.language != 'clean':
+        day_begins = '%02d_' % (args.day)
+        with os.scandir(base_year) as scan_dir:
+            for entry in scan_dir:
+                if entry.name.startswith(day_begins) and entry.is_dir() and not args.add:
+                    parser.error("Day directory (%s) already exists" % (entry.name))
 
     # 6. If there is no class name, use last word in title
     if not args.cname:
@@ -1663,6 +1673,39 @@ def convert_text(converters, raw_text):
     return result
 
 # ----------------------------------------------------------------------
+#                                                              clean_day
+# ----------------------------------------------------------------------
+
+
+def clean_day(year_dir, day_dir):
+    "Remove non-source files from the year"
+    print('Cleaning day %s' % day_dir, flush=True)
+
+    # 1. Remove node_modules if it exists
+    node_modules_dir = os.path.join(year_dir, day_dir, 'node_modules')
+    print(node_modules_dir, flush=True)
+    if os.path.isdir(node_modules_dir):
+        shutil.rmtree(node_modules_dir)
+
+
+# ----------------------------------------------------------------------
+#                                                             clean_year
+# ----------------------------------------------------------------------
+
+
+def clean_year(args):
+    """Remove non-source files from the year"""
+    print('Cleaning year %d' % args.year, flush=True)
+    # 1. Get the directory for the year
+    year_dir = os.path.join(args.base, str(args.year))
+    # 2. Loop for all of the days in the year
+    for day_dir in os.listdir(year_dir):
+        clean_day(year_dir, day_dir)
+
+    # 3 Return success
+    return 0
+
+# ----------------------------------------------------------------------
 #                                                                   main
 # ----------------------------------------------------------------------
 
@@ -1673,15 +1716,20 @@ def main():
     # 1. Get the command line options
     args = parse_command_line()
 
-    # 2. Create the day directory
+    # 2. If cleaning, go do it
+    if args.language == 'clean':
+        return_code = clean_year(args)
+        sys.exit(return_code)
+
+    # 3. Create the day directory
     base_year_day = os.path.join(args.base, str(args.year),
                                  '%02d_%s' % (args.day, ''.join(args.title)))
     os.mkdir(base_year_day)
 
-    # 3. Copy files to the day directory
+    # 4. Copy files to the day directory
     copy_files(args, base_year_day)
 
-    # 4. Create input file for sepecified input (if any)
+    # 5. Create input file for sepecified input (if any)
     if args.inval:
         with open(os.path.join(base_year_day, INPUT_FILE_NAME), 'w') as input_txt:
             input_txt.write(args.inval)
