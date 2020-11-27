@@ -1,0 +1,18 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_01.py'),
+                  loc('lisp.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_lisp.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_01.py'): ('project',
+        (u'-p2 -v input.txt',
+         '')),
+                      loc('lisp.py'): ('project',
+                                       (u'-p1 -v -i input.txt',
+        ''))}
