@@ -482,10 +482,6 @@ ESLINTRC_TS = """{
 }
 """
 
-GITIGNORE_TS = """*.js
-node_modules/
-"""
-
 TSCONFIG_JSON = """{
   "compilerOptions": {
     "target": "es6",
@@ -532,7 +528,6 @@ TYPESCRIPT_FILES = {
     'part_two.txt': PART_TWO_TXT,
     'package.json': PACKAGE_JSON_TS,
     '.eslintrc': ESLINTRC_TS,
-    '.gitignore': GITIGNORE_TS,
     'tsconfig.json': TSCONFIG_JSON,
 }
 

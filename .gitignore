@@ -1,6 +1,7 @@
 *.pyc
 *.pyo
 *.wpu
-test/__pycache__
-__pycache__
+test/__pycache__/
+__pycache__/
+node_modules/
 

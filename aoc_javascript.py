@@ -454,10 +454,6 @@ module.exports = {
 };
 """
 
-GITIGNORE_JS = """
-node_modules/
-"""
-
 PART_ONE_TXT = """Advent of Code YYYY Day DD Part One
 
 From https://adventofcode.com/YYYY/day/DD by Eric Wastl
@@ -487,7 +483,6 @@ JAVASCRIPT_FILES = {
     'package.json': PACKAGE_JSON_JS,
     '.eslintrc.js': ESLINTRC_JS,
     'jest.config.js': JEST_CONFIG_JS,
-    '.gitignore': GITIGNORE_JS,
 }
 
 
