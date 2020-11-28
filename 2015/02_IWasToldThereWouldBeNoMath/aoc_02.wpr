@@ -5,11 +5,13 @@
 ##################################################################
 [project attributes]
 proj.file-list = [loc('aoc_02.py'),
+                  loc('nomath.py'),
                   loc('part_one.txt'),
                   loc('part_two.txt'),
-                  loc('math.py'),
-                  loc('test_math.py')]
+                  loc('present.py'),
+                  loc('test_nomath.py'),
+                  loc('test_present.py')]
 proj.file-type = 'shared'
 proj.launch-config = {loc('aoc_02.py'): ('project',
-        (u'-p1 -v input.txt',
+        (u'-p2 -v input.txt',
          ''))}

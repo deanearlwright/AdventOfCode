@@ -16,7 +16,7 @@
 import argparse
 import sys
 
-import math
+import nomath
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -57,7 +57,7 @@ def part_one(args, input_lines):
     "Process part one of the puzzle"
 
     # 1. Create the puzzle solver
-    solver = math.Math(part2=False, text=input_lines)
+    solver = nomath.NoMath(part2=False, text=input_lines)
 
     # 2. Determine the solution for part one
     solution = solver.part_one(verbose=args.verbose, limit=args.limit)
@@ -78,7 +78,7 @@ def part_two(args, input_lines):
     "Process part two of the puzzle"
 
     # 1. Create the puzzle solver
-    solver = math.Math(part2=True, text=input_lines)
+    solver = nomath.NoMath(part2=True, text=input_lines)
 
     # 2. Determine the solution for part two
     solution = solver.part_two(verbose=args.verbose, limit=args.limit)
@@ -86,7 +86,6 @@ def part_two(args, input_lines):
         print("There is no solution")
     else:
         print("The solution for part two is %s" % (solution))
-
 
     # 3. Return result
     return solution is not None
