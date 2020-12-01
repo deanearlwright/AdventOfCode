@@ -21,15 +21,22 @@ import report
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
-EXAMPLE_TEXT = ""
-PART_ONE_TEXT = ""
-PART_TWO_TEXT = ""
+EXAMPLE_TEXT = """
+1721
+979
+366
+299
+675
+1456
+"""
+PART_ONE_TEXT = EXAMPLE_TEXT
+PART_TWO_TEXT = EXAMPLE_TEXT
 
-PART_ONE_RESULT = None
-PART_TWO_RESULT = None
+PART_ONE_RESULT = 514579
+PART_TWO_RESULT = 241861950
 
 # ======================================================================
-#                                                              TestReport
+#                                                             TestReport
 # ======================================================================
 
 
@@ -45,6 +52,7 @@ class TestReport(unittest.TestCase):  # pylint: disable=R0904
         # 2. Make sure it has the default values
         self.assertEqual(myobj.part2, False)
         self.assertEqual(myobj.text, None)
+        self.assertEqual(len(myobj.numbers), 0)
 
     def test_text_init(self):
         "Test the Report object creation from text"
@@ -54,7 +62,8 @@ class TestReport(unittest.TestCase):  # pylint: disable=R0904
 
         # 2. Make sure it has the expected values
         self.assertEqual(myobj.part2, False)
-        self.assertEqual(len(myobj.text), 0)
+        self.assertEqual(len(myobj.text), 6)
+        self.assertEqual(len(myobj.numbers), 6)
 
     def test_part_one(self):
         "Test part one example of Report object"
@@ -64,7 +73,6 @@ class TestReport(unittest.TestCase):  # pylint: disable=R0904
 
         # 2. Check the part one result
         self.assertEqual(myobj.part_one(verbose=False), PART_ONE_RESULT)
-
 
     def test_part_two(self):
         "Test part two example of Report object"
@@ -83,5 +91,5 @@ if __name__ == '__main__':
     pass
 
 # ======================================================================
-# end                 t e s t _ r e p o r t . p y                end
+# end                    t e s t _ r e p o r t . p y                 end
 # ======================================================================
