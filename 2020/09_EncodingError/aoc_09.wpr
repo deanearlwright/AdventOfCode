@@ -1,0 +1,15 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_09.py'),
+                  loc('cypher.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_cypher.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_09.py'): ('project',
+        (u'-p2 -v -l 25 input.txt',
+         ''))}
