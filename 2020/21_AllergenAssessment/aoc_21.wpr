@@ -1,0 +1,17 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_21.py'),
+                  loc('label.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('shopping.py'),
+                  loc('test_label.py'),
+                  loc('test_shopping.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_21.py'): ('project',
+        (u'-p2 -v input.txt',
+         ''))}

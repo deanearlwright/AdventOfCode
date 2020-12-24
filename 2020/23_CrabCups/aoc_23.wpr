@@ -4,12 +4,12 @@
 # Wing project file                                              #
 ##################################################################
 [project attributes]
-proj.file-list = [loc('aoc_sb.py'),
-                  loc('intcode.py'),
-                  loc('prob_one.txt'),
-                  loc('prob_two.txt'),
-                  loc('test/test_intcode.py')]
+proj.file-list = [loc('aoc_23.py'),
+                  loc('game.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_game.py')]
 proj.file-type = 'shared'
-proj.launch-config = {loc('aoc_sb.py'): ('project',
-        (u'-p2 input.txt',
+proj.launch-config = {loc('aoc_23.py'): ('project',
+        (u'-p1 -v input.txt',
          ''))}

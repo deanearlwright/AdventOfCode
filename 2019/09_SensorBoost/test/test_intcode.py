@@ -25,6 +25,7 @@ import intcode
 #                                                            TestUtility
 # ======================================================================
 
+
 class TestUtility(unittest.TestCase):  # pylint: disable=R0904
     """Test Utility Functions"""
 
@@ -190,7 +191,7 @@ class TestIntcode(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(mycode.outputs(), [1])
         mycode = intcode.IntCode(text='3,3,1107,-1,8,3,4,3,99')
         self.assertEqual(mycode.run(inp=[9]), intcode.STOP_HLT)
-        self.assertEqual(mycode.outputs(), [0])
+        self.assertEqual(mycode.outputs(), [0])
         # 5. 3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9 outputs 0 if input is 0 else 1
         mycode = intcode.IntCode(text='3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9')
         self.assertEqual(mycode.run(inp=[0]), intcode.STOP_HLT)
@@ -211,7 +212,7 @@ class TestIntcode(unittest.TestCase):  # pylint: disable=R0904
         prog = ''.join([
             '3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,',
             '1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,',
-            '999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99',])
+            '999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99', ])
         mycode = intcode.IntCode(text=prog)
         self.assertEqual(mycode.run(inp=[8]), intcode.STOP_HLT)
         self.assertEqual(mycode.outputs(), [1000])
@@ -228,7 +229,7 @@ class TestIntcode(unittest.TestCase):  # pylint: disable=R0904
         # 1. Takes no input and produces a copy of itself as output.
         mycode = intcode.IntCode(text='109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99')
         self.assertEqual(mycode.run(), intcode.STOP_HLT)
-        self.assertEqual(mycode.outputs(), [109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99])
+        self.assertEqual(mycode.outputs(), [109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99])
 
         # 2. 1102,34915192,34915192,7,4,7,99,0 should output a 16-digit number.
         mycode = intcode.IntCode(text='1102,34915192,34915192,7,4,7,99,0')
@@ -239,6 +240,15 @@ class TestIntcode(unittest.TestCase):  # pylint: disable=R0904
         mycode = intcode.IntCode(text='104,1125899906842624,99')
         self.assertEqual(mycode.run(), intcode.STOP_HLT)
         self.assertEqual(mycode.outputs(), [1125899906842624])
+
+    def test_challenge_coin(self):
+        """Test Intcode with the 2019 Advent of Code Novetta challenge coin"""
+        mycode = intcode.IntCode(text='9,7,20201,0,31,0,4,30,101,-1,7,7,109,-1,1206,0,31,1005,8,2,0,16,16,12,-33,-34,2,8,6,-23,-64,99')
+        self.assertEqual(mycode.run(), intcode.STOP_HLT)
+        out = mycode.outputs()
+        self.assertEqual(out, [35, 76, 105, 107, 101, 65, 66, 111, 115, 115])
+        self.assertEqual(''.join([chr(_) for _ in out]), '#LikeABoss')
+
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
