@@ -1,5 +1,5 @@
 {
-  "name": " 3_perfectlysphericalhousesinavacuum",
+  "name": "3_perfectlysphericalhousesinavacuum",
   "version": "1.0.0",
   "description": "Advent of Code 2015 Day 03, Perfectly Spherical Houses in a Vacuum",
   "main": "aoc_03.js",
@@ -20,6 +20,6 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "jest": "^25.1.0"
+    "jest": "^26.6.3"
   }
 }
