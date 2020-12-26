@@ -126,10 +126,10 @@ def from_text(text):
     lines = []
 
     # 2. Loop for lines in the text
-    for line in text.split('\\n'):
+    for line in text.splitlines():
 
-        # 3. But ignore blank and non-claim lines
-        line = line.rstrip(' \\r')
+        # 3. But ignore blank and comment lines
+        line = line.rstrip()
         if not line:
             continue
         if line.startswith('!'):
@@ -219,12 +219,20 @@ class CLASS(object):   # pylint: disable=R0902, R0205
     def part_one(self, verbose=False, limit=0):
         "Returns the solution for part one"
 
+        # 0. Precondition axioms
+        assert verbose in [True, False]
+        assert limit >= 0
+
         # 1. Return the solution for part one
         return None
 
 
     def part_two(self, verbose=False, limit=0):
         "Returns the solution for part two"
+
+        # 0. Precondition axioms
+        assert verbose in [True, False]
+        assert limit >= 0
 
         # 1. Return the solution for part two
         return None
@@ -263,7 +271,7 @@ import MODULE
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
-EXAMPLE_TEXT = ""
+EXAMPLE_TEXT = """"""
 PART_ONE_TEXT = ""
 PART_TWO_TEXT = ""
 
