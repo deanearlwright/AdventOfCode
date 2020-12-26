@@ -406,7 +406,7 @@ PACKAGE_JSON_JS = """
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "jest": "^26.0.1"
+    "jest": "^26.6.3"
   },
   "dependencies": {
     "typescript": "^3.9.5",
