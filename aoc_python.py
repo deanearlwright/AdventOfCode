@@ -178,7 +178,7 @@ if __name__ == '__main__':
 # ======================================================================
 """
 
-CLASS_PY = """# ======================================================================
+MODULE_PY = """# ======================================================================
 # TITLE
 #   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 #
@@ -214,7 +214,12 @@ class CLASS(object):   # pylint: disable=R0902, R0205
 
         # 2. Process text (if any)
         if text is not None and len(text) > 0:
-            pass
+            self._process_text(text)
+
+    def _process_text(self, text):
+        "Assign values from text
+
+        assert text is not None and len(text) > 0
 
     def part_one(self, verbose=False, limit=0):
         "Returns the solution for part one"
@@ -248,7 +253,7 @@ if __name__ == '__main__':
 # ======================================================================
 """
 
-TEST_CLASS_PY = """# ======================================================================
+TEST_MODULE_PY = """# ======================================================================
 # TITLE
 #   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 #
@@ -374,13 +379,139 @@ proj.launch-config = {loc('aoc_DD.py'): ('project',
          ''))}
 """
 
+EXTRA_PY = """# ======================================================================
+# TITLE
+#   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
+#
+# Python implementation by Dr. Dean Earl Wright III
+# ======================================================================
+
+# ======================================================================
+#                         E X T R A . p y
+# ======================================================================
+"ECLASS for the Advent of Code YYYY Day DD puzzle"
+
+# ----------------------------------------------------------------------
+#                                                                 import
+# ----------------------------------------------------------------------
+
+# ----------------------------------------------------------------------
+#                                                              constants
+# ----------------------------------------------------------------------
+
+# ======================================================================
+#                                                                 ECLASS
+# ======================================================================
+
+
+class ECLASS(object):   # pylint: disable=R0902, R0205
+    "Object for TITLE"
+
+    def __init__(self, text=None, part2=False):
+
+        # 1. Set the initial values
+        self.part2 = part2
+        self.text = text
+
+        # 2. Process text (if any)
+        if text is not None and len(text) > 0:
+            self._process_text(text)
+
+    def _process_text(self, text):
+        "Assign values from text
+
+        assert text is not None and len(text) > 0
+
+
+# ----------------------------------------------------------------------
+#                                                  module initialization
+# ----------------------------------------------------------------------
+if __name__ == '__main__':
+    pass
+
+# ======================================================================
+# end                      E X T R A . p y                     end
+# ======================================================================
+"""
+
+TEST_EXTRA_PY = """# ======================================================================
+# TITLE
+#   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
+#
+# Python implementation by Dr. Dean Earl Wright III
+# ======================================================================
+
+# ======================================================================
+#                    t e s t _ E X T R A . p y
+# ======================================================================
+"Test ECLASS for Advent of Code YYYY day DD, TITLE"
+
+# ----------------------------------------------------------------------
+#                                                                 import
+# ----------------------------------------------------------------------
+import unittest
+
+import EXTRA
+
+# ----------------------------------------------------------------------
+#                                                              constants
+# ----------------------------------------------------------------------
+EXAMPLE_TEXT = """"""
+
+# ======================================================================
+#                                                             TestECLASS
+# ======================================================================
+
+
+class TestECLASS(unittest.TestCase):  # pylint: disable=R0904
+    "Test ECLASS object"
+
+    def test_empty_init(self):
+        "Test the default ECLASS creation"
+
+        # 1. Create default ECLASS object
+        myobj = EXTRA.ECLASS())
+
+        # 2. Make sure it has the default values
+        self.assertEqual(myobj.part2, False)
+        self.assertEqual(myobj.text, None)
+
+    def test_text_init(self):
+        "Test the ECLASS object creation from text"
+
+        # 1. Create CLASS object from text
+        myobj = EXTRA.ECLASS(text=EXAMPLE_TEXT)
+
+        # 2. Make sure it has the expected values
+        self.assertEqual(myobj.part2, False)
+        self.assertEqual(len(myobj.text), 0)
+
+
+# ----------------------------------------------------------------------
+#                                                  module initialization
+# ----------------------------------------------------------------------
+if __name__ == '__main__':
+    pass
+
+# ======================================================================
+# end                 t e s t _ E X T R A . p y                end
+# ======================================================================
+"""
+
 PYTHON_FILES = {
     'aoc_DD.py': AOC_DD_PY,
-    'MODULE.py': CLASS_PY,
-    'test_MODULE.py': TEST_CLASS_PY,
+    'MODULE.py': MODULE_PY,
+    'test_MODULE.py': TEST_MODULE_PY,
     'aoc_DD.wpr': WINGWARE_PY,
     'part_one.txt': PART_ONE_TXT,
     'part_two.txt': PART_TWO_TXT,
+    'EXTRA.py': EXTRA_PY,
+    'test_EXTRA.py': TEST_EXTRA_PY,
+}
+
+PYTHON_EXTRA = {
+    'EXTRA.py': EXTRA_PY,
+    'test_EXTRA.py': TEST_EXTRA_PY,
 }
 
 
@@ -399,6 +530,9 @@ def python_before(args):
         "MODULE": args.cname.lower(),
         "CLASS": args.cname.capitalize(),
         "M O D U L E": ' '.join(list(args.cname.lower())),
+        "EXTRA": args.ename.lower(),
+        "ECLASS": args.ename.capitalize(),
+        "E X T R A": ' '.join(list(args.ename.lower())),
     }
 
     # 9. Return the text converters

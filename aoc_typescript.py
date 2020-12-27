@@ -531,6 +531,8 @@ TYPESCRIPT_FILES = {
     'tsconfig.json': TSCONFIG_JSON,
 }
 
+TYPESCRIPT_EXTRA = {}
+
 
 def ts_before(args):
     "Build text converters"

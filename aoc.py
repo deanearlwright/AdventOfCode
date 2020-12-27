@@ -32,9 +32,9 @@ INPUT_FILE_NAME = 'input.txt'
 
 
 LANGUAGES = {
-    'python': (py.PYTHON_FILES, py.python_before, py.python_after),
-    'javascript': (js.JAVASCRIPT_FILES, js.js_before, js.js_after),
-    'typescript': (ts.TYPESCRIPT_FILES, ts.ts_before, ts.ts_after)
+    'python': (py.PYTHON_FILES, py.PYTHON_EXTRA, py.python_before, py.python_after),
+    'javascript': (js.JAVASCRIPT_FILES, js.JAVASCRIPT_EXTRA, js.js_before, js.js_after),
+    'typescript': (ts.TYPESCRIPT_FILES, ts.TYPESCRIPT_EXTRA, ts.ts_before, ts.ts_after)
 }
 
 # ----- Substitions
@@ -97,6 +97,8 @@ def parse_command_line():
                         help="Title of puzzle")
     parser.add_argument('-a', '--add', action='store_true', default=False,
                         dest='add', help='Add files to existing directory')
+    parser.add_argument('-e', '--extra', action='append',
+                        dest='enames', help='Extra class file')
     parser.add_argument('--py', dest='language', action='store_const', const='python',
                         help='Programming language is python')
     parser.add_argument('--js', dest='language', action='store_const', const='javascript',
@@ -133,7 +135,7 @@ def parse_command_line():
     return args
 
 # ----------------------------------------------------------------------
-#                                                            checkt_args
+#                                                             check_args
 # ----------------------------------------------------------------------
 
 
@@ -171,32 +173,58 @@ def copy_files(args, day_directory):
     """Copy language files to day directory"""
 
     # 1. Get list of language specific files and pre and post converters
-    files, conv_before, conv_after = LANGUAGES[args.language]
+    files, extras, conv_before, conv_after = LANGUAGES[args.language]
 
     # 2. Execute the build converter function for this language
     text_converters = conv_before(args)
 
-    # 2. Loop for all the files
+    # 3. Loop for all the files
     for file_info in files.items():
-        raw_file_name, raw_file_text = file_info
 
-        # 3. Get full path of output file
-        out_file_name = get_file_name(day_directory, raw_file_name, text_converters)
+        # 4. Process this single file
+        copy_file(args, day_directory, text_converters,
+                  conv_after, file_info)
 
-        # 4. Don't write if the file already exists
-        if os.path.isfile(out_file_name):
-            print("File %s already exists, skipping" % out_file_name)
-            continue
+    # 5. Loop for any extra files
+    for extra in args.extras:
 
-        # 5. Convert the text for this file
-        converted_text = convert_text(text_converters, raw_file_text)
+        # 6. Get the converters
+        args.ename = extra
+        text_converters = conv_before(args)
 
-        # 6. Do any final clear up on the file
-        final_text = conv_after(args, text_converters, converted_text)
+        # 7. Loop for the extra files
+        for file_info in extras.items():
 
-        # 7. Write file
-        with open(out_file_name, 'w') as output_file:
-            output_file.write(final_text)
+            # 8. Process this single file
+            copy_file(args, day_directory, text_converters,
+                      conv_after, file_info)
+
+# ----------------------------------------------------------------------
+#                                                              copy_file
+# ----------------------------------------------------------------------
+
+
+def copy_file(args, day_directory, text_converters, conv_after, file_info):
+    """Copy a single language file to day directory"""
+
+    # 1. Get full path of output file
+    raw_file_name, raw_file_text = file_info
+    out_file_name = get_file_name(day_directory, raw_file_name, text_converters)
+
+    # 2. Don't write if the file already exists
+    if os.path.isfile(out_file_name):
+        print("File %s already exists, skipping" % out_file_name)
+        return
+
+    # 3. Convert the text for this file
+    converted_text = convert_text(text_converters, raw_file_text)
+
+    # 4. Do any final conversion
+    final_text = conv_after(args, text_converters, converted_text)
+
+    # 5. Write file
+    with open(out_file_name, 'w') as output_file:
+        output_file.write(final_text)
 
 # ----------------------------------------------------------------------
 #                                                          get_file_name

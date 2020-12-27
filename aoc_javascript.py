@@ -485,6 +485,8 @@ JAVASCRIPT_FILES = {
     'jest.config.js': JEST_CONFIG_JS,
 }
 
+JAVASCRIPT_EXTRA = {}
+
 
 def js_before(args):
     "Build text converters"
