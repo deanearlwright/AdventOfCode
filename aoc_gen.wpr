@@ -6,6 +6,7 @@
 [project attributes]
 proj.file-list = [loc('aoc.py'),
                   loc('aoc_javascript.py'),
+                  loc('aoc_lua.py'),
                   loc('aoc_python.py'),
                   loc('aoc_typescript.py')]
 proj.file-type = 'shared'

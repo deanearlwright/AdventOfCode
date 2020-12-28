@@ -22,6 +22,7 @@ import shutil
 import aoc_javascript as js
 import aoc_python as py
 import aoc_typescript as ts
+import aoc_lua as lua
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -34,7 +35,8 @@ INPUT_FILE_NAME = 'input.txt'
 LANGUAGES = {
     'python': (py.PYTHON_FILES, py.PYTHON_EXTRA, py.python_before, py.python_after),
     'javascript': (js.JAVASCRIPT_FILES, js.JAVASCRIPT_EXTRA, js.js_before, js.js_after),
-    'typescript': (ts.TYPESCRIPT_FILES, ts.TYPESCRIPT_EXTRA, ts.ts_before, ts.ts_after)
+    'typescript': (ts.TYPESCRIPT_FILES, ts.TYPESCRIPT_EXTRA, ts.ts_before, ts.ts_after),
+    'lua': (lua.TYPESCRIPT_FILES, lua.TYPESCRIPT_EXTRA, lua.lua_before, lua.lua_after)
 }
 
 # ----- Substitions
@@ -105,6 +107,8 @@ def parse_command_line():
                         help='Programming language is javascript')
     parser.add_argument('--ts', dest='language', action='store_const', const='typescript',
                         help='Programming language is typescript')
+    parser.add_argument('--lua', dest='language', action='store_const', const='lua',
+                        help='Programming language is lua')
     parser.add_argument('--clean', dest='language', action='store_const', const='clean',
                         help='Clean non-executables from year')
 

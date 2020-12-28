@@ -505,8 +505,6 @@ PYTHON_FILES = {
     'aoc_DD.wpr': WINGWARE_PY,
     'part_one.txt': PART_ONE_TXT,
     'part_two.txt': PART_TWO_TXT,
-    'EXTRA.py': EXTRA_PY,
-    'test_EXTRA.py': TEST_EXTRA_PY,
 }
 
 PYTHON_EXTRA = {
