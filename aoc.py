@@ -36,7 +36,7 @@ LANGUAGES = {
     'python': (py.PYTHON_FILES, py.PYTHON_EXTRA, py.python_before, py.python_after),
     'javascript': (js.JAVASCRIPT_FILES, js.JAVASCRIPT_EXTRA, js.js_before, js.js_after),
     'typescript': (ts.TYPESCRIPT_FILES, ts.TYPESCRIPT_EXTRA, ts.ts_before, ts.ts_after),
-    'lua': (lua.TYPESCRIPT_FILES, lua.TYPESCRIPT_EXTRA, lua.lua_before, lua.lua_after)
+    'lua': (lua.LUA_FILES, lua.LUA_EXTRA, lua.lua_before, lua.lua_after)
 }
 
 # ----- Substitions

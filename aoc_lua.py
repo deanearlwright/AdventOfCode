@@ -26,10 +26,10 @@ AOC_DD_LUA = """-- =============================================================
 -- ----------------------------------------------------------------------
 --                                                                require
 -- ----------------------------------------------------------------------
--- import argparse
+local argparse = require "argparse"
 -- import sys
 
-local solver = require MODULE
+local solver = require "MODULE"
 
 -- ----------------------------------------------------------------------
 --                                                              constants
@@ -40,37 +40,34 @@ local solver = require MODULE
 -- ----------------------------------------------------------------------
 
 
-def parse_command_line():
-    "Parse the command line options"
+function parse_cmd_line ()
+    -- "Parse the command line options"
 
     -- 1. Create the command line parser
-    desc = 'TITLE - Day DD of Advent of Code YYYY'
-    sample = 'sample: python aoc_DD.py input.txt'
-    parser = argparse.ArgumentParser(description=desc,
-                                     epilog=sample)
-    parser.add_argument('-v', '--verbose', action='store_true', default=False,
-                        dest='verbose', help='Print status messages to stdout')
-    parser.add_argument('-p', '--part', action='store', default=1, type=int,
-                        dest='part', help='Puzzle Part (1 or 2)')
-    parser.add_argument('-l', '--limit', action='store', default=0, type=int,
-                        dest='limit',
-                        help='Maximum limit (e.g., time, size, recursion) before stopping')
-    parser.add_argument('filepath', metavar='FILENAME', action='store', type=str,
-                        help="Location of puzzle input")
+    local parser = argparse()
+       :name "aoc_DD"
+       :description "TITLE - Day DD of Advent of Code YYYY"
+       :epilog "sample: lua aoc_DD.lua input.txt"
+    parser:argument("filepath", "Location of puzzle input")
+       :args(1)
+    parser:flag("-v --verbose", "Print status messages to stdout")
+    parser:option("-p --part", "Puzzle Part (1 or 2)", "1")
+    parser:option("-l --limit", "Maximum limit (e.g., time, size, recursion) before stopping)", "0")
 
     -- 2. Get the options and arguments
-    return parser.parse_args()
+    return parser:parse()
+end
 
 -- ----------------------------------------------------------------------
 --                                                               part_one
 -- ----------------------------------------------------------------------
 
 
-def part_one(args, input_lines):
-    "Process part one of the puzzle"
+function part_one(args, input_lines):
+    -- "Process part one of the puzzle"
 
     -- 1. Create the puzzle solver
-    solver = MODULE.CLASS(part2=False, text=input_lines)
+    solver = MODULE.CLASS(part2=false, text=input_lines)
 
     -- 2. Determine the solution for part one
     solution = solver.part_one(verbose=args.verbose, limit=args.limit)
@@ -78,20 +75,22 @@ def part_one(args, input_lines):
         print("There is no solution")
     else:
         print("The solution for part one is %s" % (solution))
+    end
 
     -- 3. Return result
     return solution is not None
+end
 
 -- ----------------------------------------------------------------------
 --                                                               part_two
 -- ----------------------------------------------------------------------
 
 
-def part_two(args, input_lines):
-    "Process part two of the puzzle"
+function part_two(args, input_lines):
+    -- "Process part two of the puzzle"
 
     -- 1. Create the puzzle solver
-    solver = MODULE.CLASS(part2=True, text=input_lines)
+    solver = MODULE.CLASS(part2=true, text=input_lines)
 
     -- 2. Determine the solution for part two
     solution = solver.part_two(verbose=args.verbose, limit=args.limit)
@@ -99,55 +98,55 @@ def part_two(args, input_lines):
         print("There is no solution")
     else:
         print("The solution for part two is %s" % (solution))
-
+    end
 
     -- 3. Return result
     return solution is not None
-
+end
 
 -- ----------------------------------------------------------------------
 --                                                              from_file
 -- ----------------------------------------------------------------------
 
 
-def from_file(filepath):
-    "Read the file"
-
-    return from_text(open(filepath).read())
+function from_file(filepath):
+    -- "Read the file"
+    io.input(filepath)
+    return from_text(io.read("*all"))
+end
 
 -- ----------------------------------------------------------------------
 --                                                              from_text
 -- ----------------------------------------------------------------------
 
-
-def from_text(text):
-    "Break the text into trimed, non-comment lines"
+function from_text(text)
+    -- "Break the text into trimed, non-comment lines"
 
     -- 1. We start with no lines
-    lines = []
+    local result = {}
 
     -- 2. Loop for lines in the text
-    for line in text.splitlines():
+    for line in text:gmatch('[^\r\n]+') do
 
         -- 3. But ignore blank and comment lines
-        line = line.rstrip()
-        if not line:
-            continue
-        if line.startswith('!'):
-            continue
+        line = line:gsub("%s*$", "")
+        if #line > 0 then -- and not "!" == line:sub(1, 1) then
 
-        -- 4. Add the line
-        lines.append(line)
+            -- 4. Add the line
+            table.insert(result, line)
+        end
+    end
 
-    -- 5. Return a list of clean lines
-    return lines
+    -- 5. Return a table of clean lines
+    return result
+end
 
 -- ----------------------------------------------------------------------
 --                                                                   main
 -- ----------------------------------------------------------------------
 
 
-def main():
+function main():
     "Read the Advent of Code problem and solve it"
 
     -- 1. Get the command line options
@@ -161,18 +160,21 @@ def main():
         result = part_one(args, input_text)
     else:
         result = part_two(args, input_text)
+    end
 
     -- 5. Set return code (0 if solution found, 2 if not)
     if result:
         sys.exit(0)
+    end
     sys.exit(2)
-
+end
 
 -- ----------------------------------------------------------------------
 --                                                  module initialization
 -- ----------------------------------------------------------------------
 if __name__ == '__main__':
     main()
+    end
 
 -- ======================================================================
 -- end                         a o c _ D D . l u a                      end
@@ -482,7 +484,7 @@ if __name__ == '__main__':
 -- ======================================================================
 """
 
-PLUAFILES = {
+LUA_FILES = {
     'aoc_DD.lua': AOC_DD_LUA,
     'MODULE.lua': MODULE_LUA,
     'test_MODULE.lua': TEST_MODULE_LUA,
