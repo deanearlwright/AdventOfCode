@@ -134,6 +134,7 @@ def parse_command_line():
     # 6. If there is no class name, use last word in title
     if not args.cname:
         args.cname = args.title[-1]
+    args.ename = ''
 
     # 7. Return the arguments
     return args
@@ -190,18 +191,19 @@ def copy_files(args, day_directory):
                   conv_after, file_info)
 
     # 5. Loop for any extra files
-    for extra in args.extras:
+    if args.enames:
+        for ename in args.enames:
 
-        # 6. Get the converters
-        args.ename = extra
-        text_converters = conv_before(args)
+            # 6. Get the converters
+            args.ename = ename
+            text_converters = conv_before(args)
 
-        # 7. Loop for the extra files
-        for file_info in extras.items():
+            # 7. Loop for the extra files
+            for file_info in extras.items():
 
-            # 8. Process this single file
-            copy_file(args, day_directory, text_converters,
-                      conv_after, file_info)
+                # 8. Process this single file
+                copy_file(args, day_directory, text_converters,
+                          conv_after, file_info)
 
 # ----------------------------------------------------------------------
 #                                                              copy_file

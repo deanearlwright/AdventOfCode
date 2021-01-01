@@ -21,15 +21,14 @@ AOC_DD_LUA = """-- =============================================================
 -- ======================================================================
 --                           a o c _ D D . l u a
 -- ======================================================================
-"Solve the puzzles for Advent of Code YYYY day DD"
+-- "Solve the puzzles for Advent of Code YYYY day DD"
 
 -- ----------------------------------------------------------------------
 --                                                                require
 -- ----------------------------------------------------------------------
 local argparse = require "argparse"
--- import sys
 
-local solver = require "MODULE"
+local MODULE = require "MODULE"
 
 -- ----------------------------------------------------------------------
 --                                                              constants
@@ -40,22 +39,30 @@ local solver = require "MODULE"
 -- ----------------------------------------------------------------------
 
 
-function parse_cmd_line ()
-    -- "Parse the command line options"
+function parse_command_line ()
+  -- "Parse the command line options"
 
-    -- 1. Create the command line parser
-    local parser = argparse()
-       :name "aoc_DD"
-       :description "TITLE - Day DD of Advent of Code YYYY"
-       :epilog "sample: lua aoc_DD.lua input.txt"
-    parser:argument("filepath", "Location of puzzle input")
-       :args(1)
-    parser:flag("-v --verbose", "Print status messages to stdout")
-    parser:option("-p --part", "Puzzle Part (1 or 2)", "1")
-    parser:option("-l --limit", "Maximum limit (e.g., time, size, recursion) before stopping)", "0")
+  -- 1. Create the command line parser
+  local parser = argparse()
+    :name "aoc_DD"
+    :description "TITLE - Day DD of Advent of Code YYYY"
+    :epilog "sample: lua aoc_DD.lua input.txt"
+  parser:argument("filepath", "Location of puzzle input")
+     :args(1)
+  parser:flag("-v --verbose", "Print status messages to stdout")
+  parser:option("-p --part", "Puzzle Part (1 or 2)", "1")
+  parser:option("-l --limit", "Maximum limit (e.g., time, size, recursion) before stopping)", "0")
 
-    -- 2. Get the options and arguments
-    return parser:parse()
+  -- 2. Get the options and arguments
+  local args = parser:parse()
+
+  -- 3. Validate arguments
+  assert(args.part == "1" or args.part == "2")
+  args.part = tonumber(args.part)
+  args.limit = tonumber(args.limit)
+
+  -- 4. Return the validated arguments
+  return args
 end
 
 -- ----------------------------------------------------------------------
@@ -63,22 +70,22 @@ end
 -- ----------------------------------------------------------------------
 
 
-function part_one(args, input_lines):
-    -- "Process part one of the puzzle"
+function part_one(args, input_lines)
+  -- "Process part one of the puzzle"
 
-    -- 1. Create the puzzle solver
-    solver = MODULE.CLASS(part2=false, text=input_lines)
+  -- 1. Create the puzzle solver
+  local solver = MODULE:CLASS({part2=false, text=input_lines})
 
-    -- 2. Determine the solution for part one
-    solution = solver.part_one(verbose=args.verbose, limit=args.limit)
-    if solution is None:
-        print("There is no solution")
-    else:
-        print("The solution for part one is %s" % (solution))
-    end
+  -- 2. Determine the solution for part one
+  local solution = solver:part_one(args)
+  if solution == nil then
+     print("There is no solution")
+  else
+     print("The solution for part one is " .. solution)
+  end
 
     -- 3. Return result
-    return solution is not None
+    return solution ~= nil
 end
 
 -- ----------------------------------------------------------------------
@@ -86,22 +93,22 @@ end
 -- ----------------------------------------------------------------------
 
 
-function part_two(args, input_lines):
+function part_two(args, input_lines)
     -- "Process part two of the puzzle"
 
     -- 1. Create the puzzle solver
-    solver = MODULE.CLASS(part2=true, text=input_lines)
+    local solver = MODULE:CLASS({part2=true, text=input_lines})
 
     -- 2. Determine the solution for part two
-    solution = solver.part_two(verbose=args.verbose, limit=args.limit)
-    if solution is None:
+    local solution = solver:part_two(args)
+    if solution == nil then
         print("There is no solution")
-    else:
-        print("The solution for part two is %s" % (solution))
+    else
+        print("The solution for part two is " .. solution)
     end
 
     -- 3. Return result
-    return solution is not None
+    return solution ~= nil
 end
 
 -- ----------------------------------------------------------------------
@@ -109,10 +116,10 @@ end
 -- ----------------------------------------------------------------------
 
 
-function from_file(filepath):
-    -- "Read the file"
-    io.input(filepath)
-    return from_text(io.read("*all"))
+function from_file(filepath)
+  -- "Read the file"
+  io.input(filepath)
+  return from_text(io.read("*all"))
 end
 
 -- ----------------------------------------------------------------------
@@ -120,25 +127,25 @@ end
 -- ----------------------------------------------------------------------
 
 function from_text(text)
-    -- "Break the text into trimed, non-comment lines"
+  -- "Break the text into trimed, non-comment lines"
 
-    -- 1. We start with no lines
-    local result = {}
+  -- 1. We start with no lines
+  local result = {}
 
-    -- 2. Loop for lines in the text
-    for line in text:gmatch('[^\r\n]+') do
+  -- 2. Loop for lines in the text
+  for line in text:gmatch('[^\\r\\n]+') do
 
-        -- 3. But ignore blank and comment lines
-        line = line:gsub("%s*$", "")
-        if #line > 0 then -- and not "!" == line:sub(1, 1) then
+    -- 3. But ignore blank and comment lines
+    line = line:gsub("%s*$", "")
+    if #line > 0 and "!" ~= line:sub(1, 1) then
 
-            -- 4. Add the line
-            table.insert(result, line)
-        end
+      -- 4. Add the line
+      table.insert(result, line)
     end
+  end
 
-    -- 5. Return a table of clean lines
-    return result
+  -- 5. Return a table of cleaned lines
+  return result
 end
 
 -- ----------------------------------------------------------------------
@@ -146,35 +153,34 @@ end
 -- ----------------------------------------------------------------------
 
 
-function main():
-    "Read the Advent of Code problem and solve it"
+function main()
+  -- "Read the Advent of Code problem and solve it"
 
-    -- 1. Get the command line options
-    args = parse_command_line()
+  -- 1. Get the command line options
+  local args = parse_command_line()
 
-    -- 2. Read the puzzle file
-    input_text = from_file(args.filepath)
+  -- 2. Read the puzzle file
+  local input_text = from_file(args.filepath)
 
-    -- 3. Process the appropiate part of the puzzle
-    if args.part == 1:
-        result = part_one(args, input_text)
-    else:
-        result = part_two(args, input_text)
-    end
+  -- 3. Process the appropiate part of the puzzle
+  local result = nil
+  if args.part == 1 then
+    result = part_one(args, input_text)
+  else
+    result = part_two(args, input_text)
+  end
 
-    -- 5. Set return code (0 if solution found, 2 if not)
-    if result:
-        sys.exit(0)
-    end
-    sys.exit(2)
+  -- 5. Set return code (0 if solution found, 2 if not)
+  if result then
+    os.exit(0)
+  end
+  os.exit(2)
 end
 
 -- ----------------------------------------------------------------------
 --                                                  module initialization
 -- ----------------------------------------------------------------------
-if __name__ == '__main__':
-    main()
-    end
+main()
 
 -- ======================================================================
 -- end                         a o c _ D D . l u a                      end
@@ -191,12 +197,12 @@ MODULE_LUA = """-- =============================================================
 -- ======================================================================
 --                         M O D U L E . l u a
 -- ======================================================================
-"A solver for the Advent of Code YYYY Day DD puzzle"
+-- "A solver for the Advent of Code YYYY Day DD puzzle"
 
 -- ----------------------------------------------------------------------
---                                                                 import
+--                                                                  local
 -- ----------------------------------------------------------------------
-
+local CLASS = {}
 -- ----------------------------------------------------------------------
 --                                                              constants
 -- ----------------------------------------------------------------------
@@ -205,51 +211,80 @@ MODULE_LUA = """-- =============================================================
 --                                                                  CLASS
 -- ======================================================================
 
+-- "Object for TITLE"
 
-class CLASS(object):   -- pylint: disable=R0902, R0205
-    "Object for TITLE"
+function CLASS:CLASS (o)
 
-    def __init__(self, text=None, part2=False):
+  -- 1. Set the initial values
+  o = o or {}
+  if o.part2 == nil then
+    o.part2 = false
+  end
+  if o.text == nil then
+    o.text = {}
+  end
 
-        -- 1. Set the initial values
-        self.part2 = part2
-        self.text = text
+  -- 2. Create the object metatable
+  self.__index = self
+  setmetatable(o, self)
 
-        -- 2. Process text (if any)
-        if text is not None and len(text) > 0:
-            self._process_text(text)
+  -- 3. Process text (if any)
+  o.numbers = {}
+  if o.text ~= nil and #o.text > 0 then
+     o:_process_text(self.text)
+  end
 
-    def _process_text(self, text):
-        "Assign values from text
+  return o
+end
 
-        assert text is not None and len(text) > 0
+function CLASS:_process_text(text)
+  -- "Assign values from text
 
-    def part_one(self, verbose=False, limit=0):
-        "Returns the solution for part one"
+  -- 0. Precondition axioms
+  assert(text ~= nil and #text > 0)
 
-        -- 0. Precondition axioms
-        assert verbose in [True, False]
-        assert limit >= 0
+  -- 1. Loop for each line of the text
+  for _, line in ipairs(text) do
 
-        -- 1. Return the solution for part one
-        return None
+    -- 2. Add the number to the entries
+    table.insert(self.numbers, tonumber(line))
+    end
 
 
-    def part_two(self, verbose=False, limit=0):
-        "Returns the solution for part two"
+end
 
-        -- 0. Precondition axioms
-        assert verbose in [True, False]
-        assert limit >= 0
+function CLASS:part_one(args)
+  -- "Returns the solution for part one"
 
-        -- 1. Return the solution for part two
-        return None
+  -- 0. Precondition axioms
+  local verbose = args.verbose or false
+  local limit = args.limit or 0
+  assert(verbose == true or verbose == false)
+  assert(limit >= 0)
+
+  -- 1. Return the solution for part one
+  return nil
+end
+
+
+function CLASS:part_two(args)
+  -- "Returns the solution for part two"
+
+  -- 0. Precondition axioms
+  local verbose = args.verbose or false
+  local limit = args.limit or 0
+  assert(verbose == true or verbose == false)
+  assert(limit >= 0)
+
+  -- 1. Return the solution for part one
+  return nil
+end
 
 -- ----------------------------------------------------------------------
 --                                                  module initialization
 -- ----------------------------------------------------------------------
-if __name__ == '__main__':
-    pass
+
+return CLASS
 
 -- ======================================================================
 -- end                      M O D U L E . l u a                     end
@@ -266,79 +301,109 @@ TEST_MODULE_LUA = """-- ========================================================
 -- ======================================================================
 --                    t e s t _ M O D U L E . l u a
 -- ======================================================================
-"Test solver for Advent of Code YYYY day DD, TITLE"
+-- "Test solver for Advent of Code YYYY day DD, TITLE"
 
 -- ----------------------------------------------------------------------
 --                                                                require
 -- ----------------------------------------------------------------------
-local ut = require luaunit
+luaunit = require('luaunit')
 
-local aoc_DD = require aoc_DD
-local MODULE = require MODULE
+MODULE = require('MODULE')
+
+-- ----------------------------------------------------------------------
+--                                                              from_text
+-- ----------------------------------------------------------------------
+
+function from_text(text)
+  -- "Break the text into trimed, non-comment lines"
+
+  -- 1. We start with no lines
+  local result = {}
+
+  -- 2. Loop for lines in the text
+  for line in text:gmatch('[^\\r\\n]+') do
+
+    -- 3. But ignore blank and comment lines
+    line = line:gsub("%s*$", "")
+    if #line > 0 and "!" ~= line:sub(1, 1) then
+
+      -- 4. Add the line
+      table.insert(result, line)
+    end
+  end
+
+  -- 5. Return a table of cleaned lines
+  return result
+end
 
 -- ----------------------------------------------------------------------
 --                                                              constants
 -- ----------------------------------------------------------------------
-EXAMPLE_TEXT = """"""
+EXAMPLE_TEXT = [[
+]]
 PART_ONE_TEXT = ""
 PART_TWO_TEXT = ""
 
-PART_ONE_RESULT = None
-PART_TWO_RESULT = None
+PART_ONE_RESULT = nil
+PART_TWO_RESULT = nil
 
 -- ======================================================================
 --                                                              TestCLASS
 -- ======================================================================
 
 
-class TestCLASS(unittest.TestCase):  -- pylint: disable=R0904
-    "Test CLASS object"
+function test_empty_init()
+  -- "Test the default CLASS creation"
 
-    def test_empty_init(self):
-        "Test the default CLASS creation"
+  -- 1. Create default CLASS object
+  local myobj = MODULE:CLASS()
 
-        -- 1. Create default CLASS object
-        myobj = MODULE.CLASS()
+  -- 2. Make sure it has the default values
+  luaunit.assertEquals(myobj.part2, false)
+  luaunit.assertEquals(#myobj.text, 0)
+  luaunit.assertEquals(#myobj.numbers, 0)
 
-        -- 2. Make sure it has the default values
-        self.assertEqual(myobj.part2, False)
-        self.assertEqual(myobj.text, None)
+end
 
-    def test_text_init(self):
-        "Test the CLASS object creation from text"
+function test_text_init()
+  -- "Test the CLASS object creation from text"
 
-        -- 1. Create CLASS object from text
-        myobj = MODULE.CLASS(text=aoc_DD.from_text(EXAMPLE_TEXT))
+  -- 1. Create CLASS object from text
+  local myobj = MODULE:CLASS({text=from_text(EXAMPLE_TEXT)})
 
-        -- 2. Make sure it has the expected values
-        self.assertEqual(myobj.part2, False)
-        self.assertEqual(len(myobj.text), 0)
+  -- 2. Make sure it has the expected values
+  luaunit.assertEquals(myobj.part2, false)
+  luaunit.assertEquals(#myobj.text, 0)
+  luaunit.assertEquals(#myobj.numbers, 0)
 
-    def test_part_one(self):
-        "Test part one example of CLASS object"
+end
 
-        -- 1. Create CLASS object from text
-        myobj = MODULE.CLASS(text=aoc_DD.from_text(PART_ONE_TEXT))
+function test_part_one()
+  -- "Test part one example of CLASS object"
 
-        -- 2. Check the part one result
-        self.assertEqual(myobj.part_one(verbose=False), PART_ONE_RESULT)
+  -- 1. Create CLASS object from text
+  local myobj = MODULE:CLASS({text=from_text(PART_ONE_TEXT)})
 
+  -- 2. Check the part one result
+  luaunit.assertEquals(myobj:part_one({verbose=false, limit=0}), PART_ONE_RESULT)
 
-    def test_part_two(self):
-        "Test part two example of CLASS object"
+end
 
-        -- 1. Create CLASS object from text
-        myobj = MODULE.CLASS(part2=True, text=aoc_DD.from_text(PART_TWO_TEXT))
+function test_part_two()
+  -- "Test part two example of CLASS object"
 
-        -- 2. Check the part two result
-        self.assertEqual(myobj.part_two(verbose=False), PART_TWO_RESULT)
+  -- 1. Create CLASS object from text
+  local myobj = MODULE:CLASS({part2=true, text=from_text(PART_TWO_TEXT)})
 
+  -- 2. Check the part two result
+  luaunit.assertEquals(myobj:part_two({verbose=false, limit=0}), PART_TWO_RESULT)
+
+end
 
 -- ----------------------------------------------------------------------
 --                                                  module initialization
 -- ----------------------------------------------------------------------
-if __name__ == '__main__':
-    pass
+os.exit( luaunit.LuaUnit.run() )
 
 -- ======================================================================
 -- end                 t e s t _ M O D U L E . l u a                end
