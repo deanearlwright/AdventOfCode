@@ -202,7 +202,7 @@ MODULE_LUA = """-- =============================================================
 -- ----------------------------------------------------------------------
 --                                                                  local
 -- ----------------------------------------------------------------------
-local CLASS = {}
+local CLASS = { part2 = false, text = {} numbers = {} }
 -- ----------------------------------------------------------------------
 --                                                              constants
 -- ----------------------------------------------------------------------
@@ -217,12 +217,8 @@ function CLASS:CLASS (o)
 
   -- 1. Set the initial values
   o = o or {}
-  if o.part2 == nil then
-    o.part2 = false
-  end
-  if o.text == nil then
-    o.text = {}
-  end
+  o.part2 = o.part2 or false
+  o.text = o.text or {}
 
   -- 2. Create the object metatable
   self.__index = self
@@ -231,7 +227,7 @@ function CLASS:CLASS (o)
   -- 3. Process text (if any)
   o.numbers = {}
   if o.text ~= nil and #o.text > 0 then
-     o:_process_text(self.text)
+     o:_process_text(o.text)
   end
 
   return o
@@ -249,7 +245,6 @@ function CLASS:_process_text(text)
     -- 2. Add the number to the entries
     table.insert(self.numbers, tonumber(line))
     end
-
 
 end
 
@@ -433,52 +428,60 @@ From https://adventofcode.com/YYYY/day/DD by Eric Wastl
 EXTRA_LUA = """-- ======================================================================
 -- TITLE
 --   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
-#
+--
 -- lua implementation by Dr. Dean Earl Wright III
 -- ======================================================================
 
 -- ======================================================================
 --                         E X T R A . l u a
 -- ======================================================================
-"ECLASS for the Advent of Code YYYY Day DD puzzle"
+-- "OTHER for the Advent of Code YYYY Day DD puzzle"
 
 -- ----------------------------------------------------------------------
---                                                                require
+--                                                                  local
 -- ----------------------------------------------------------------------
-
+local OTHER = { part2=false, text='' }
 -- ----------------------------------------------------------------------
 --                                                              constants
 -- ----------------------------------------------------------------------
 
 -- ======================================================================
---                                                                 ECLASS
+--                                                                 OTHER
 -- ======================================================================
 
 
-class ECLASS(object):   -- pylint: disable=R0902, R0205
-    "Object for TITLE"
-
-    def __init__(self, text=None, part2=False):
-
-        -- 1. Set the initial values
-        self.part2 = part2
-        self.text = text
-
-        -- 2. Process text (if any)
-        if text is not None and len(text) > 0:
-            self._process_text(text)
-
-    def _process_text(self, text):
-        "Assign values from text
-
-        assert text is not None and len(text) > 0
+function OTHER:OTHER (o)
+  -- "Object for TITLE"
 
 
+  -- 1. Set the initial values
+  o = o or {}
+  o.part2 = o.part2 or false
+  o.text = o.text or {}
+
+  -- 2. Create the object metatable
+  self.__index = self
+  setmetatable(o, self)
+
+  -- 3. Process text (if any)
+  if o.text ~= nil and #o.text > 0 then
+     o:_process_text(o.text)
+  end
+
+  return o
+end
+
+function OTHER:_process_text(text)
+  -- "Assign values from text
+
+  -- 0. Precondition axioms
+  assert(text ~= nil and #text > 0)
+
+end
 -- ----------------------------------------------------------------------
 --                                                  module initialization
 -- ----------------------------------------------------------------------
-if __name__ == '__main__':
-    pass
+return OTHER
 
 -- ======================================================================
 -- end                      E X T R A . l u a                     end
@@ -495,54 +498,52 @@ TEST_EXTRA_LUA = """-- =========================================================
 -- ======================================================================
 --                    t e s t _ E X T R A . l u a
 -- ======================================================================
-"Test ECLASS for Advent of Code YYYY day DD, TITLE"
+-- "Test OTHER for Advent of Code YYYY day DD, TITLE"
 
 -- ----------------------------------------------------------------------
 --                                                                require
 -- ----------------------------------------------------------------------
-local ut = require unittest
+luaunit = require('luaunit')
 
-local EXTRA = require EXTRA
+EXTRA = require('EXTRA')
 
 -- ----------------------------------------------------------------------
 --                                                              constants
 -- ----------------------------------------------------------------------
-EXAMPLE_TEXT = """"""
+EXAMPLE_TEXT = ""
 
 -- ======================================================================
---                                                             TestECLASS
+--                                                             TestOTHER
 -- ======================================================================
 
+function test_empty_init()
+  -- "Test the default OTHER creation"
 
-class TestECLASS(unittest.TestCase):  -- pylint: disable=R0904
-    "Test ECLASS object"
+  -- 1. Create default OTHER object
+  local myobj = EXTRA:OTHER()
 
-    def test_empty_init(self):
-        "Test the default ECLASS creation"
+  -- 2. Make sure it has the default values
+  luaunit.assertEquals(myobj.part2, false)
+  luaunit.assertEquals(#myobj.text, 0)
 
-        -- 1. Create default ECLASS object
-        myobj = EXTRA.ECLASS())
+end
 
-        -- 2. Make sure it has the default values
-        self.assertEqual(myobj.part2, False)
-        self.assertEqual(myobj.text, None)
+function test_text_init()
+  -- "Test the OTHER object creation from text"
 
-    def test_text_init(self):
-        "Test the ECLASS object creation from text"
+  -- 1. Create CLASS object from text
+  local myobj = EXTRA:OTHER({text=from_text(EXAMPLE_TEXT)})
 
-        -- 1. Create CLASS object from text
-        myobj = EXTRA.ECLASS(text=EXAMPLE_TEXT)
+  -- 2. Make sure it has the expected values
+  luaunit.assertEquals(myobj.part2, false)
+  luaunit.assertEquals(#myobj.text, 0)
 
-        -- 2. Make sure it has the expected values
-        self.assertEqual(myobj.part2, False)
-        self.assertEqual(len(myobj.text), 0)
-
+end
 
 -- ----------------------------------------------------------------------
 --                                                  module initialization
 -- ----------------------------------------------------------------------
-if __name__ == '__main__':
-    pass
+os.exit( luaunit.LuaUnit.run() )
 
 -- ======================================================================
 -- end                 t e s t _ E X T R A . p y                end
@@ -579,7 +580,7 @@ def lua_before(args):
         "CLASS": args.cname.capitalize(),
         "M O D U L E": ' '.join(list(args.cname.lower())),
         "EXTRA": args.ename.lower(),
-        "ECLASS": args.ename.capitalize(),
+        "OTHER": args.ename.capitalize(),
         "E X T R A": ' '.join(list(args.ename.lower())),
     }
 

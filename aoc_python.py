@@ -389,7 +389,7 @@ EXTRA_PY = """# ================================================================
 # ======================================================================
 #                         E X T R A . p y
 # ======================================================================
-"ECLASS for the Advent of Code YYYY Day DD puzzle"
+"OTHER for the Advent of Code YYYY Day DD puzzle"
 
 # ----------------------------------------------------------------------
 #                                                                 import
@@ -400,11 +400,11 @@ EXTRA_PY = """# ================================================================
 # ----------------------------------------------------------------------
 
 # ======================================================================
-#                                                                 ECLASS
+#                                                                 OTHER
 # ======================================================================
 
 
-class ECLASS(object):   # pylint: disable=R0902, R0205
+class OTHER(object):   # pylint: disable=R0902, R0205
     "Object for TITLE"
 
     def __init__(self, text=None, part2=False):
@@ -444,7 +444,7 @@ TEST_EXTRA_PY = """# ===========================================================
 # ======================================================================
 #                    t e s t _ E X T R A . p y
 # ======================================================================
-"Test ECLASS for Advent of Code YYYY day DD, TITLE"
+"Test OTHER for Advent of Code YYYY day DD, TITLE"
 
 # ----------------------------------------------------------------------
 #                                                                 import
@@ -459,28 +459,28 @@ import EXTRA
 EXAMPLE_TEXT = """"""
 
 # ======================================================================
-#                                                             TestECLASS
+#                                                             TestOTHER
 # ======================================================================
 
 
-class TestECLASS(unittest.TestCase):  # pylint: disable=R0904
-    "Test ECLASS object"
+class TestOTHER(unittest.TestCase):  # pylint: disable=R0904
+    "Test OTHER object"
 
     def test_empty_init(self):
-        "Test the default ECLASS creation"
+        "Test the default OTHER creation"
 
-        # 1. Create default ECLASS object
-        myobj = EXTRA.ECLASS())
+        # 1. Create default OTHER object
+        myobj = EXTRA.OTHER())
 
         # 2. Make sure it has the default values
         self.assertEqual(myobj.part2, False)
         self.assertEqual(myobj.text, None)
 
     def test_text_init(self):
-        "Test the ECLASS object creation from text"
+        "Test the OTHER object creation from text"
 
         # 1. Create CLASS object from text
-        myobj = EXTRA.ECLASS(text=EXAMPLE_TEXT)
+        myobj = EXTRA.OTHER(text=EXAMPLE_TEXT)
 
         # 2. Make sure it has the expected values
         self.assertEqual(myobj.part2, False)
@@ -529,7 +529,7 @@ def python_before(args):
         "CLASS": args.cname.capitalize(),
         "M O D U L E": ' '.join(list(args.cname.lower())),
         "EXTRA": args.ename.lower(),
-        "ECLASS": args.ename.capitalize(),
+        "OTHER": args.ename.capitalize(),
         "E X T R A": ' '.join(list(args.ename.lower())),
     }
 
