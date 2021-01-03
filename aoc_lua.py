@@ -202,7 +202,7 @@ MODULE_LUA = """-- =============================================================
 -- ----------------------------------------------------------------------
 --                                                                  local
 -- ----------------------------------------------------------------------
-local CLASS = { part2 = false, text = {} numbers = {} }
+local CLASS = { part2 = false, text = {}, numbers = {} }
 -- ----------------------------------------------------------------------
 --                                                              constants
 -- ----------------------------------------------------------------------
@@ -271,7 +271,7 @@ function CLASS:part_two(args)
   assert(verbose == true or verbose == false)
   assert(limit >= 0)
 
-  -- 1. Return the solution for part one
+  -- 1. Return the solution for part two
   return nil
 end
 
