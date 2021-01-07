@@ -21,7 +21,7 @@ AOC_DD_LUA = """-- =============================================================
 -- ======================================================================
 --                           a o c _ D D . l u a
 -- ======================================================================
--- "Solve the puzzles for Advent of Code YYYY day DD"
+-- Solve the puzzles for Advent of Code YYYY day DD
 
 -- ----------------------------------------------------------------------
 --                                                                require
@@ -33,6 +33,7 @@ local MODULE = require "MODULE"
 -- ----------------------------------------------------------------------
 --                                                              constants
 -- ----------------------------------------------------------------------
+local SAVE_BLANK_LINES = false
 
 -- ----------------------------------------------------------------------
 --                                                      parse_commnd_line
@@ -40,7 +41,7 @@ local MODULE = require "MODULE"
 
 
 function parse_command_line ()
-  -- "Parse the command line options"
+  -- Parse the command line options
 
   -- 1. Create the command line parser
   local parser = argparse()
@@ -71,7 +72,7 @@ end
 
 
 function part_one(args, input_lines)
-  -- "Process part one of the puzzle"
+  -- Process part one of the puzzle
 
   -- 1. Create the puzzle solver
   local solver = MODULE:CLASS({part2=false, text=input_lines})
@@ -94,7 +95,7 @@ end
 
 
 function part_two(args, input_lines)
-    -- "Process part two of the puzzle"
+    -- Process part two of the puzzle
 
     -- 1. Create the puzzle solver
     local solver = MODULE:CLASS({part2=true, text=input_lines})
@@ -117,7 +118,7 @@ end
 
 
 function from_file(filepath)
-  -- "Read the file"
+  -- Read the file
   io.input(filepath)
   return from_text(io.read("*all"))
 end
@@ -127,24 +128,32 @@ end
 -- ----------------------------------------------------------------------
 
 function from_text(text)
-  -- "Break the text into trimed, non-comment lines"
+  -- Break the text into trimed, non-comment lines
 
   -- 1. We start with no lines
   local result = {}
 
-  -- 2. Loop for lines in the text
-  for line in text:gmatch('[^\\r\\n]+') do
+  -- 2. Set up to save blank lines (if desired)
+  text = text:gsub('[\r]', '')
+  if SAVE_BLANK_LINES then
+    text = text:gsub('\n\n', '\n \n')
+  end
 
-    -- 3. But ignore blank and comment lines
+  -- 3. Loop for lines in the text
+  for line in text:gmatch('[^\n]+') do
     line = line:gsub("%s*$", "")
-    if #line > 0 and "!" ~= line:sub(1, 1) then
 
-      -- 4. Add the line
-      table.insert(result, line)
+    -- 4. Ignore comment lines
+    if #line > 0 and "!" == line:sub(1, 1) then
+      -- Ignore
+    else -- not a comment line
+      if #line > 0 or SAVE_BLANK_LINES then
+        table.insert(result, line)
+      end
     end
   end
 
-  -- 5. Return a table of cleaned lines
+  -- 5. Return a table of cleaned text lines
   return result
 end
 
@@ -154,7 +163,7 @@ end
 
 
 function main()
-  -- "Read the Advent of Code problem and solve it"
+  -- Read the Advent of Code problem and solve it
 
   -- 1. Get the command line options
   local args = parse_command_line()
@@ -183,7 +192,7 @@ end
 main()
 
 -- ======================================================================
--- end                         a o c _ D D . l u a                      end
+-- end                         a o c _ D D . l u a                    end
 -- ======================================================================
 """
 
@@ -532,7 +541,7 @@ function test_text_init()
   -- "Test the OTHER object creation from text"
 
   -- 1. Create CLASS object from text
-  local myobj = EXTRA:OTHER({text=from_text(EXAMPLE_TEXT)})
+  local myobj = EXTRA:OTHER({text=EXAMPLE_TEXT})
 
   -- 2. Make sure it has the expected values
   luaunit.assertEquals(myobj.part2, false)
