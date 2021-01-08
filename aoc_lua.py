@@ -134,13 +134,13 @@ function from_text(text)
   local result = {}
 
   -- 2. Set up to save blank lines (if desired)
-  text = text:gsub('[\r]', '')
+  text = text:gsub('[\\r]', '')
   if SAVE_BLANK_LINES then
-    text = text:gsub('\n\n', '\n \n')
+    text = text:gsub('\\n\\n', '\\n \\n')
   end
 
   -- 3. Loop for lines in the text
-  for line in text:gmatch('[^\n]+') do
+  for line in text:gmatch('[^\\n]+') do
     line = line:gsub("%s*$", "")
 
     -- 4. Ignore comment lines
@@ -206,7 +206,7 @@ MODULE_LUA = """-- =============================================================
 -- ======================================================================
 --                         M O D U L E . l u a
 -- ======================================================================
--- "A solver for the Advent of Code YYYY Day DD puzzle"
+-- A solver for the Advent of Code YYYY Day DD puzzle
 
 -- ----------------------------------------------------------------------
 --                                                                  local
@@ -220,7 +220,7 @@ local CLASS = { part2 = false, text = {}, numbers = {} }
 --                                                                  CLASS
 -- ======================================================================
 
--- "Object for TITLE"
+-- Object for TITLE
 
 function CLASS:CLASS (o)
 
@@ -243,7 +243,7 @@ function CLASS:CLASS (o)
 end
 
 function CLASS:_process_text(text)
-  -- "Assign values from text
+  -- Assign values from text
 
   -- 0. Precondition axioms
   assert(text ~= nil and #text > 0)
@@ -258,7 +258,7 @@ function CLASS:_process_text(text)
 end
 
 function CLASS:part_one(args)
-  -- "Returns the solution for part one"
+  -- Returns the solution for part one
 
   -- 0. Precondition axioms
   local verbose = args.verbose or false
@@ -272,7 +272,7 @@ end
 
 
 function CLASS:part_two(args)
-  -- "Returns the solution for part two"
+  -- Returns the solution for part two
 
   -- 0. Precondition axioms
   local verbose = args.verbose or false
@@ -305,21 +305,21 @@ TEST_MODULE_LUA = """-- ========================================================
 -- ======================================================================
 --                    t e s t _ M O D U L E . l u a
 -- ======================================================================
--- "Test solver for Advent of Code YYYY day DD, TITLE"
+-- Test solver for Advent of Code YYYY day DD, TITLE
 
 -- ----------------------------------------------------------------------
 --                                                                require
 -- ----------------------------------------------------------------------
-luaunit = require('luaunit')
+local luaunit = require('luaunit')
 
-MODULE = require('MODULE')
+local MODULE = require('MODULE')
 
 -- ----------------------------------------------------------------------
 --                                                              from_text
 -- ----------------------------------------------------------------------
 
 function from_text(text)
-  -- "Break the text into trimed, non-comment lines"
+  -- Break the text into trimed, non-comment lines
 
   -- 1. We start with no lines
   local result = {}
@@ -343,13 +343,13 @@ end
 -- ----------------------------------------------------------------------
 --                                                              constants
 -- ----------------------------------------------------------------------
-EXAMPLE_TEXT = [[
+local EXAMPLE_TEXT = [[
 ]]
-PART_ONE_TEXT = ""
-PART_TWO_TEXT = ""
+local PART_ONE_TEXT = ""
+local PART_TWO_TEXT = ""
 
-PART_ONE_RESULT = nil
-PART_TWO_RESULT = nil
+local PART_ONE_RESULT = nil
+local PART_TWO_RESULT = nil
 
 -- ======================================================================
 --                                                              TestCLASS
@@ -357,7 +357,7 @@ PART_TWO_RESULT = nil
 
 
 function test_empty_init()
-  -- "Test the default CLASS creation"
+  -- Test the default CLASS creation
 
   -- 1. Create default CLASS object
   local myobj = MODULE:CLASS()
@@ -370,7 +370,7 @@ function test_empty_init()
 end
 
 function test_text_init()
-  -- "Test the CLASS object creation from text"
+  -- Test the CLASS object creation from text
 
   -- 1. Create CLASS object from text
   local myobj = MODULE:CLASS({text=from_text(EXAMPLE_TEXT)})
@@ -383,7 +383,7 @@ function test_text_init()
 end
 
 function test_part_one()
-  -- "Test part one example of CLASS object"
+  -- Test part one example of CLASS object
 
   -- 1. Create CLASS object from text
   local myobj = MODULE:CLASS({text=from_text(PART_ONE_TEXT)})
@@ -394,7 +394,7 @@ function test_part_one()
 end
 
 function test_part_two()
-  -- "Test part two example of CLASS object"
+  -- Test part two example of CLASS object
 
   -- 1. Create CLASS object from text
   local myobj = MODULE:CLASS({part2=true, text=from_text(PART_TWO_TEXT)})
@@ -444,7 +444,7 @@ EXTRA_LUA = """-- ==============================================================
 -- ======================================================================
 --                         E X T R A . l u a
 -- ======================================================================
--- "OTHER for the Advent of Code YYYY Day DD puzzle"
+-- OTHER for the Advent of Code YYYY Day DD puzzle
 
 -- ----------------------------------------------------------------------
 --                                                                  local
@@ -460,7 +460,7 @@ local OTHER = { part2=false, text='' }
 
 
 function OTHER:OTHER (o)
-  -- "Object for TITLE"
+  -- Object for TITLE
 
 
   -- 1. Set the initial values
@@ -481,7 +481,7 @@ function OTHER:OTHER (o)
 end
 
 function OTHER:_process_text(text)
-  -- "Assign values from text
+  -- Assign values from text
 
   -- 0. Precondition axioms
   assert(text ~= nil and #text > 0)
@@ -507,26 +507,26 @@ TEST_EXTRA_LUA = """-- =========================================================
 -- ======================================================================
 --                    t e s t _ E X T R A . l u a
 -- ======================================================================
--- "Test OTHER for Advent of Code YYYY day DD, TITLE"
+-- Test OTHER for Advent of Code YYYY day DD, TITLE
 
 -- ----------------------------------------------------------------------
 --                                                                require
 -- ----------------------------------------------------------------------
-luaunit = require('luaunit')
+local luaunit = require('luaunit')
 
-EXTRA = require('EXTRA')
+local EXTRA = require('EXTRA')
 
 -- ----------------------------------------------------------------------
 --                                                              constants
 -- ----------------------------------------------------------------------
-EXAMPLE_TEXT = ""
+local EXAMPLE_TEXT = ""
 
 -- ======================================================================
 --                                                             TestOTHER
 -- ======================================================================
 
 function test_empty_init()
-  -- "Test the default OTHER creation"
+  -- Test the default OTHER creation
 
   -- 1. Create default OTHER object
   local myobj = EXTRA:OTHER()
@@ -538,7 +538,7 @@ function test_empty_init()
 end
 
 function test_text_init()
-  -- "Test the OTHER object creation from text"
+  -- Test the OTHER object creation from text
 
   -- 1. Create CLASS object from text
   local myobj = EXTRA:OTHER({text=EXAMPLE_TEXT})

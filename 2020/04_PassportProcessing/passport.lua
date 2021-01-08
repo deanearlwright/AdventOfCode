@@ -128,13 +128,14 @@ function Passport:is_field_valid(field)
   end
   
   -- 3. Must match one of the patterns
-  local matched = false
+  local is_match = false
   for pattern in tests.match:gmatch("[^|]+") do
-    if nil ~= value:match(pattern) then
-      matched = true
+    local matched = value:match(pattern)
+    if nil ~= matched and #matched == #value then
+      is_match = true
     end
   end
-    if matched == false then
+    if is_match == false then
     return false
   end
   
