@@ -228,13 +228,13 @@ function CLASS:CLASS (o)
   o = o or {}
   o.part2 = o.part2 or false
   o.text = o.text or {}
+  o.numbers = {}
 
   -- 2. Create the object metatable
   self.__index = self
   setmetatable(o, self)
 
   -- 3. Process text (if any)
-  o.numbers = {}
   if o.text ~= nil and #o.text > 0 then
      o:_process_text(o.text)
   end
