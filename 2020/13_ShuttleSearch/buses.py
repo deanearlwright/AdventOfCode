@@ -35,8 +35,7 @@ def chinese_remainder(n, a):
 
 
 def mul_inv(a, b):
-    b0 = b
-    x0, x1 = 0, 1
+    b0, x0, x1 = b, 0, 1
     if b == 1:
         return 1
     while a > 1:
