@@ -42,7 +42,7 @@ class Game(object):   # pylint: disable=R0902, R0205
         "Return the nth number spoken"
         assert turn > self.memory.turn
 
-        # 1. Loop until we we get to the specifiec turn
+        # 1. Loop until we get to the specified turn
         while self.memory.turn < turn - 1:
             self.memory.add_last_spoken()
 
