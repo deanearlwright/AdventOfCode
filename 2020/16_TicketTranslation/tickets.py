@@ -87,7 +87,7 @@ class Tickets(object):   # pylint: disable=R0902, R0205
         return result
 
     def departure_fields(self):
-        "Return the sum of the departure fields"
+        "Return the product of the departure fields"
 
         # 1. Mark invalid tickets as such
         self.ticket_scanning_error_rate()
@@ -95,7 +95,7 @@ class Tickets(object):   # pylint: disable=R0902, R0205
         # 2. Find_field_position()
         self.find_field_positions()
 
-        # 3. Return product of departure fields
+        # 3. Compute the product of the departure fields
         result = 1
         for rul in self.rules:
             if rul.name.startswith('departure'):
@@ -103,6 +103,8 @@ class Tickets(object):   # pylint: disable=R0902, R0205
                     print('Unable to determine field for %s' % rul.name)
                     continue
                 result *= self.mine.numbers[list(rul.position)[0]]
+
+        # 4. Return that product
         return result
 
     def find_field_positions(self):
