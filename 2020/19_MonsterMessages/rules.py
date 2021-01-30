@@ -82,7 +82,7 @@ class Rules(object):   # pylint: disable=R0902, R0205
                 print("try_rule: Checking %s of rule %d against %s" %
                       (alternative, number, message))
 
-            # 5. Try matchin and get the remainder of the message after matching
+            # 5. Try matching and get the remainder of the message after matching
             remaining = self.try_rules(alternative, message, verbose=verbose)
 
             # 6. if match, remember what still needs to be matched
@@ -100,29 +100,29 @@ class Rules(object):   # pylint: disable=R0902, R0205
             print("try_rules: Checking %s against %s" % (rule_nums, message))
 
         # 1. We want to match the entire message initially but
-        #    as we match the rules we match against the remaining
+        #    as we match the rules we want to match against the remaining
         #    characters in the messages (which may have different possibilities)
         messages = [message]
 
-        # 5. Loop for each rule in the (partial) rule definition
+        # 2. Loop for each rule in the (partial) rule definition
         for rule_num in rule_nums.split():
             rule_int = int(rule_num)
 
-            # 6. Match each rule in the definition keeping track of what remains
+            # 3. Match each rule in the definition keeping track of what remains
             remains = []
             for msg in messages:
                 remains += self.try_rule(rule_int, msg, verbose=verbose)
 
-            # 7. If we matched nothing, this definition is a bust
+            # 4. If we matched nothing, this definition is a bust
             if not remains:
                 if verbose:
                     print("try_rules: Unable to match rule %d against %s" % (rule_int, msg))
                 return []
 
-            # 8. What the rest of the rule must match next
+            # 5. What the rest of the rule must match next
             messages = remains
 
-        # 9. Return what this rule definition did not match
+        # 6. Return what this rule definition did not match
         return messages
 
     def match_rule(self, number, message, verbose=False):
@@ -160,7 +160,7 @@ class Rules(object):   # pylint: disable=R0902, R0205
             if self.match_rule(0, message, verbose=verbose):
                 result += 1
 
-        # 4. Return the count of the messages that match the specified rule
+        # 4. Return the count of the messages that matched rule 0
         return result
 
     def part_one(self, verbose=False, limit=0):
