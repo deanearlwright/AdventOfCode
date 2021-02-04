@@ -193,6 +193,7 @@ class Image(object):   # pylint: disable=R0902, R0205
         # 3. Loop for all the images, looking for a monster
         for the_image in images:
             the_count = self.count_monsters_in_image(the_image)
+            print("image %d" % the_count)
             if the_count > best_count:
                 best_image = the_image
                 best_count = the_count

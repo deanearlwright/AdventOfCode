@@ -112,17 +112,17 @@ class Tiles(object):   # pylint: disable=R0902, R0205
         if row == self.size:
             return grid
 
-        # 3. Loop for all the possible tiles (that aren't already in the grid)
+        # 2. Loop for all the possible tiles (that aren't already in the grid)
         for the_tile in self.tiles:
             if self._already_placed(grid, the_tile):
                 continue
 
-            # 4. Try placing the tile in the row and column of the grid
+            # 3. Try placing the tile in the row and column of the grid
             rest = self._position_tile(grid, row, col, the_tile)
             if rest is not None:
                 return rest
 
-        # 5. Nothing to see here
+        # 4. Nothing to see here
         return None
 
     def _position_tile(self, grid, row, col, the_tile):
