@@ -236,7 +236,7 @@ function Tiles:image()
       for _, col in ipairs(row) do
         
         -- 5. Add in this part of the image row
-        print("image", col[1].number, col[2], indx, col[3][indx])
+        -- print("image", col[1].number, col[2], indx, col[3][indx])
         table.insert(image_row, col[3][indx])
       end
       

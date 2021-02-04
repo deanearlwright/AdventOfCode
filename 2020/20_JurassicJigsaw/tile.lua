@@ -81,7 +81,7 @@ function Tile:construct_alternatives(combined)
   assert(#self.rows > 0 and #self.rows == string.len(self.rows[1]))
   
   -- 1. Set initial rotation (not actually rotated) and save it
-  self:_initial_rotation(combined)
+  self:_initial_rotation()
   
   -- 2. Add the four flips
   self:add_four_flips(combined)
