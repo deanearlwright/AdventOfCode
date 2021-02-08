@@ -140,6 +140,7 @@ class Game(object):   # pylint: disable=R0902, R0205
                 if winner == 0:
                     self.players[0].keep(card0, card1)
                 else:
+                    print("player 2 wins the recursion")
                     self.players[1].keep(card1, card0)
 
     def play(self, limit=0):
