@@ -403,26 +403,25 @@ PACKAGE_JSON_TS = """{
     "private": true
     },
   "devDependencies": {
-    "@types/jest": "^26.0.0",
-    "@types/node": "^14.0.13",
-    "@typescript-eslint/eslint-plugin": "^3.3.0",
-    "@typescript-eslint/parser": "^3.2.0",
-    "eslint": "^7.2.0",
-    "eslint-config-airbnb-typescript": "^8.0.2",
-    "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.21.2",
-    "eslint-plugin-jest": "^23.13.2",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.27",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.3",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.20.0",
-    "eslint-plugin-standard": "^4.0.1",
-    "jest": "^26.0.1",
-    "ts-jest": "^26.1.0",
-    "typescript": "^3.9.5"
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-react": "^7.22.0",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.1",
+    "typescript": "^4.1.5"
   },
   "dependencies": {
-    "yargs": "^15.3.1"
+    "yargs": "^16.2.0"
   },
   "jest": {
     "transform": {
