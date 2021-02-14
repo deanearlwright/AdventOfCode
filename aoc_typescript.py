@@ -382,6 +382,107 @@ describe('CLASS', () => {
 // end                   M O D U L E . t e s t . t s                  end
 // ======================================================================
 """
+EXTRA_TS = """// ======================================================================
+// TITLE
+//   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
+//
+// TypeScript implementation by Dr. Dean Earl Wright III
+// ======================================================================
+
+// ======================================================================
+//                           E X T R A . t s
+//
+// OTHER for the Advent of Code YYYY Day DD problem
+// ======================================================================
+
+// ----------------------------------------------------------------------
+//                                                                 import
+// ----------------------------------------------------------------------
+
+// ----------------------------------------------------------------------
+//                                                              constants
+// ----------------------------------------------------------------------
+
+// ======================================================================
+//                                                                  OTHER
+// ======================================================================
+
+export class OTHER {
+  // Object for TITLE
+  text: string[];
+
+  part2: boolean;
+
+  constructor(text: string[], part2 = false) {
+    // Create a OTHER object
+
+    // 1. Set the initial values
+    this.text = text === undefined ? [] : text;
+    this.part2 = part2 === undefined ? false : part2;
+
+    // 2. Process text (if any)
+    if (this.text.length !== 0) {
+      // TODO process the test
+    }
+  }
+}
+
+// ======================================================================
+// end                      E X T R A . t s                     end
+// ======================================================================
+"""
+
+EXTRA_TEST_TS = """// ======================================================================
+// TITLE
+//   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
+//
+// Typescript implementation by Dr. Dean Earl Wright III
+//  ======================================================================
+
+// ======================================================================
+//                      E X T R A . t e s t . t s
+//
+// Test OTHER for Advent of Code YYYY day DD problem
+// ======================================================================
+
+// ----------------------------------------------------------------------
+//                                                                 import
+// ----------------------------------------------------------------------
+
+import { fromText } from './aoc_DD';
+import { OTHER } from './EXTRA';
+
+// ----------------------------------------------------------------------
+//                                                              constants
+// ----------------------------------------------------------------------
+const EXAMPLE_TEXT = '';
+
+// ======================================================================
+//                                                              TestOTHER
+// ======================================================================
+
+describe('OTHER', () => {
+  test('Test the default OTHER creation', () => {
+    // 1. Create default OTHER object
+    const myobj = new OTHER([]);
+    // 2. Make sure it has the default values
+    expect(myobj.part2).toBe(false);
+    expect(myobj.text).toHaveLength(0);
+  });
+
+  test('Test the OTHER object creation from text', () => {
+    // 1. Create OTHER object from text
+    const myobj = new OTHER(fromText(EXAMPLE_TEXT));
+    // 2. Make sure it has the expected values
+    expect(myobj.part2).toBe(false);
+    expect(myobj.text).toHaveLength(0);
+  });
+}
+
+// ======================================================================
+// end                   E X T R A . t e s t . t s                  end
+// ======================================================================
+"""
 
 PACKAGE_JSON_TS = """{
   "name": "DIRLOWER",
@@ -416,6 +517,8 @@ PACKAGE_JSON_TS = """{
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.1",
     "typescript": "^4.1.5"
@@ -450,6 +553,7 @@ ESLINTRC_TS = """{
   "parser": "@typescript-eslint/parser",
   "extends": [
     "airbnb-typescript/base",
+    "plugin:react-hooks/recommended"
   ],
   "env": {
     "commonjs": true,
@@ -530,7 +634,10 @@ TYPESCRIPT_FILES = {
     'tsconfig.json': TSCONFIG_JSON,
 }
 
-TYPESCRIPT_EXTRA = {}
+TYPESCRIPT_EXTRA = {
+    'EXTRA.ts': EXTRA_TS,
+    'EXTRA.test.ts': EXTRA_TEST_TS,
+}
 
 
 def ts_before(args):
@@ -564,7 +671,11 @@ def ts_before(args):
         'RTYPE': rtype,
         'RNONE': rnone,
         'RCHECK': rchk,
-        'NOTCHK': nrchk
+        'NOTCHK': nrchk,
+        "EXTRA": args.ename.lower(),
+        "OTHER": args.ename.capitalize(),
+        "E X T R A": ' '.join(list(args.ename.lower())),
+
     }
 
     # 9. Return the text converters
