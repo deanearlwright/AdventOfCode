@@ -239,16 +239,22 @@ export class CLASS {
 
   part2: boolean;
 
+  numbers: number[];
+
   constructor(text: string[], part2 = false) {
     // Create a CLASS object
 
     // 1. Set the initial values
     this.text = text === undefined ? [] : text;
     this.part2 = part2 === undefined ? false : part2;
+    this.numbers = [];
+
 
     // 2. Process text (if any)
     if (this.text.length !== 0) {
-      // TODO process the test
+      for (let indx = 0; indx < this.text.length; indx += 1) {
+        this.numbers.push(+this.text[indx]);
+      }
     }
   }
 
@@ -409,7 +415,7 @@ EXTRA_TS = """// ===============================================================
 
 export class OTHER {
   // Object for TITLE
-  text: string[];
+  text: string;
 
   part2: boolean;
 
@@ -417,7 +423,7 @@ export class OTHER {
     // Create a OTHER object
 
     // 1. Set the initial values
-    this.text = text === undefined ? [] : text;
+    this.text = text === undefined ? '' : text;
     this.part2 = part2 === undefined ? false : part2;
 
     // 2. Process text (if any)
@@ -449,7 +455,6 @@ EXTRA_TEST_TS = """// ==========================================================
 //                                                                 import
 // ----------------------------------------------------------------------
 
-import { fromText } from './aoc_DD';
 import { OTHER } from './EXTRA';
 
 // ----------------------------------------------------------------------
@@ -464,7 +469,7 @@ const EXAMPLE_TEXT = '';
 describe('OTHER', () => {
   test('Test the default OTHER creation', () => {
     // 1. Create default OTHER object
-    const myobj = new OTHER([]);
+    const myobj = new OTHER('');
     // 2. Make sure it has the default values
     expect(myobj.part2).toBe(false);
     expect(myobj.text).toHaveLength(0);
@@ -472,7 +477,7 @@ describe('OTHER', () => {
 
   test('Test the OTHER object creation from text', () => {
     // 1. Create OTHER object from text
-    const myobj = new OTHER(fromText(EXAMPLE_TEXT));
+    const myobj = new OTHER(EXAMPLE_TEXT);
     // 2. Make sure it has the expected values
     expect(myobj.part2).toBe(false);
     expect(myobj.text).toHaveLength(0);
@@ -492,10 +497,10 @@ PACKAGE_JSON_TS = """{
   "scripts": {
     "lint": "eslint . --ext .ts",
     "test": "jest",
-    "part1": "tsc aoc_DD.ts && node aoc_DD.js -p 1",
-    "part2": "tsc aoc_DD.ts && node aoc_DD.js -p 2",
-    "part1v": "tsc aoc_DD.ts && node aoc_DD.js -p 1 -v",
-    "part2v": "tsc aoc_DD.ts && node aoc_DD.js -p 2 -v"
+    "part1": "tsc -lib ES2020 aoc_DD.ts && node aoc_DD.js -p 1",
+    "part2": "tsc -lib ES2020 aoc_DD.ts && node aoc_DD.js -p 2",
+    "part1v": "tsc -lib ES2020 aoc_DD.ts && node aoc_DD.js -p 1 -v",
+    "part2v": "tsc -lib ES2020 aoc_DD.ts && node aoc_DD.js -p 2 -v"
   },
   "keywords": ["Advent of Code"],
     "author": "Dr. Dean Earl Wright III",
@@ -587,10 +592,8 @@ ESLINTRC_TS = """{
 
 TSCONFIG_JSON = """{
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
     "lib": [
-        "es6"
+        "es2020"
     ],
     "strict": true,
     "moduleResolution": "node",
