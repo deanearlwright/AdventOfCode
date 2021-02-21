@@ -249,7 +249,6 @@ export class CLASS {
     this.part2 = part2 === undefined ? false : part2;
     this.numbers = [];
 
-
     // 2. Process text (if any)
     if (this.text.length !== 0) {
       for (let indx = 0; indx < this.text.length; indx += 1) {
@@ -419,7 +418,7 @@ export class OTHER {
 
   part2: boolean;
 
-  constructor(text: string[], part2 = false) {
+  constructor(text: string, part2 = false) {
     // Create a OTHER object
 
     // 1. Set the initial values
@@ -482,7 +481,7 @@ describe('OTHER', () => {
     expect(myobj.part2).toBe(false);
     expect(myobj.text).toHaveLength(0);
   });
-}
+});
 
 // ======================================================================
 // end                   E X T R A . t e s t . t s                  end
