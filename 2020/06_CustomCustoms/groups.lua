@@ -63,7 +63,7 @@ function Groups:_process_text(text)
   -- 2. Loop for each line of the text
   for _, line in ipairs(text) do
 
-    -- 3. If this is a blank like save the collected answers (if any)
+    -- 3. If this is a blank line save the collected answers (if any)
     if #line == 0 then
       if #answers > 0 then
         local grp = group:Group({part2=self.part2, text=answers})
