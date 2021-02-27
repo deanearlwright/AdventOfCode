@@ -117,7 +117,7 @@ end
 
 function Rules:required_inside(color)
   -- print("required_inside", color)
-  -- How many bags are required withing the specified bag
+  -- How many bags are required within the specified bag
   
   -- 1. Do we know the answer already, just return it
   if nil ~= self.known[color] then
