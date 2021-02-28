@@ -38,6 +38,8 @@ function Console:Console (o)
   o.part2 = o.part2 or false
   o.text = o.text or {}
   o.instructions = {}
+  o.pc = 1;
+  o.acc = 0;
 
   -- 2. Create the object metatable
   self.__index = self
@@ -132,15 +134,15 @@ function Console:fix_the_program()
         return self.acc
       end
       
-      -- 5. Reset the instruction
+      -- 6. Reset the instruction
       inst.operation = original
       
-      -- 6. And the visited flags
+      -- 7. And the visited flags
       self:reset_visited()
     end
   end
   
-  -- 7. We tried every instruction but had no luck
+  -- 8. We tried every instruction but had no luck
   return nil
 end
 
