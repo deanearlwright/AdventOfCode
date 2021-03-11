@@ -155,12 +155,12 @@ end
 function Conway:sight_line_neighbor(row, col, delta)
   -- Returns the next seat in the sight line
   
-  -- 1. Start with with floor
+  -- 1. Start with the floor
   local nbor = SEAT_FLOOR
   local delta_row = row + delta[1]
   local delta_col = col + delta[2]
   
-  -- 2. Loop until we are not at a a floor space
+  -- 2. Loop until we are not at a floor space
   while nbor == SEAT_FLOOR do
     
     -- 3. Check the next space
