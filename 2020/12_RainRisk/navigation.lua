@@ -49,10 +49,12 @@ function Navigation:execute_all()
   -- Execute all of the navigation instructions and return the manhattan distance
 
   -- 1. Loop for each line of the text
-  for _, line in ipairs(self.text) do
+  for indx, line in ipairs(self.text) do
 
     -- 2. Execute the instruction
     self.ferry:execute(line)
+    print(indx, line, self.ferry.loc[1], self.ferry.loc[2], 
+      self.ferry.waypoint[1], self.ferry.waypoint[2])
   end
   
   -- 3. Return the manhattan distance
