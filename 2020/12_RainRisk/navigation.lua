@@ -53,8 +53,8 @@ function Navigation:execute_all()
 
     -- 2. Execute the instruction
     self.ferry:execute(line)
-    print(indx, line, self.ferry.loc[1], self.ferry.loc[2], 
-      self.ferry.waypoint[1], self.ferry.waypoint[2])
+    -- print(indx, line, self.ferry.loc[1], self.ferry.loc[2], 
+    --  self.ferry.waypoint[1], self.ferry.waypoint[2])
   end
   
   -- 3. Return the manhattan distance
