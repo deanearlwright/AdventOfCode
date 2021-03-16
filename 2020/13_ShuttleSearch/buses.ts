@@ -131,6 +131,40 @@ export class Buses {
     return NaN;
   }
 
+  brute_force_contest(): number {
+    // Return the time that the first bus departs and all the rest in succession
+
+    // 1. Start with nothing
+    let time = 0;
+
+    // 2. Loop for all of the buses
+    for (let indx = 0; indx < this.buses.length;) {
+      const aBus = this.buses[indx];
+
+      // 3. When will this bus be available
+      const avail = aBus.nextDeparture(time);
+      // console.log(`time ${time} indx ${indx} id ${aBus.bid} off ${aBus.offset} avail ${avail}`);
+
+      // 4. Is it ready at the right time?
+      if (avail === time + aBus.offset) {
+        // 5. Great, advance to the next bus
+        indx += 1;
+      } else {
+        // 6. How unfortunate, we must start over
+        time = this.buses[0].nextDeparture(time + 1);
+        indx = 0;
+      }
+
+      // 7. Have we blown it?
+      if (time > 999999999999999) {
+        return NaN;
+      }
+    }
+
+    // 7. Return the winning time
+    return time;
+  }
+
   solution(verbose = false, limit = 0): number {
     if (verbose) console.log(`solution: ${limit}`);
     if (this.part2) {
