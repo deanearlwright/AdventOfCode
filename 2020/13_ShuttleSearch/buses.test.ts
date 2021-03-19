@@ -26,6 +26,13 @@ const EXAMPLE_TEXT = `
 7,13,x,x,59,x,31,19
 `;
 
+interface ExampleTests {
+  text: string;
+  result: number;
+}
+
+const EXAMPLES_PART_TWO: ExampleTests[] = [];
+
 const PART_ONE_TEXT = EXAMPLE_TEXT;
 const PART_TWO_TEXT = EXAMPLE_TEXT;
 
@@ -57,6 +64,18 @@ describe('Buses', () => {
     expect(myobj.buses).toHaveLength(5);
     // 3. Test methods
     expect(myobj.waiting()).toBe(295);
+  });
+
+  test('Test all of the part two examples', () => {
+    // 1. Loop for all of the examples for the second part
+    EXAMPLES_PART_TWO.forEach((test) => {
+      // 2. Create Bitmask object using the key as text
+      const myobj = new Bitmask(fromText(test.text), true);
+      expect(myobj.part2).toBe(true);
+      expect(myobj.text).toHaveLength(1);
+      // 3. Make sure it has the expected value
+      expect(myobj.solution()).toBe(test.result);
+    });
   });
 
   test('Test part one example of Buses object', () => {
