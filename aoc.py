@@ -286,12 +286,6 @@ def clean_day(year_dir, day_dir):
         print("Deleting %s" % pycache_dir, flush=True)
         shutil.rmtree(pycache_dir)
 
-    # 2. Remove .gitignore if it exists (use base one)
-    gitignore_file = os.path.join(year_dir, day_dir, '.gitignore')
-    if os.path.isfile(gitignore_file):
-        print("Deleting %s" % gitignore_file, flush=True)
-        os.remove(gitignore_file)
-
 # ----------------------------------------------------------------------
 #                                                             clean_year
 # ----------------------------------------------------------------------
