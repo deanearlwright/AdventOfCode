@@ -31,7 +31,13 @@ interface ExampleTests {
   result: number;
 }
 
-const EXAMPLES_PART_TWO: ExampleTests[] = [];
+const EXAMPLES_PART_TWO: ExampleTests[] = [
+  { text: '17,x,13,19', result: 3417 },
+  { text: '67,7,59,61', result: 754018 },
+  { text: '67,x,7,59,61', result: 779210 },
+  { text: '67,7,x,59,61', result: 1261476 },
+  { text: '1789,37,47,1889', result: 1202161486 },
+];
 
 const PART_ONE_TEXT = EXAMPLE_TEXT;
 const PART_TWO_TEXT = EXAMPLE_TEXT;
@@ -70,9 +76,10 @@ describe('Buses', () => {
     // 1. Loop for all of the examples for the second part
     EXAMPLES_PART_TWO.forEach((test) => {
       // 2. Create Bitmask object using the key as text
-      const myobj = new Bitmask(fromText(test.text), true);
+      const theText: string[] = ['123', test.text];
+      const myobj = new Buses(theText, true);
       expect(myobj.part2).toBe(true);
-      expect(myobj.text).toHaveLength(1);
+      expect(myobj.text).toHaveLength(2);
       // 3. Make sure it has the expected value
       expect(myobj.solution()).toBe(test.result);
     });

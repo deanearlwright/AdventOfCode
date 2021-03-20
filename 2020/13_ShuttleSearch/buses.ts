@@ -15,6 +15,7 @@
 //                                                                 import
 // ----------------------------------------------------------------------
 import { Bus } from './bus';
+import { CRT } from './crt';
 
 // ----------------------------------------------------------------------
 //                                                              constants
@@ -131,6 +132,29 @@ export class Buses {
     return NaN;
   }
 
+  contestCRT(): number {
+    // Return the time that the first bus departs and all the rest in succession
+
+    // 1. Start with nothing
+    const ids: number[] = [];
+    const offsets: number[] = [];
+
+    // 2. Loop for all of the buses
+    for (let indx = 0; indx < this.buses.length; indx += 1) {
+      const aBus = this.buses[indx];
+
+      // 3. Add to the mods and offset arrays
+      //   Using negative offsets worked in other languages but not here
+      ids.push(aBus.bid);
+      offsets.push(aBus.offset === 0 ? 0 : aBus.bid - aBus.offset);
+    }
+
+    // 4. Let CRT do the magic
+    //    With this code, I get 230903629977717 while the correct answer is 230903629977901
+    //    I guess I will have to go with bigint if I want to use CRT
+    return CRT(ids, offsets);
+  }
+
   brute_force_contest(): number {
     // Return the time that the first bus departs and all the rest in succession
 
@@ -168,7 +192,7 @@ export class Buses {
   solution(verbose = false, limit = 0): number {
     if (verbose) console.log(`solution: ${limit}`);
     if (this.part2) {
-      return this.contest();
+      return this.contestCRT();
     }
     return this.waiting();
   }
