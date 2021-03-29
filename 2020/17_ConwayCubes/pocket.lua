@@ -203,7 +203,7 @@ end
 function Pocket:run_until(cycle)
   -- Return count of active cubes after the specified cycle
   
-  -- 1. Loop until we react the specified cycle
+  -- 1. Loop until we reach the specified cycle
   while self.cycle < cycle do
     
     -- 2. Execute the next cycle
