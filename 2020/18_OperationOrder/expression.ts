@@ -137,7 +137,6 @@ export class Expression {
   getParen(tokens: Tokens): [Tokens, Tokens] {
     // Returns the parenthetical expression (minus parens) and the remaining tokens
     // 1. Start with nothing
-    const within: Tokens = [];
     let depth = 0;
 
     // 2. Loop until we run out of tokens
@@ -147,7 +146,7 @@ export class Expression {
 
       // 4. If this is the closing paren, return the collected within and remaining tokens
       if (token === ')' && depth === 0) {
-        return [within, tokens.slice(indx + 1)];
+        return [tokens.slice(0, indx), tokens.slice(indx + 1)];
       }
 
       // 5. If this is a closing paren, but not THE closing paren, decrease paren depth
@@ -161,10 +160,8 @@ export class Expression {
       } else if (token === '(') {
         depth += 1;
       }
-      // 7. Add token to within
-      within.push(token);
     }
-    // 8. No closing paren
+    // 7. No closing paren
     console.log('Missing closing paren');
     return [[], []];
   }
