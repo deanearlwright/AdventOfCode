@@ -128,9 +128,8 @@ export function fromText(text: string): string[] {
 
   // 2. Loop for lines in the text
   text.split(/\r?\n/).forEach((line) => {
-    // 3. But ignore blank and non-claim lines
-    // eslint-disable-next-line no-control-regex
-    const cleaned = line.replace(/[x09\x0a\x0b\x0c\x0d\x20\xa0]+$/, '');
+    // 3. But ignore blank and comment lines
+    const cleaned = line.trimEnd();
     if (cleaned.length > 0 && !cleaned.startsWith('!')) {
       // 4. Add the line
       lines.push(cleaned);
