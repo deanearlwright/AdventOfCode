@@ -170,7 +170,7 @@ function Shopping:resolve_allergens()
   for _ = 1, 10 do
     local done = true
     
-    -- 2. Once we find an allergen that can be in only one imgredient
+    -- 2. Once we find an allergen that can be in only one ingredient
     --    we can remove that ingredient from the other allergen lists
     for _, ingredients in pairs(self.mapping) do
       if #ingredients == 1 then
