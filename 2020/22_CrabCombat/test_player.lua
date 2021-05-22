@@ -70,7 +70,7 @@ function test_text_init()
   luaunit.assertEquals(myobj:is_deck_empty(), true)  
 end
 
-function test_close()
+function test_clone()
   -- Test the cloning a player
 
   -- 1. Create Game object from text
