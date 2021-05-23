@@ -29,5 +29,5 @@ predict what the labels on those cups will be when the crab is finished.
 In the above example (389125467), this would be 934001 and then 159792;
 multiplying these together produces 149245887792.
 
-Determine which two cups will end up immediately clockwise of cup 1. What d
-o you get if you multiply their labels together?
+Determine which two cups will end up immediately clockwise of cup 1. What 
+do you get if you multiply their labels together?
