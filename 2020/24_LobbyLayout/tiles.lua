@@ -229,7 +229,7 @@ function Tiles:next_day()
           local white_neighbors = self:neighbors(white_row, white_col)
           local white_count = self:black_neighbors(white_neighbors)
           
-          -- 7. A while tile changes to black if there are exactly two black tiles nearby
+          -- 7. A white tile changes to black if there are exactly two black tiles nearby
           if white_count == 2 then
             -- print("Setting to black", nearby)
             future[nearby] = true
@@ -265,7 +265,7 @@ function Tiles:multiple_days(days)
     self:next_day()
   end
   
-  -- 3. Return the number of black files
+  -- 3. Return the number of black tiles
   return self:how_many_black()
 end
 
