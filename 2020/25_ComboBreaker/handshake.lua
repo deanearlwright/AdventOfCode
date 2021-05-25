@@ -106,7 +106,7 @@ function Handshake:guess_private(public)
 end
 
 function Handshake:guess_encryption_key()
-  -- Determine the encryption key is the handshake trying to establish
+  -- Determine the encryption key that the handshake trying to establish
   print(string.format("The card's public key is %d", self.card_public))
   print(string.format("The door's public key is %d", self.door_public))
 
