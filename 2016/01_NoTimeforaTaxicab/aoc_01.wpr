@@ -1,0 +1,22 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_01.py'),
+                  loc('input.txt'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('taxicab.py'),
+                  loc('test_taxicab.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_01.py'): ('project',
+        (u'-p2 -v input.txt',
+         '')),
+                      loc('taxicab.py'): ('project',
+        (u'-p1 input.txt',
+         '')),
+                      loc('test_taxicab.py'): ('project',
+        (u'-p1 input.txt',
+         ''))}
