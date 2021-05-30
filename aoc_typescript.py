@@ -140,9 +140,8 @@ export function fromText(text: string): string[] {
 
   // 2. Loop for lines in the text
   text.split(/\\r?\\n/).forEach((line) => {
-    // 3. But ignore blank and non-claim lines
-    // eslint-disable-next-line no-control-regex
-    const cleaned = line.replace(/[\\x09\\x0a\\x0b\\x0c\\x0d\\x20\\xa0]+$/, '');
+    // 3. But ignore blank and comment lines
+    const cleaned = line.trimEnd();
     if (cleaned.length > 0 && !cleaned.startsWith('!')) {
       // 4. Add the line
       lines.push(cleaned);
@@ -508,27 +507,27 @@ PACKAGE_JSON_TS = """{
     "private": true
     },
   "devDependencies": {
-    "@types/jest": "^26.0.20",
-    "@types/node": "^14.14.27",
-    "@typescript-eslint/eslint-plugin": "^4.15.0",
-    "@typescript-eslint/parser": "^4.15.0",
-    "eslint": "^7.20.0",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "eslint": "^7.26.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jest": "^24.1.3",
+    "eslint-plugin-import": "^2.23.2",
+    "eslint-plugin-jest": "^24.3.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "jest": "^26.6.3",
-    "ts-jest": "^26.5.1",
-    "typescript": "^4.1.5"
+    "ts-jest": "^26.5.6",
+    "typescript": "^4.2.4"
   },
   "dependencies": {
-    "yargs": "^16.2.0"
+    "yargs": "^17.0.1"
   },
   "jest": {
     "transform": {

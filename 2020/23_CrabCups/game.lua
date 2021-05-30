@@ -14,7 +14,7 @@
 --                                                                  local
 -- ----------------------------------------------------------------------
 local Game = { part2 = false, text = {}, 
-  cups = {}, current = 0, size = 0 }
+  cups = {}, current = 0, maximum = 0 }
 -- ----------------------------------------------------------------------
 --                                                              constants
 -- ----------------------------------------------------------------------
@@ -56,17 +56,15 @@ function Game:process_text(text)
   -- 1. Start with nothing 
   local values = {}
   
-  -- 1. Loop for each line of the text
+  -- 2. Loop for each line of the text, adding the number to the values
   for num in text[1]:gmatch("%d") do
-
-    -- 2. Add the number to the values
     table.insert(values, tonumber(num))
   end
   
   -- 3. Loop for most of the values
   for indx = 1, #values - 1 do
   
-  -- 4. Make a linked list of the values in numbers
+  -- 4. Make a linked list of the values
     self.cups[values[indx]] = values[indx+1]
   end
   
@@ -151,7 +149,7 @@ function Game:move()
   end  
 
   -- 3. Place the picked cups after the destination
-  --    Befpre: ... -> c -> p1 -> p2 -> p3 -> a -> ...
+  --    Before: ... -> c -> p1 -> p2 -> p3 -> a -> ...
   --            ... -> d -> x -> ...
   --    After:  ... -> c -> a -> ...
   --            ... -> d -> p1 -> p2 -> p3 -> x -> ...
@@ -183,12 +181,12 @@ function Game:labels()
     nxt = self.cups[nxt]
   end
   
-  -- 5. Return the formatted object
+  -- 5. Return the cup labels
   return result
 end
   
 function Game:many_moves(number)
-  -- Similate many moves in the game
+  -- Simulate many moves in the game
   
   -- 1. Loop for the moves
   for _ = 1, number do

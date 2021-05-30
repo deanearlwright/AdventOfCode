@@ -133,7 +133,7 @@ function fromText(text) {
 
   // 2. Loop for lines in the text
   text.split(/\\r?\\n/).forEach((line) => {
-    // 3. But ignore blank and non-claim lines
+    // 3. But ignore blank and comment lines
     const cleaned = line.trimEnd();
     if (cleaned.length > 0 && !cleaned.startsWith('!')) {
       // 4. Add the line
