@@ -1,0 +1,18 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_07.py'),
+                  loc('input.txt'),
+                  loc('ip7addr.py'),
+                  loc('ip7list.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_ip7addr.py'),
+                  loc('test_ip7list.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_07.py'): ('project',
+        (u'-p2 -v input.txt',
+         ''))}

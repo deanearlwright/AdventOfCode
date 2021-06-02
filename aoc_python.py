@@ -418,7 +418,7 @@ class OTHER(object):   # pylint: disable=R0902, R0205
             self._process_text(text)
 
     def _process_text(self, text):
-        "Assign values from text
+        "Assign values from text"
 
         assert text is not None and len(text) > 0
 
@@ -456,7 +456,7 @@ import EXTRA
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
-EXAMPLE_TEXT = """"""
+EXAMPLE_TEXT = ""
 
 # ======================================================================
 #                                                             TestOTHER
