@@ -111,6 +111,8 @@ def parse_command_line():
                         help='Programming language is lua')
     parser.add_argument('--clean', dest='language', action='store_const', const='clean',
                         help='Clean non-executables from year')
+    parser.add_argument('--install', dest='language', action='store_const', const='install',
+                        help='(Re)Install node_modules and package-lock.json for year')
 
     # 3. Get the options and arguments
     args = parser.parse_args()
@@ -124,7 +126,7 @@ def parse_command_line():
     base_year = os.path.join(args.base, str(args.year))
     if not os.path.isdir(base_year):
         parser.error("Year directory (%s) does not exist" % (base_year))
-    if args.language != 'clean':
+    if not args.language in ['clean', 'install']:
         day_begins = '%02d_' % (args.day)
         with os.scandir(base_year) as scan_dir:
             for entry in scan_dir:
@@ -162,6 +164,9 @@ def check_args(args, parser):
     if args.language == 'clean':
         if ''.join(args.title) != 'clean':
             parser.error("Use title of 'clean' with --clean")
+    elif args.language == 'install':
+        if ''.join(args.title) != 'install':
+            parser.error("Use title of 'inatall' with --install")
     else:
         if not args.day:
             parser.error("Puzzle day is required")
@@ -304,6 +309,85 @@ def clean_year(args):
     return 0
 
 # ----------------------------------------------------------------------
+#                                                            install_day
+# ----------------------------------------------------------------------
+
+
+def install_day(year_dir, day_dir):
+    "Remove non-source files from the year"
+
+    # 1. Insure that there is a package.json file
+    json_file = os.path.join(year_dir, day_dir, 'package.json')
+    if not os.path.isfile(json_file):
+        print("No package.json (%s)" % json_file, flush=True)
+        return 1
+
+    # 2. Remove node_modules if it exists
+    node_modules_dir = os.path.join(year_dir, day_dir, 'node_modules')
+    if os.path.isdir(node_modules_dir):
+        print("Deleting %s" % node_modules_dir, flush=True)
+        shutil.rmtree(node_modules_dir)
+    if os.path.isdir(node_modules_dir):
+        print("Unable to Delete %s" % node_modules_dir, flush=True)
+        return 2
+
+    # 3. Create empty node_module directory
+    os.mkdir(node_modules_dir)
+    if not os.path.isdir(node_modules_dir):
+        print("Unable to create %s" % node_modules_dir, flush=True)
+        return 3
+
+    # 4. Remove package-lock.json if it exists
+    lock_file = os.path.join(year_dir, day_dir, 'package-lock.json')
+    if os.path.isfile(lock_file):
+        print("Deleting %s" % lock_file, flush=True)
+        os.remove(lock_file)
+    if os.path.isfile(lock_file):
+        print("Unable to delete %s" % lock_file, flush=True)
+        return 4
+
+    # 5. Verify the npm cache
+    print("Verifying the npm cache", flush=True)
+    os.system('npm cache verify')
+
+    # 6. Install packages to node_modules
+    print("Installing packages to node_modules", flush=True)
+    current_dir = os.getcwd()
+    os.chdir(os.path.join(year_dir, day_dir))
+    os.system('npm install')
+    os.chdir(current_dir)
+
+    # 7. Check that the package-lock file was created
+    if not os.path.isfile(lock_file):
+        print("Unable to create %s" % lock_file, flush=True)
+        return 7
+
+    # 8. Return success
+    return 0
+
+# ----------------------------------------------------------------------
+#                                                           install_year
+# ----------------------------------------------------------------------
+
+
+def install_year(args):
+    """Do npm install (creating package-lock.json) from the year"""
+    print('NPM Install year %d' % args.year, flush=True)
+
+    # 1. Get the directory for the year
+    year_dir = os.path.join(args.base, str(args.year))
+
+    # 2. Loop for all of the days in the year and do install
+    rc = 0
+    for day_dir in os.listdir(year_dir):
+        rc = install_day(year_dir, day_dir)
+        if rc != 0:
+            break
+
+    # 3 Return success
+    return rc
+
+# ----------------------------------------------------------------------
 #                                                                   main
 # ----------------------------------------------------------------------
 
@@ -314,9 +398,12 @@ def main():
     # 1. Get the command line options
     args = parse_command_line()
 
-    # 2. If cleaning, go do it
+    # 2. If cleaning or install, go do it
     if args.language == 'clean':
         return_code = clean_year(args)
+        sys.exit(return_code)
+    elif args.language == 'install':
+        return_code = install_year(args)
         sys.exit(return_code)
 
     # 3. Create the day directory (if needed)
