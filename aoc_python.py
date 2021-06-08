@@ -470,7 +470,7 @@ class TestOTHER(unittest.TestCase):  # pylint: disable=R0904
         "Test the default OTHER creation"
 
         # 1. Create default OTHER object
-        myobj = EXTRA.OTHER())
+        myobj = EXTRA.OTHER()
 
         # 2. Make sure it has the default values
         self.assertEqual(myobj.part2, False)
