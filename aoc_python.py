@@ -479,7 +479,7 @@ class TestOTHER(unittest.TestCase):  # pylint: disable=R0904
     def test_text_init(self):
         "Test the OTHER object creation from text"
 
-        # 1. Create CLASS object from text
+        # 1. Create OTHER object from text
         myobj = EXTRA.OTHER(text=EXAMPLE_TEXT)
 
         # 2. Make sure it has the expected values

@@ -1,0 +1,18 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_15.py'),
+                  loc('crt.py'),
+                  loc('discs.py'),
+                  loc('input.txt'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_crt.py'),
+                  loc('test_discs.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_15.py'): ('project',
+        (u'-p2 -v input.txt',
+         ''))}
