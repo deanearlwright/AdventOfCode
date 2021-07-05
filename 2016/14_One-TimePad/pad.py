@@ -22,14 +22,14 @@ import hashlib
 
 
 def part_one_hash(value):
-    "Return the md5 has for part 1"
+    "Return the md5 hash for part 1"
     m = hashlib.md5()
     m.update(bytes(value, 'utf8'))
     return m.hexdigest()
 
 
 def part_two_hash(value):
-    "Return the stretched md5 has for part 2"
+    "Return the stretched md5 hash for part 2"
     # 1. Start with the regular md5 hash
     h = part_one_hash(value)
     # 2. Now rehash it 2016 additional times
