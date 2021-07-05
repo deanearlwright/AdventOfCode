@@ -1,0 +1,23 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_11.py'),
+                  loc('elevator.py'),
+                  loc('floor.py'),
+                  loc('item.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('solver.py'),
+                  loc('state.py'),
+                  loc('test_elevator.py'),
+                  loc('test_floor.py'),
+                  loc('test_item.py'),
+                  loc('test_solver.py'),
+                  loc('test_state.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_11.py'): ('project',
+        (u'-p1 -v input.txt',
+         ''))}
