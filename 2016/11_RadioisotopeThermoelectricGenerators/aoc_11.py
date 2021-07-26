@@ -57,10 +57,10 @@ def part_one(args, input_lines):
     "Process part one of the puzzle"
 
     # 1. Create the puzzle solver
-    solver = solver.Solver(part2=False, text=input_lines)
+    one = solver.Solver(part2=False, text=input_lines)
 
     # 2. Determine the solution for part one
-    solution = solver.part_one(verbose=args.verbose, limit=args.limit)
+    solution = one.part_one(verbose=args.verbose, limit=args.limit)
     if solution is None:
         print("There is no solution")
     else:
@@ -78,10 +78,10 @@ def part_two(args, input_lines):
     "Process part two of the puzzle"
 
     # 1. Create the puzzle solver
-    solver = solver.Solver(part2=True, text=input_lines)
+    two = solver.Solver(part2=True, text=input_lines)
 
     # 2. Determine the solution for part two
-    solution = solver.part_two(verbose=args.verbose, limit=args.limit)
+    solution = two.part_two(verbose=args.verbose, limit=args.limit)
     if solution is None:
         print("There is no solution")
     else:

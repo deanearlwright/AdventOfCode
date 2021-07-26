@@ -20,7 +20,11 @@ import re
 # ----------------------------------------------------------------------
 INITIAL_FLOOR = 1
 MAXIMUM_FLOOR = 4
-RE_ELEVATOR = re.compile("The elevator is on floor ([0-9]) of ([0-9])")
+RE_ELEVATOR = re.compile("The elevator is on floor ([0-9]) of ([0-9]).")
+DELTA = {
+  'U': 1,
+  'D': -1,
+}
 
 # ======================================================================
 #                                                               Elevator
@@ -95,8 +99,21 @@ class Elevator(object):   # pylint: disable=R0902, R0205
             return True
         return self.items[0].are_safe(self.items[1])
 
+    def directions(self):
+        "In which directions can the elevator move"
+        result = []
+        if self.floor < self.floors:
+            result.append('U')
+        if self.floor > 1:
+            result.append('D')
+        return result
+
     def __str__(self):
-        return "The elevator is on floor %d of %d" % (self.floor, self.floors)
+        return "The elevator is on floor %d of %d." % (self.floor, self.floors)
+
+    def next_floor(self, direction):
+        "Return the floor number if the elevator moves in the specified direction"
+        return self.floor + DELTA[direction]
 
 
 # ----------------------------------------------------------------------

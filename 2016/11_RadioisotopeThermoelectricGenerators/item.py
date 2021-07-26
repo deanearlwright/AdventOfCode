@@ -19,7 +19,8 @@
 # ----------------------------------------------------------------------
 ITEM_TYPES = set(["microchip", "generator"])
 ITEM_ELEMENTS = set(["hydrogen", "lithium", "thulium", "plutonium",
-                     "strontium", "promethium", "ruthenium"])
+                     "strontium", "promethium", "ruthenium",
+                     "elerium", "dilithium"])
 OTHER = {
     'microchip': 'generator',
     'generator': 'microchip',

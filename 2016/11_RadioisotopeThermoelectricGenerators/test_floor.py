@@ -69,6 +69,7 @@ class TestFloor(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(len(myobj.microchips()), 0)
         self.assertEqual(myobj.trace(None, TRACE), "F0 . ... ... ... ...")
         self.assertEqual(myobj.is_safe(), True)
+        self.assertEqual(myobj.is_empty(), True)
 
     def test_text_init(self):
         "Test the Floor object creation from text"
@@ -92,6 +93,7 @@ class TestFloor(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(len(myobj.microchips()), 2)
         self.assertEqual(myobj.trace(None, TRACE), "F1 . ... HyM ... LiM")
         self.assertEqual(myobj.is_safe(), True)
+        self.assertEqual(myobj.is_empty(), False)
         self.assertEqual(myobj.has_pair(HYG), True)
         other = myobj.clone()
         self.assertEqual(myobj, other)
@@ -99,10 +101,12 @@ class TestFloor(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(myobj.has_pair(HYG), False)
         self.assertEqual(myobj.trace(None, TRACE), "F1 . ... ... ... LiM")
         self.assertEqual(myobj.is_safe(), True)
+        self.assertEqual(myobj.is_empty(), False)
         self.assertNotEqual(myobj, other)
         myobj.add(LIG)
         self.assertEqual(myobj.trace(None, TRACE), "F1 . ... ... LiG LiM")
         self.assertEqual(myobj.is_safe(), True)
+        self.assertEqual(myobj.is_empty(), False)
         self.assertTrue(myobj.is_safe_with([HYG]))
         self.assertFalse(myobj.is_safe_with([HYM]))
         self.assertTrue(myobj.is_safe_with([HYM, HYG]))
@@ -130,18 +134,28 @@ class TestFloor(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(myobj.elements(), set())
         self.assertEqual(len(myobj.generators()), 0)
         self.assertEqual(len(myobj.microchips()), 0)
+        self.assertEqual(myobj.safely_removable(), [])
         lift = elevator.Elevator()
         lift.floor = 4
         self.assertEqual(myobj.trace(lift, TRACE), "F4 E ... ... ... ...")
         self.assertEqual(myobj.is_safe(), True)
+        self.assertEqual(myobj.is_empty(), True)
         myobj.add(HYG)
         self.assertEqual(myobj.trace(lift, TRACE), "F4 E HyG ... ... ...")
         self.assertEqual(myobj.is_safe(), True)
+        self.assertEqual(myobj.is_empty(), False)
+        items = myobj.safely_removable()
+        self.assertEqual(len(items), 1)
+        self.assertEqual(len(items[0]), 1)
+        self.assertEqual(items[0][0], HYG)
         myobj.add(LIM)
+        self.assertEqual(myobj.is_safe(), False)
+        self.assertEqual(myobj.is_empty(), False)
         lift.load([LIG])
         lift.move_down()
         self.assertEqual(myobj.trace(lift, TRACE), "F4 v HyG ... ... LiM")
         self.assertEqual(myobj.is_safe(), False)
+        self.assertEqual(len(myobj.safely_removable()), 2)
 
     def test_many_floor(self):
         "Test the Floor object creation from text with many items"
@@ -168,6 +182,9 @@ class TestFloor(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(myobj.has_pair(THM), True)
         self.assertEqual(myobj.has_pair(HYG), False)
         self.assertEqual(myobj.is_safe(), True)
+        self.assertEqual(len(myobj.element_items("plutonium")), 1)
+        self.assertEqual(len(myobj.element_items("thulium")), 2)
+        self.assertEqual(len(myobj.element_items("kryptonium")), 0)
 
 
 # ----------------------------------------------------------------------

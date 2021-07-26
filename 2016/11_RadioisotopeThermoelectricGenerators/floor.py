@@ -14,12 +14,14 @@
 #                                                                 import
 # ----------------------------------------------------------------------
 import re
+from itertools import combinations
+
 import item
 
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
-ORDINAL = ["Unknown", "first", "second", "third", "fourth", "fifth"]
+ORDINAL = ["Unknown", "first", "second", "third", "fourth", "fifth", "sixth"]
 
 RE_FLOOR = re.compile('The ([a-z]+) floor contains ([a-z, -]+).')
 NOTHING = "nothing relevant"
@@ -89,6 +91,13 @@ class Floor(object):   # pylint: disable=R0902, R0205
         parts = pstr.rpartition(', ')
         return "%s %s, and %s." % (floor, parts[0], parts[2])
 
+    def __hash__(self):
+        return hash((self.number, frozenset(self.items)))
+
+    def is_empty(self):
+        "Returns True if there are no items on this floor"
+        return len(self.items) == 0
+
     def has(self, an_item):
         "Returns True if the item is on the floor"
         return an_item in self.items
@@ -108,6 +117,14 @@ class Floor(object):   # pylint: disable=R0902, R0205
         for an_item in self.items:
             result.add(an_item.ielement)
         return result
+
+    def element_items(self, element):
+        "Returns the items for a given element"
+        result = []
+        for an_item in self.items:
+            if an_item.ielement == element:
+                result.append(an_item)
+        return sorted(result)
 
     def generators(self):
         "Returns the generators on the floor"
@@ -134,6 +151,8 @@ class Floor(object):   # pylint: disable=R0902, R0205
                 result = ["F%d E" % self.number]
             elif elevator.last == self.number:
                 result = ["F%d %s" % (self.number, elevator.direction)]
+            else:
+                result = ["F%d ." % self.number]
         else:
             result = ["F%d ." % self.number]
 
@@ -156,6 +175,8 @@ class Floor(object):   # pylint: disable=R0902, R0205
 
     def add(self, an_item):
         "Add the specified item"
+        if an_item in self.items:
+            print("Already have %s on floor %d" % (str(an_item), self.number))
         assert an_item not in self.items
         self.items.add(an_item)
 
@@ -234,6 +255,34 @@ class Floor(object):   # pylint: disable=R0902, R0205
             if not other.has(an_item):
                 return False
         return True
+
+    def safely_removable(self):
+        "Returns list of items that can safely be removed"
+
+        # 1. Start with nothing
+        result = []
+
+        # 2. Try singular items
+        for an_item in self.items:
+
+            # 3. Is it safe to remove it?
+            if self.is_safe_without([an_item]):
+
+                # 4. Yes, Ass them to the result
+                # print("SR adding %s" % str(an_item))
+                result.append([an_item])
+
+        # 5. Try things is pairs
+        for pair in combinations(self.items, 2):
+
+            # 6. Is it safe to remove them and are they safe together?
+            if pair[0].are_safe(pair[1]) and self.is_safe_without(pair):
+
+                # 7. Yes, add them to the result
+                result.append(pair)
+
+        # 8. Return items that are safe to remove (if any)
+        return result
 
 
 # ----------------------------------------------------------------------

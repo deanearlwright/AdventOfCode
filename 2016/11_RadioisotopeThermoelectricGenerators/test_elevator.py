@@ -21,7 +21,7 @@ import item
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
-EXAMPLE_TEXT = "The elevator is on floor 2 of 6"
+EXAMPLE_TEXT = "The elevator is on floor 2 of 6."
 HYG = item.Item(text="hydrogen generator")
 HYM = item.Item(text="hydrogen-compatible microchip")
 LIG = item.Item(text="lithium generator")
@@ -50,6 +50,10 @@ class TestElevator(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(myobj.last, 0)
         self.assertEqual(myobj.direction, ' ')
 
+        # 3. Check methods
+        self.assertEqual(str(myobj), "The elevator is on floor 1 of 4.")
+        self.assertEqual(myobj.directions(), ['U'])
+
     def test_text_init(self):
         "Test the Elevator object creation from text"
 
@@ -58,7 +62,7 @@ class TestElevator(unittest.TestCase):  # pylint: disable=R0904
 
         # 2. Make sure it has the expected values
         self.assertEqual(myobj.part2, False)
-        self.assertEqual(len(myobj.text), 31)
+        self.assertEqual(len(myobj.text), 32)
         self.assertEqual(myobj.floor, 2)
         self.assertEqual(myobj.floors, 6)
         self.assertEqual(len(myobj.items), 0)
@@ -66,6 +70,10 @@ class TestElevator(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(myobj.direction, ' ')
 
         # 3. Check Methods
+        self.assertEqual(str(myobj), "The elevator is on floor 2 of 6.")
+        self.assertEqual(myobj.directions(), ['U', 'D'])
+        self.assertEqual(myobj.next_floor('U'), 3)
+        self.assertEqual(myobj.next_floor('D'), 1)
         self.assertFalse(myobj.can_move())
         self.assertFalse(myobj.can_move_up())
         self.assertFalse(myobj.can_move_down())
@@ -81,6 +89,8 @@ class TestElevator(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(myobj.floors, 6)
         self.assertEqual(myobj.last, 2)
         self.assertEqual(myobj.direction, 'v')
+        self.assertEqual(str(myobj), "The elevator is on floor 1 of 6.")
+        self.assertEqual(myobj.directions(), ['U'])
         self.assertTrue(myobj.can_move())
         self.assertTrue(myobj.can_move_up())
         self.assertFalse(myobj.can_move_down())

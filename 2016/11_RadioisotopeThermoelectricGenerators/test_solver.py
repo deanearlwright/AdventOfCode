@@ -28,10 +28,11 @@ The third floor contains a lithium generator.
 The fourth floor contains nothing relevant.
 """
 
-PART_ONE_TEXT = ""
+
+PART_ONE_TEXT = EXAMPLE_TEXT
 PART_TWO_TEXT = ""
 
-PART_ONE_RESULT = None
+PART_ONE_RESULT = 11
 PART_TWO_RESULT = None
 
 # ======================================================================
@@ -61,6 +62,9 @@ class TestSolver(unittest.TestCase):  # pylint: disable=R0904
         # 2. Make sure it has the expected values
         self.assertEqual(myobj.part2, False)
         self.assertEqual(len(myobj.text), 4)
+
+        # 3. Check methods
+        self.assertEqual(myobj.number_moves(), 11)
 
     def test_part_one(self):
         "Test part one example of Solver object"
