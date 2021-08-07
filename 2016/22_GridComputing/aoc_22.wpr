@@ -1,0 +1,17 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_22.py'),
+                  loc('grid.py'),
+                  loc('node.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_grid.py'),
+                  loc('test_node.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_22.py'): ('project',
+        (u'-p2 -v input.txt',
+         ''))}
