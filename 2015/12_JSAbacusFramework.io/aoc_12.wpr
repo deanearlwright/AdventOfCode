@@ -1,0 +1,15 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('abacus.py'),
+                  loc('aoc_12.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_abacus.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_12.py'): ('project',
+        (u'-p2 -v input.txt',
+         ''))}
