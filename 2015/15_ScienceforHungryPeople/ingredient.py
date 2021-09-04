@@ -19,7 +19,7 @@ import re
 #                                                              constants
 # ----------------------------------------------------------------------
 # Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8
-RE_INGREDIENT = re.compile("([A-Z][a-z]+): capacity (-?[0-9]+), durability (-?[0-9]+)," +
+RE_INGREDIENT = re.compile("([A-Za-z]+): capacity (-?[0-9]+), durability (-?[0-9]+)," +
                            " flavor (-?[0-9]+), texture (-?[0-9]+), calories (-?[0-9]+)")
 
 # ======================================================================

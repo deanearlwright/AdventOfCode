@@ -13,5 +13,5 @@ proj.file-list = [loc('aoc_15.py'),
                   loc('test_ingredient.py')]
 proj.file-type = 'shared'
 proj.launch-config = {loc('aoc_15.py'): ('project',
-        (u'-p1 -v input.txt',
+        (u'-p2 -v input.txt',
          ''))}

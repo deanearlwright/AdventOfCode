@@ -25,11 +25,11 @@ EXAMPLE_TEXT = """
 Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8
 Cinnamon: capacity 2, durability 3, flavor -2, texture -1, calories 3
 """
-PART_ONE_TEXT = ""
-PART_TWO_TEXT = ""
+PART_ONE_TEXT = EXAMPLE_TEXT
+PART_TWO_TEXT = EXAMPLE_TEXT
 
-PART_ONE_RESULT = None
-PART_TWO_RESULT = None
+PART_ONE_RESULT = 62842880
+PART_TWO_RESULT = 57600000
 
 # ======================================================================
 #                                                             TestCookie
