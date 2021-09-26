@@ -17,6 +17,8 @@
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
+UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+TERMINALS = ["Rn", "Ar", "Y", "Y"]
 
 # ======================================================================
 #                                                               Medicine
@@ -70,6 +72,33 @@ class Medicine(object):   # pylint: disable=R0902, R0205
         # 7. Return the expanded strings
         return result
 
+    def count_terminals(self):
+        "Return the count of the terminal symbols"
+
+        # 1. Start with nothing
+        result = 0
+
+        # 2. Loop for all of the terminal symbols
+        for terminal in TERMINALS:
+
+            # 3. Get the number of times it occurs
+            knt = self.calibrate.count(terminal)
+            print(terminal, knt)
+
+            # 4. Increment the total
+            result += knt
+
+        # 5. Return the total count of terminal symbols
+        print("terminals", result)
+        return result
+
+    def count_tokens(self):
+        "Return the number of token symbols"
+
+        uppers = [_ for _ in self.calibrate if _ in UPPER]
+        print("tokens", len(self.calibrate), len(uppers))
+        return len(uppers)
+
     def part_one(self, verbose=False, limit=0):
         "Returns the solution for part one"
 
@@ -88,7 +117,7 @@ class Medicine(object):   # pylint: disable=R0902, R0205
         assert limit >= 0
 
         # 1. Return the solution for part two
-        return None
+        return self.count_tokens() - (1 + self.count_terminals())
 
 
 # ----------------------------------------------------------------------
