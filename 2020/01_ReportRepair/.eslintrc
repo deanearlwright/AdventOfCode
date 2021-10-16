@@ -11,7 +11,8 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "extends": [
-    "airbnb-typescript/base",
+    "airbnb-base",
+    "airbnb-typescript/base"
   ],
   "env": {
     "commonjs": true,

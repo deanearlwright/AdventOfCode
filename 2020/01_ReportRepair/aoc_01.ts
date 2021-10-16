@@ -149,8 +149,10 @@ function fromFile(filepath: string): string[] {
   try {
     const data = readFileSync(filepath, 'utf8');
     return fromText(data);
-  } catch (e) {
-    console.log('Error', e.stack); // eslint-disable-line no-console
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      console.log('Error', e.stack); // eslint-disable-line no-console
+    }
     return [];
   }
 }

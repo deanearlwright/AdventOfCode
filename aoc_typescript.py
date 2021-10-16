@@ -161,8 +161,10 @@ function fromFile(filepath: string): string[] {
   try {
     const data = readFileSync(filepath, 'utf8');
     return fromText(data);
-  } catch (e) {
-    console.log('Error', e.stack); // eslint-disable-line no-console
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      console.log('Error', e.stack); // eslint-disable-line no-console
+    }
     return [];
   }
 }
@@ -507,27 +509,25 @@ PACKAGE_JSON_TS = """{
     "private": true
     },
   "devDependencies": {
-    "@types/jest": "^26.0.23",
-    "@types/node": "^15.3.0",
-    "@typescript-eslint/eslint-plugin": "^4.23.0",
-    "@typescript-eslint/parser": "^4.23.0",
-    "eslint": "^7.26.0",
-    "eslint-config-airbnb-typescript": "^12.3.1",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.0",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-airbnb-typescript": "^14.0.1",
     "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.23.2",
-    "eslint-plugin-jest": "^24.3.3",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^25.2.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-react": "^7.23.2",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "jest": "^26.6.3",
-    "ts-jest": "^26.5.6",
-    "typescript": "^4.2.4"
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-react": "^7.22.0",
+    "jest": "^27.2.5",
+    "ts-jest": "^27.0.6",
+    "typescript": "^4.4.4"
   },
   "dependencies": {
-    "yargs": "^17.0.1"
+    "yargs": "^17.2.1"
   },
   "jest": {
     "transform": {
@@ -555,8 +555,8 @@ ESLINTRC_TS = """{
   "root": true,
   "parser": "@typescript-eslint/parser",
   "extends": [
+    "airbnb-base",
     "airbnb-typescript/base",
-    "plugin:react-hooks/recommended"
   ],
   "env": {
     "commonjs": true,
