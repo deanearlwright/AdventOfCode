@@ -21,6 +21,17 @@ import wizsim
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
+SOLUTION_FROM_JAVASCRIPT_VERSION = """
+Spells: Zero - Recharge - Shield - MagicMissle - Shield - Drain - Drain
+        - Shield - Recharge - MagicMissle - Shield - Recharge
+        - MagicMissle - Shield - Drain - Shield - MagicMissle - Poison
+The solution for part one is 1824
+
+Spells: Zero - Shield - Recharge - Poison - Shield - Recharge - Poison
+        - Shield - Recharge - Poison - Shield - MagicMissle - Poison
+        - MagicMissle
+The solution for part two is 1937
+"""
 
 # ----------------------------------------------------------------------
 #                                                      parse_commnd_line
@@ -87,7 +98,6 @@ def part_two(args, input_lines):
     else:
         print("The solution for part two is %s" % (solution))
 
-
     # 3. Return result
     return solution is not None
 
@@ -145,9 +155,9 @@ def main():
 
     # 3. Process the appropiate part of the puzzle
     if args.part == 1:
-        result = part_one(args, input_text)
+        result = part_one(args, input_text)  # 1824
     else:
-        result = part_two(args, input_text)
+        result = part_two(args, input_text)  # 1937
 
     # 5. Set return code (0 if solution found, 2 if not)
     if result:

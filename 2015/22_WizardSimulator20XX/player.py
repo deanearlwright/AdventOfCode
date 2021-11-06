@@ -17,8 +17,7 @@
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
-INITIAL_HITPOINTS = 50
-INITIAL_MANA = 500
+
 # ======================================================================
 #                                                                 Player
 # ======================================================================
@@ -27,17 +26,18 @@ INITIAL_MANA = 500
 class Player(object):   # pylint: disable=R0902, R0205
     "Object for Wizard Simulator 20XX"
 
-    def __init__(self, text=None, part2=False):
+    def __init__(self, name="noone", text=None, part2=False):
 
         # 1. Set the initial values
         self.part2 = part2
         self.text = text
-        self.name = 'noone'
+        self.name = name
         self.attributes = {
-            'hitpoints': INITIAL_HITPOINTS,
+            'hitpoints': 0,
             'damage': 0,
             'armor': 0,
-            'mana': INITIAL_MANA
+            'mana': 0,
+            'used': 0,
         }
 
         # 2. Process text (if any)
@@ -63,7 +63,12 @@ class Player(object):   # pylint: disable=R0902, R0205
     def defend(self, attack):
         "Take damage based on the attack minus armor"
         self.attributes['hitpoints'] -= max(1, attack - self.attributes['armor'])
+        self.attributes['hitpoints'] = max(0, self.attributes['hitpoints'])
         return self.is_dead()
+
+    def wack(self):
+        "Take a single point of damage"
+        self.attributes['hitpoints'] -= 1
 
     def attack(self):
         "Returns the player's damage rating"
@@ -76,8 +81,8 @@ class Player(object):   # pylint: disable=R0902, R0205
         result = Player()
 
         # 2. Copy the fields
-        result.text = self.text[:]
-        result.name = self.name[:]
+        result.text = self.text
+        result.name = self.name
         result.part2 = self.part2
         for key, value in self.attributes.items():
             result.attributes[key] = value
@@ -90,6 +95,11 @@ class Player(object):   # pylint: disable=R0902, R0205
 
     def __setitem__(self, key, value):
         self.attributes[key] = int(value)
+
+    def __str__(self):
+        non_zero = ["%s:%d" % (_[0], self.attributes[_]) for _ in self.attributes
+                    if self.attributes[_] > 0]
+        return "%s(%s)" % (self.name[0], ",".join(non_zero))
 
 
 # ----------------------------------------------------------------------

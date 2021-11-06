@@ -105,7 +105,7 @@ class Wizsim {
         // eslint-disable-next-line no-console
         console.log(`Spells: ${cast.join(' - ')}`);
         // eslint-disable-next-line no-console
-        console.log(`Active = ${conflict.active.join()}`);
+        // console.log(`Active = ${conflict.active.join()}`);
       }
       if (limit > 0 && rounds > limit) {
         // eslint-disable-next-line no-console

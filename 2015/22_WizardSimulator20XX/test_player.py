@@ -46,11 +46,12 @@ class TestPlayer(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(myobj.part2, False)
         self.assertEqual(myobj.text, None)
         self.assertEqual(myobj.name, 'noone')
-        self.assertEqual(len(myobj.attributes), 4)
-        self.assertEqual(myobj.attributes['hitpoints'], 50)
+        self.assertEqual(len(myobj.attributes), 5)
+        self.assertEqual(myobj.attributes['hitpoints'], 0)
         self.assertEqual(myobj.attributes['damage'], 0)
         self.assertEqual(myobj.attributes['armor'], 0)
-        self.assertEqual(myobj.attributes['mana'], 500)
+        self.assertEqual(myobj.attributes['mana'], 0)
+        self.assertEqual(myobj.attributes['used'], 0)
 
     def test_text_init(self):
         "Test the Player object creation from text"
@@ -62,24 +63,25 @@ class TestPlayer(unittest.TestCase):  # pylint: disable=R0904
         self.assertEqual(myobj.part2, False)
         self.assertEqual(len(myobj.text), 4)
         self.assertEqual(myobj.name, 'noone')
-        self.assertEqual(len(myobj.attributes), 4)
+        self.assertEqual(len(myobj.attributes), 5)
         self.assertEqual(myobj.attributes['hitpoints'], 10)
-        self.assertEqual(myobj.attributes['damage'], 7)
-        self.assertEqual(myobj.attributes['armor'], 2)
+        self.assertEqual(myobj.attributes['damage'], 0)
+        self.assertEqual(myobj.attributes['armor'], 0)
         self.assertEqual(myobj.attributes['mana'], 250)
+        self.assertEqual(myobj.attributes['used'], 0)
 
         # 3. Check methods
         self.assertEqual(myobj.is_dead(), False)
-        self.assertEqual(myobj['hitpoints'], 12)
-        self.assertEqual(myobj['damage'], 7)
-        self.assertEqual(myobj['armor'], 2)
+        self.assertEqual(myobj['hitpoints'], 10)
+        self.assertEqual(myobj['damage'], 0)
+        self.assertEqual(myobj['armor'], 0)
         myobj['hitpoints'] = 0
         self.assertEqual(myobj.attributes['hitpoints'], 0)
         self.assertEqual(myobj['hitpoints'], 0)
         self.assertEqual(myobj.is_dead(), True)
         myobj['hitpoints'] = 12
         myobj.defend(5)
-        self.assertEqual(myobj['hitpoints'], 9)
+        self.assertEqual(myobj['hitpoints'], 7)
         self.assertEqual(myobj.is_dead(), False)
 
 

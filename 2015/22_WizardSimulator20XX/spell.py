@@ -42,9 +42,9 @@ class Spell(object):   # pylint: disable=R0902, R0205
         if text and len(text) > 0:
             parts = text.split(',')
             if len(parts) != 7:
-                print("Unable to parse: %s", text)
+                print("Unable to parse: %s" % text)
             else:
-                self.name = parts[0]
+                self.name = parts[0].strip()
                 self.cost = int(parts[1])
                 self.turns = int(parts[2])
                 self.damage = int(parts[3])
@@ -60,23 +60,24 @@ class Spell(object):   # pylint: disable=R0902, R0205
         "Cast the spell"
 
         # 1. Absorb the cost to cast the spell
-        wizard.mana -= self.cost
+        wizard['mana'] -= self.cost
+        wizard['used'] += self.cost
 
         # 2. Does it happen immediately? If so, do it
         if self.turns == 0:
             boss.defend(self.damage)
-            wizard.hitpoints += self.heal
+            wizard['hitpoints'] += self.heal
             return None
 
         # 3. Create a copy of spell for delayed effect
-        return Spell(str(self))
+        return self.clone()
 
     def effect(self, wizard, boss):
-        "Execute a spells delayed effect"
+        "Execute a spell's delayed effect"
 
         # 1. Shield
         if self.armor > 0:
-            wizard.armor = self.armor
+            wizard['armor'] = self.armor
 
         # 2. Poison
         if self.damage > 0:
@@ -84,7 +85,7 @@ class Spell(object):   # pylint: disable=R0902, R0205
 
         # 3. Recharge
         if self.mana > 0:
-            wizard.mana += self.mana
+            wizard['mana'] += self.mana
 
         # 4. Decrement timer
         self.turns -= 1
@@ -95,6 +96,18 @@ class Spell(object):   # pylint: disable=R0902, R0205
     def __str__(self):
         return "%s, %d, %d, %d, %d, %d, %d" % (
             self.name, self.cost, self.turns, self.damage, self.heal, self.armor, self.mana)
+
+    def clone(self):
+        "Make a clean copy"
+        other = Spell()
+        other.name = self.name
+        other.cost = self.cost
+        other.turns = self.turns
+        other.damage = self.damage
+        other.heal = self.heal
+        other.armor = self.armor
+        other.mana = self.mana
+        return other
 
 
 # ----------------------------------------------------------------------

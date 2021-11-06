@@ -5,13 +5,17 @@
 ##################################################################
 [project attributes]
 proj.file-list = [loc('aoc_22.py'),
+                  loc('input.txt'),
                   loc('part_one.txt'),
                   loc('part_two.txt'),
                   loc('player.py'),
                   loc('spell.py'),
                   loc('spells.py'),
+                  loc('state.py'),
                   loc('test_player.py'),
+                  loc('test_spell.py'),
                   loc('test_spells.py'),
+                  loc('test_state.py'),
                   loc('test_wizsim.py'),
                   loc('wizsim.py')]
 proj.file-type = 'shared'

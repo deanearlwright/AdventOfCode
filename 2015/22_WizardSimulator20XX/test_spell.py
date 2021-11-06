@@ -6,51 +6,72 @@
 # ======================================================================
 
 # ======================================================================
-#                    t e s t _ s p e l l s . p y
+#                    t e s t _ s p e l l . p y
 # ======================================================================
-"Test Spells for Advent of Code 2015 day 22, Wizard Simulator 20XX"
+"Test Spell for Advent of Code 2015 day 22, Wizard Simulator 20XX"
 
 # ----------------------------------------------------------------------
 #                                                                 import
 # ----------------------------------------------------------------------
 import unittest
 
-import spells
+import spell
+import player
 
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
-EXAMPLE_TEXT = ""
+EXAMPLE_TEXT = "Shield, 113, 6, 6, 0, 7, 0"
 
 # ======================================================================
-#                                                             TestSpells
+#                                                              TestSpell
 # ======================================================================
 
 
-class TestSpells(unittest.TestCase):  # pylint: disable=R0904
-    "Test Spells object"
+class TestSpell(unittest.TestCase):  # pylint: disable=R0904
+    "Test Spell object"
 
     def test_empty_init(self):
-        "Test the default Spells creation"
+        "Test the default Spell creation"
 
         # 1. Create default Shop object
-        myobj = spells.Spells()
+        myobj = spell.Spell()
 
         # 2. Make sure it has the default values
-        self.assertEqual(len(myobj.spells), 0)
+        self.assertEqual(myobj.name, "None")
+        self.assertEqual(myobj.cost, 9999)
+        self.assertEqual(myobj.turns, 0)
+        self.assertEqual(myobj.damage, 0)
+        self.assertEqual(myobj.heal, 0)
+        self.assertEqual(myobj.armor, 0)
+        self.assertEqual(myobj.mana, 0)
 
         # 3. Check methods
+        self.assertEqual(str(myobj), "None, 9999, 0, 0, 0, 0, 0")
 
     def test_text_init(self):
-        "Test the Spells creation from text"
+        "Test Spell creation from text"
 
         # 1. Create default Shop object
-        myobj = spells.Spells(text=spells.SPELLS)
+        myobj = spell.Spell(text=EXAMPLE_TEXT)
 
         # 2. Make sure it has the default values
-        self.assertEqual(len(myobj.spells), 5)
+        self.assertEqual(myobj.name, "Shield")
+        self.assertEqual(myobj.cost, 113)
+        self.assertEqual(myobj.turns, 6)
+        self.assertEqual(myobj.damage, 6)
+        self.assertEqual(myobj.heal, 0)
+        self.assertEqual(myobj.armor, 7)
+        self.assertEqual(myobj.mana, 0)
 
         # 3. Check methods
+        self.assertEqual(str(myobj), "Shield, 113, 6, 6, 0, 7, 0")
+        player_1 = player.Player(name="P1")
+        player_2 = player.Player(name="P2")
+        act = myobj.cast(player_1, player_2)
+        self.assertEqual(player_1["used"], 113)
+        self.assertNotEqual(act, None)
+        self.assertEqual(act.name, myobj.name)
 
 
 # ----------------------------------------------------------------------
@@ -60,5 +81,5 @@ if __name__ == '__main__':
     pass
 
 # ======================================================================
-# end                   t e s t _ s p e l l s . p y                  end
+# end                    t e s t _ s p e l l . p y                   end
 # ======================================================================
