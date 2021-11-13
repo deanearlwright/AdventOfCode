@@ -291,6 +291,12 @@ def clean_day(year_dir, day_dir):
         print("Deleting %s" % pycache_dir, flush=True)
         shutil.rmtree(pycache_dir)
 
+    # 3. Remove test/__pycache__ if it exists
+    pycache_dir = os.path.join(year_dir, day_dir, 'test/__pycache__')
+    if os.path.isdir(pycache_dir):
+        print("Deleting %s" % pycache_dir, flush=True)
+        shutil.rmtree(pycache_dir)
+
 # ----------------------------------------------------------------------
 #                                                             clean_year
 # ----------------------------------------------------------------------
