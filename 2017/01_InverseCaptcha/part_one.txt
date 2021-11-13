@@ -1,4 +1,10 @@
---- Day 1: Inverse Captcha ---
+Advent of Code 2017 Day 01 Part One
+
+From https://adventofcode.com/2017/day/01 by Eric Wastl
+
+----- Day 01: InverseCaptcha -----
+
+----- Part One -----
 
 The night before Christmas, one of Santa's Elves calls you in a panic. "The
 printer's broken! We can't print the Naughty or Nice List!" By the time you

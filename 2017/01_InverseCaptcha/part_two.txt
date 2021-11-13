@@ -1,6 +1,10 @@
---- Day 1: Inverse Captcha ---
+Advent of Code 2017 Day 01 Part Two
 
---- Part Two ---
+From https://adventofcode.com/2017/day/01 by Eric Wastl
+
+----- Day 01: InverseCaptcha -----
+
+----- Part Two -----
 
 You notice a progress bar that jumps to 50% completion. Apparently, the
 door isn't yet satisfied, but it did emit a star as encouragement. The
