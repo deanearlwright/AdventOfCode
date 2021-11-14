@@ -1,6 +1,10 @@
---- Day 2: Corruption Checksum ---
+Advent of Code 2017 Day 02 Part Two
 
---- Part Two ---
+From https://adventofcode.com/2017/day/02 by Eric Wastl
+
+----- Day 02: Corruption Checksum -----
+
+----- Part Two -----
 
 "Great work; looks like we're on the right track after all. Here's a star
 for your effort." However, the program seems a little worried. Can programs

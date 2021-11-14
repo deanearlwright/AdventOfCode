@@ -1,4 +1,10 @@
---- Day 2: Corruption Checksum ---
+Advent of Code 2017 Day 02 Part One
+
+From https://adventofcode.com/2017/day/02 by Eric Wastl
+
+----- Day 02: Corruption Checksum -----
+
+----- Part One -----
 
 As you walk through the door, a glowing humanoid shape yells in your
 direction. "You there! Your state appears to be idle. Come help us repair
