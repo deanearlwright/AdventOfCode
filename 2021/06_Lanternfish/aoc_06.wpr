@@ -1,0 +1,16 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_06.py'),
+                  loc('fishes.py'),
+                  loc('input.txt'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_fishes.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_06.py'): ('project',
+        (u'-p2 -v input.txt',
+         ''))}
