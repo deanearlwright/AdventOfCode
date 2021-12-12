@@ -16,8 +16,9 @@
 import argparse
 import datetime
 import os
-import sys
 import shutil
+import subprocess
+import sys
 
 import aoc_javascript as js
 import aoc_python as py
@@ -77,8 +78,7 @@ def parse_command_line():
     # 2. Create the command line parser
     desc = 'Advent of Code source file generator'
     sample = 'sample: python aoc.py --py -d 17 My Little Programs'
-    parser = argparse.ArgumentParser(description=desc,
-                                     epilog=sample)
+    parser = argparse.ArgumentParser(description=desc, epilog=sample)
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
                         dest='verbose', help='Print status messages to stdout')
     parser.add_argument('-l', '--language', choices=['python', 'javascript', 'typescript'],
@@ -99,6 +99,8 @@ def parse_command_line():
                         help="Title of puzzle")
     parser.add_argument('-a', '--add', action='store_true', default=False,
                         dest='add', help='Add files to existing directory')
+    parser.add_argument('-t', '--text', action='store_true', default=False,
+                        dest='aocd', help='Download input.txt using aocd')
     parser.add_argument('-e', '--extra', action='append',
                         dest='enames', help='Extra class file')
     parser.add_argument('--py', dest='language', action='store_const', const='python',
@@ -383,15 +385,43 @@ def install_year(args):
     # 1. Get the directory for the year
     year_dir = os.path.join(args.base, str(args.year))
 
-    # 2. Loop for all of the days in the year and do install
-    rc = 0
+    # 2. Assume that all will go well
+    problem = 0
+
+    # 3. Loop for all of the days in the year
     for day_dir in os.listdir(year_dir):
-        rc = install_day(year_dir, day_dir)
-        if rc != 0:
+
+        # 4. Install the day
+        problem = install_day(year_dir, day_dir)
+        if problem != 0:
             break
 
-    # 3 Return success
-    return rc
+    # 5. Return success (or failure)
+    return problem
+
+
+# ----------------------------------------------------------------------
+#                                                             aocd_input
+# ----------------------------------------------------------------------
+def aocd_input(args):
+    "Download input.txt using aocd"
+
+    # 1. Get the directory of the input.txt file
+    base_year_day = os.path.join(args.base, str(args.year),
+                                 '%02d_%s' % (args.day, ''.join(args.title)))
+
+    # 2. Get the compilete input.txt path
+    input_txt_path = os.path.join(base_year_day, INPUT_FILE_NAME)
+
+    # 3. Create the input.txt file
+    input_txt_file = open(input_txt_path, "w")
+
+    # 4. Create the aocd command
+    aocd_cmd = "aocd %d %d" % (args.day, args.year)
+
+    # 5. Use aocd to populate the file
+    subprocess.Popen(aocd_cmd, stdout=input_txt_file)
+
 
 # ----------------------------------------------------------------------
 #                                                                   main
@@ -417,7 +447,7 @@ def main():
                                  '%02d_%s' % (args.day, ''.join(args.title)))
     if args.add:
         if not os.path.isdir(base_year_day):
-            print("Missing day directory %s", base_year_day)
+            print("Missing day directory %s" % base_year_day)
             sys.exit(1)
     else:
         os.mkdir(base_year_day)
@@ -430,6 +460,17 @@ def main():
         with open(os.path.join(base_year_day, INPUT_FILE_NAME), 'w') as input_txt:
             input_txt.write(args.inval)
             input_txt.write('\n')
+
+    # 6. Use aocd to create input.txt (if requested)
+    if args.aocd:
+        aocd_input(args)
+
+    # 7. Check for input.txt file (if we should have built it)
+    if args.inval or args.aocd:
+        input_txt_file = os.path.join(base_year_day, INPUT_FILE_NAME)
+        if not os.path.isfile(input_txt_file):
+            print("Unable to create %s" % input_txt_file)
+            sys.exit(1)
 
 
 # ----------------------------------------------------------------------
