@@ -1,0 +1,16 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_12.py'),
+                  loc('caves.py'),
+                  loc('input.txt'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_caves.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_12.py'): ('project',
+        (u'-p2 -v input.txt',
+         ''))}
