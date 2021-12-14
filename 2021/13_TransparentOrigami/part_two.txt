@@ -1,0 +1,13 @@
+Advent of Code 2021 Day 13 Part Two
+
+From https://adventofcode.com/2021/day/13 by Eric Wastl
+
+----- Day 13: Transparent Origami -----
+
+----- Part Two -----
+
+Finish folding the transparent paper according to the instructions. The
+manual says the code is always eight capital letters.
+
+What code do you use to activate the infrared thermal imaging camera
+system?
