@@ -1,0 +1,24 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_23.py'),
+                  loc('burrow.py'),
+                  loc('hallway.py'),
+                  loc('input.txt'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('positions.py'),
+                  loc('puzzle.py'),
+                  loc('room.py'),
+                  loc('test_burrow.py'),
+                  loc('test_hallway.py'),
+                  loc('test_positions.py'),
+                  loc('test_puzzle.py'),
+                  loc('test_room.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_23.py'): ('project',
+        (u'-p1 -v input.txt',
+         ''))}
