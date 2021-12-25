@@ -146,7 +146,7 @@ def main():
     if args.part == 1:
         result = part_one(args, input_text)  # 12240
     else:
-        result = part_two(args, input_text)
+        result = part_two(args, input_text)  # 44618
 
     # 5. Set return code (0 if solution found, 2 if not)
     if result:
