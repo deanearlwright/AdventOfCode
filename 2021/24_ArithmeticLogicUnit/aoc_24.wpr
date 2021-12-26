@@ -1,0 +1,18 @@
+#!wing
+#!version=7.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('alu.py'),
+                  loc('aoc_24.py'),
+                  loc('input.txt'),
+                  loc('monad.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_alu.py'),
+                  loc('test_monad.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_24.py'): ('project',
+        (u'-p2 -v input.txt',
+         ''))}
