@@ -34,10 +34,14 @@ INPUT_FILE_NAME = 'input.txt'
 
 
 LANGUAGES = {
-    'python': (py.PYTHON_FILES, py.PYTHON_EXTRA, py.python_before, py.python_after),
-    'javascript': (js.JAVASCRIPT_FILES, js.JAVASCRIPT_EXTRA, js.js_before, js.js_after),
-    'typescript': (ts.TYPESCRIPT_FILES, ts.TYPESCRIPT_EXTRA, ts.ts_before, ts.ts_after),
-    'lua': (lua.LUA_FILES, lua.LUA_EXTRA, lua.lua_before, lua.lua_after)
+    'python': (py.PYTHON_FILES, py.PYTHON_EXTRA,
+               py.python_before, py.python_after),
+    'javascript': (js.JAVASCRIPT_FILES, js.JAVASCRIPT_EXTRA,
+                   js.js_before, js.js_after),
+    'typescript': (ts.TYPESCRIPT_FILES, ts.TYPESCRIPT_EXTRA,
+                   ts.ts_before, ts.ts_after),
+    'lua': (lua.LUA_FILES, lua.LUA_EXTRA,
+            lua.lua_before, lua.lua_after)
 }
 
 # ----- Substitions
@@ -81,13 +85,17 @@ def parse_command_line():
     parser = argparse.ArgumentParser(description=desc, epilog=sample)
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
                         dest='verbose', help='Print status messages to stdout')
-    parser.add_argument('-l', '--language', choices=['python', 'javascript', 'typescript'],
+    parser.add_argument('-l', '--language',
+                        choices=['python', 'javascript', 'typescript'],
                         help='Programming language (python or javascript)')
-    parser.add_argument('-i', '--input', action='store', default="", dest='inval',
+    parser.add_argument('-i', '--input', action='store',
+                        default="", dest='inval',
                         help='Puzzle input from web page')
-    parser.add_argument('-c', '--class', action='store', default="", dest='cname',
+    parser.add_argument('-c', '--class', action='store',
+                        default="", dest='cname',
                         help='Name of class')
-    parser.add_argument('-r', '--result', action='store', default="int", dest='rtype',
+    parser.add_argument('-r', '--result', action='store',
+                        default="int", dest='rtype',
                         choices=['str', 'int'], help='Name of class')
     parser.add_argument('-y', '--year', action='store', default=default_year,
                         help="Year of puzzle", dest='year', type=int)
@@ -103,17 +111,23 @@ def parse_command_line():
                         dest='aocd', help='Download input.txt using aocd')
     parser.add_argument('-e', '--extra', action='append',
                         dest='enames', help='Extra class file')
-    parser.add_argument('--py', dest='language', action='store_const', const='python',
+    parser.add_argument('--py', dest='language',
+                        action='store_const', const='python',
                         help='Programming language is python')
-    parser.add_argument('--js', dest='language', action='store_const', const='javascript',
+    parser.add_argument('--js', dest='language',
+                        action='store_const', const='javascript',
                         help='Programming language is javascript')
-    parser.add_argument('--ts', dest='language', action='store_const', const='typescript',
+    parser.add_argument('--ts', dest='language',
+                        action='store_const', const='typescript',
                         help='Programming language is typescript')
-    parser.add_argument('--lua', dest='language', action='store_const', const='lua',
+    parser.add_argument('--lua', dest='language',
+                        action='store_const', const='lua',
                         help='Programming language is lua')
-    parser.add_argument('--clean', dest='language', action='store_const', const='clean',
+    parser.add_argument('--clean', dest='language',
+                        action='store_const', const='clean',
                         help='Clean non-executables from year')
-    parser.add_argument('--install', dest='language', action='store_const', const='install',
+    parser.add_argument('--install', dest='language',
+                        action='store_const', const='install',
                         help='(Re)Install node_modules and package-lock.json for year')
 
     # 3. Get the options and arguments
@@ -128,12 +142,14 @@ def parse_command_line():
     base_year = os.path.join(args.base, str(args.year))
     if not os.path.isdir(base_year):
         parser.error("Year directory (%s) does not exist" % (base_year))
-    if not args.language in ['clean', 'install']:
+    if args.language not in ['clean', 'install']:
         day_begins = '%02d_' % (args.day)
         with os.scandir(base_year) as scan_dir:
             for entry in scan_dir:
-                if entry.name.startswith(day_begins) and entry.is_dir() and not args.add:
-                    parser.error("Day directory (%s) already exists" % (entry.name))
+                if entry.name.startswith(day_begins) and \
+                        entry.is_dir() and not args.add:
+                    parser.error("Day directory (%s) already exists" %
+                                 (entry.name))
 
     # 6. If there is no class name, use last word in title
     if not args.cname:
@@ -222,7 +238,8 @@ def copy_file(args, day_directory, text_converters, conv_after, file_info):
 
     # 1. Get full path of output file
     raw_file_name, raw_file_text = file_info
-    out_file_name = get_file_name(day_directory, raw_file_name, text_converters)
+    out_file_name = get_file_name(day_directory,
+                                  raw_file_name, text_converters)
 
     # 2. Don't write if the file already exists
     if os.path.isfile(out_file_name):
@@ -457,7 +474,8 @@ def main():
 
     # 5. Create input file for sepecified input (if any)
     if args.inval:
-        with open(os.path.join(base_year_day, INPUT_FILE_NAME), 'w') as input_txt:
+        with open(os.path.join(base_year_day,
+                               INPUT_FILE_NAME), 'w') as input_txt:
             input_txt.write(args.inval)
             input_txt.write('\n')
 

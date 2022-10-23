@@ -4,7 +4,9 @@
   "description": "Advent of Code 2015 Day 03, Perfectly Spherical Houses in a Vacuum",
   "main": "aoc_03.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "part1": "node aoc_03.js -p 1",
+    "part2": "node aoc_03.js -p 2"
   },
   "keywords": [
     "Advent of Code"

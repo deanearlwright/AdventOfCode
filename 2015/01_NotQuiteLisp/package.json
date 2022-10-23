@@ -4,7 +4,9 @@
   "description": "Advent of Code Year 2015 Day 01 Not Quite Lisp",
   "main": "aoc_01.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "part1": "node aoc_01.js -p 1",
+    "part2": "node aoc_01.js -p 2"
   },
   "keywords": [],
   "author": "Dr. Dean Earl Wright III",

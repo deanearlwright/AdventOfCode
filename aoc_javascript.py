@@ -10,6 +10,7 @@
 # ======================================================================
 "Generates javascript base programming source files for Advent of Code"
 
+
 AOC_DD_JS = """/* eslint-disable linebreak-style */
 
 // ======================================================================
@@ -88,11 +89,14 @@ function partOne(args, inputLines) {
   const solver = new MODULE.CLASS({ part2: false, text: inputLines });
 
   // 2. Determine the solution for part two
-  const solution = solver.partOne({ verbose: args.verbose, limit: args.limit });
+  const solution = solver.partOne({ verbose: args.verbose,
+                                    limit: args.limit });
   if (solution == null) {
-    console.log('There is no solution for part one'); // eslint-disable-line no-console
+    // eslint-disable-next-line no-console
+    console.log('There is no solution for part one');
   } else {
-    console.log('The solution for part one is', solution); // eslint-disable-line no-console
+    // eslint-disable-next-line no-console
+    console.log('The solution for part one is', solution);
   }
 
   // 3. Return result
@@ -110,11 +114,14 @@ function partTwo(args, inputLines) {
   const solver = new MODULE.CLASS({ part2: true, text: inputLines });
 
   // 2. Determine the solution for part two
-  const solution = solver.partTwo({ verbose: args.verbose, limit: args.limit });
+  const solution = solver.partTwo({ verbose: args.verbose,
+                                    limit: args.limit });
   if (solution == null) {
-    console.log('There is no solution for part two'); // eslint-disable-line no-console
+    // eslint-disable-next-line no-console
+    console.log('There is no solution for part two');
   } else {
-    console.log('The solution for part two is', solution); // eslint-disable-line no-console
+    // eslint-disable-next-line no-console
+    console.log('The solution for part two is', solution);
   }
 
   // 3. Return result
@@ -372,7 +379,9 @@ describe('CLASS', () => {
 
   test('Test part two example of CLASS object', () => {
     // 1. Create CLASS object from text
-    const myobj = new MODULE.CLASS({ part2: true, text: aocDD.fromText(PART_TWO_TEXT) });
+    const myobj = new MODULE.CLASS({ part2: true,
+                                     text: aocDD.fromText(PART_TWO_TEXT)
+                                   });
     // 2. Check the part two result
     expect(myobj.partTwo({ verbose: false })).toBe(PART_TWO_RESULT);
   });
@@ -392,7 +401,9 @@ PACKAGE_JSON_JS = """
   "scripts": {
     "test": "jest",
     "part1": "node aoc_DD.js -p 1",
-    "part2": "node aoc_DD.js -p 2"
+    "part2": "node aoc_DD.js -p 2",
+    "part1v": "node aoc_DD.js -p 1 -v",
+    "part2v": "node aoc_DD.js -p 2 -v"
   },
   "keywords": ["Advent of Code"],
     "author": "Dr. Dean Earl Wright III",

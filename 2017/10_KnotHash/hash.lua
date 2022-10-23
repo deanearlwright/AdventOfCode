@@ -34,6 +34,8 @@ function Hash:Hash(o)
   o.part2 = o.part2 or false
   o.text = o.text or {}
   o.length = o.length or DEFAULT_LENGTH
+  o.current = 0
+  o.skip = 0
   o.numbers = {}
   o.lengths = {}
 

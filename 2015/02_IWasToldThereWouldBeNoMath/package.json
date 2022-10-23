@@ -5,8 +5,8 @@
   "main": "aoc_02.js",
   "scripts": {
     "test": "jest",
-    "one": "node aoc_02.js -p 1",
-    "two": "node aoc_02.js -p 2"
+    "part1": "node aoc_02.js -p 1",
+    "part2": "node aoc_02.js -p 2"
   },
   "keywords": [
     "Advent of Code"
