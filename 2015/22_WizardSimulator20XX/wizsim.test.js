@@ -27,7 +27,6 @@ const EXAMPLE_TEXT = `Hit Points: 71
 Damage: 10
 `;
 
-
 const PART_ONE_13_RESULT = 226;
 const PART_ONE_14_RESULT = 641;
 const PART_TWO_13_RESULT = 226;
@@ -100,7 +99,6 @@ describe('Wizsim', () => {
     expect(myobj.spells.book.MagicMissle.mana).toBe(0);
     expect(myobj.spells.book.MagicMissle.turns).toBe(0);
   });
-
 
   test('Test part one example of Wizsim object with boss 13', () => {
     // 1. Create the wizard and boss players

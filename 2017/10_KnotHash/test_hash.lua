@@ -60,6 +60,10 @@ end
 local EXAMPLE_TEXT = [[
 3, 4, 1, 5
 ]]
+local P1_CURRENT = [[0, 3, 3, 1, 4]]
+local P1_SKIP = [[0, 1, 2, 3, 4]]
+local P1_RESULT = 12
+
 local PART_ONE_TEXT = EXAMPLE_TEXT
 local PART_TWO_TEXT = ""
 
@@ -101,6 +105,12 @@ function test_text_init()
   luaunit.assertEquals(myobj.skip, 0)
   luaunit.assertEquals(#myobj.numbers, 5)
   luaunit.assertEquals(#myobj.lengths, 4)
+
+  -- 3. Process the first knot
+  myknot.process_one_knot(3, verbose=false)
+  luaunit.assertEqual(myknot.current, P1_CURRENT[1])
+  luaunit.assertEqual(myknot.skip, P1_SKIP[1])
+  luaunit.assertEqual(myknot.values, P1_VALUES[1])
 
 end
 

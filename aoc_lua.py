@@ -51,7 +51,9 @@ function parse_command_line ()
      :args(1)
   parser:flag("-v --verbose", "Print status messages to stdout")
   parser:option("-p --part", "Puzzle Part (1 or 2)", "1")
-  parser:option("-l --limit", "Maximum limit (e.g., time, size, recursion) before stopping)", "0")
+  parser:option("-l --limit",
+                "Maximum limit (e.g., time, size, recursion) before stopping)",
+                "0")
 
   -- 2. Get the options and arguments
   local args = parser:parse()
@@ -341,7 +343,7 @@ end
 -- ----------------------------------------------------------------------
 function dict_len(d)
     local result = 0
-    for _ in pairs(d) do 
+    for _ in pairs(d) do
       result = result + 1
     end
     return result
@@ -395,7 +397,8 @@ function test_part_one()
   local myobj = MODULE:CLASS({text=from_text(PART_ONE_TEXT)})
 
   -- 2. Check the part one result
-  luaunit.assertEquals(myobj:part_one({verbose=false, limit=0}), PART_ONE_RESULT)
+  luaunit.assertEquals(myobj:part_one({verbose=false, limit=0}),
+                       PART_ONE_RESULT)
 
 end
 
@@ -406,7 +409,8 @@ function test_part_two()
   local myobj = MODULE:CLASS({part2=true, text=from_text(PART_TWO_TEXT)})
 
   -- 2. Check the part two result
-  luaunit.assertEquals(myobj:part_two({verbose=false, limit=0}), PART_TWO_RESULT)
+  luaunit.assertEquals(myobj:part_two({verbose=false, limit=0}),
+                       PART_TWO_RESULT)
 
 end
 
@@ -416,7 +420,7 @@ end
 os.exit( luaunit.LuaUnit.run() )
 
 -- ======================================================================
--- end                 t e s t _ M O D U L E . l u a                end
+-- end                 t e s t _ M O D U L E . l u a                  end
 -- ======================================================================
 """
 
@@ -576,6 +580,8 @@ LUA_EXTRA = {
     'EXTRA.lua': EXTRA_LUA,
     'test_EXTRA.lua': TEST_EXTRA_LUA,
 }
+
+LUA_UPDATE = {}
 
 
 def lua_before(args):

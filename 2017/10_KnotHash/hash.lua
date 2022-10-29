@@ -73,6 +73,8 @@ function Hash:_process_text(line)
     end
 end
 
+function Hash:process_one_knot(3, verbose=False)
+
 function Hash:part_one(args)
   -- Returns the solution for part one
 

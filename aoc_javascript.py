@@ -399,6 +399,8 @@ PACKAGE_JSON_JS = """
   "description": "Advent of Code YYYY Day DD, TITLE",
   "main": "aoc_DD.js",
   "scripts": {
+    "lint": "eslint . --ext .js",
+    "lint:fix": "npm run lint -- --fix",
     "test": "jest",
     "part1": "node aoc_DD.js -p 1",
     "part2": "node aoc_DD.js -p 2",
@@ -408,20 +410,20 @@ PACKAGE_JSON_JS = """
   "keywords": ["Advent of Code"],
     "author": "Dr. Dean Earl Wright III",
   "license": "MIT",
-  "devDependencies": {
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-jest": "^23.13.2",
+"devDependencies": {
+    "eslint": "^8.26.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^27.1.3",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "jest": "^26.6.3"
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.31.10",
+    "jest": "^29.2.2"
   },
   "dependencies": {
-    "typescript": "^3.9.5",
-    "yargs": "^15.3.1"
+    "yargs": "^17.6.0"
+
   }
 }
 """

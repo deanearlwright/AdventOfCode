@@ -53,8 +53,9 @@ def parse_command_line():
                         dest='part', help='Puzzle Part (1 or 2)')
     parser.add_argument('-l', '--limit', action='store', default=0, type=int,
                         dest='limit',
-                        help='Maximum limit (e.g., time, size, recursion) before stopping')
-    parser.add_argument('filepath', metavar='FILENAME', action='store', type=str,
+                        help='Maximum (time, size, recursion) before stopping')
+    parser.add_argument('filepath', metavar='FILENAME',
+                        action='store', type=str,
                         help="Location of puzzle input")
 
     # 2. Get the options and arguments

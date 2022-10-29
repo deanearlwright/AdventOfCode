@@ -20,10 +20,17 @@ import shutil
 import subprocess
 import sys
 
+from collections import namedtuple
+
 import aoc_javascript as js
 import aoc_python as py
 import aoc_typescript as ts
 import aoc_lua as lua
+
+# ----------------------------------------------------------------------
+#                                                                  types
+# ----------------------------------------------------------------------
+Lang = namedtuple("Lang", "files, extra, before, after")
 
 # ----------------------------------------------------------------------
 #                                                              constants
@@ -34,14 +41,14 @@ INPUT_FILE_NAME = 'input.txt'
 
 
 LANGUAGES = {
-    'python': (py.PYTHON_FILES, py.PYTHON_EXTRA,
-               py.python_before, py.python_after),
-    'javascript': (js.JAVASCRIPT_FILES, js.JAVASCRIPT_EXTRA,
-                   js.js_before, js.js_after),
-    'typescript': (ts.TYPESCRIPT_FILES, ts.TYPESCRIPT_EXTRA,
-                   ts.ts_before, ts.ts_after),
-    'lua': (lua.LUA_FILES, lua.LUA_EXTRA,
-            lua.lua_before, lua.lua_after)
+    'python': Lang(py.PYTHON_FILES, py.PYTHON_EXTRA,
+                   py.python_before, py.python_after),
+    'javascript': Lang(js.JAVASCRIPT_FILES, js.JAVASCRIPT_EXTRA,
+                       js.js_before, js.js_after),
+    'typescript': Lang(ts.TYPESCRIPT_FILES, ts.TYPESCRIPT_EXTRA,
+                       ts.ts_before, ts.ts_after),
+    'lua': Lang(lua.LUA_FILES, lua.LUA_EXTRA,
+                lua.lua_before, lua.lua_after)
 }
 
 # ----- Substitions
@@ -126,9 +133,9 @@ def parse_command_line():
     parser.add_argument('--clean', dest='language',
                         action='store_const', const='clean',
                         help='Clean non-executables from year')
-    parser.add_argument('--install', dest='language',
-                        action='store_const', const='install',
-                        help='(Re)Install node_modules and package-lock.json for year')
+    parser.add_argument('--update', dest='language',
+                        action='store_const', const='update',
+                        help='Update node_modules and package[-lock].json')
 
     # 3. Get the options and arguments
     args = parser.parse_args()
@@ -142,7 +149,7 @@ def parse_command_line():
     base_year = os.path.join(args.base, str(args.year))
     if not os.path.isdir(base_year):
         parser.error("Year directory (%s) does not exist" % (base_year))
-    if args.language not in ['clean', 'install']:
+    if args.language not in ['clean', 'update']:
         day_begins = '%02d_' % (args.day)
         with os.scandir(base_year) as scan_dir:
             for entry in scan_dir:
@@ -182,9 +189,9 @@ def check_args(args, parser):
     if args.language == 'clean':
         if ''.join(args.title) != 'clean':
             parser.error("Use title of 'clean' with --clean")
-    elif args.language == 'install':
-        if ''.join(args.title) != 'install':
-            parser.error("Use title of 'inatall' with --install")
+    elif args.language == 'update':
+        if ''.join(args.title) != 'update':
+            parser.error("Use title of 'update' with --update")
     else:
         if not args.day:
             parser.error("Puzzle day is required")
@@ -201,17 +208,17 @@ def copy_files(args, day_directory):
     """Copy language files to day directory"""
 
     # 1. Get list of language specific files and pre and post converters
-    files, extras, conv_before, conv_after = LANGUAGES[args.language]
+    lang = LANGUAGES[args.language]
 
     # 2. Execute the build converter function for this language
-    text_converters = conv_before(args)
+    text_converters = lang.before(args)
 
     # 3. Loop for all the files
-    for file_info in files.items():
+    for file_info in lang.files.items():
 
         # 4. Process this single file
         copy_file(args, day_directory, text_converters,
-                  conv_after, file_info)
+                  lang.after, file_info)
 
     # 5. Loop for any extra files
     if args.enames:
@@ -219,21 +226,23 @@ def copy_files(args, day_directory):
 
             # 6. Get the converters
             args.ename = ename
-            text_converters = conv_before(args)
+            text_converters = lang.conv_before(args)
 
             # 7. Loop for the extra files
-            for file_info in extras.items():
+            for file_info in lang.extras.items():
 
                 # 8. Process this single file
                 copy_file(args, day_directory, text_converters,
-                          conv_after, file_info)
+                          lang.after, file_info)
 
 # ----------------------------------------------------------------------
 #                                                              copy_file
 # ----------------------------------------------------------------------
 
 
-def copy_file(args, day_directory, text_converters, conv_after, file_info):
+def copy_file(args, day_directory,   # pylint: disable=R0913
+              text_converters, after, file_info,
+              overwrite=False):
     """Copy a single language file to day directory"""
 
     # 1. Get full path of output file
@@ -242,7 +251,7 @@ def copy_file(args, day_directory, text_converters, conv_after, file_info):
                                   raw_file_name, text_converters)
 
     # 2. Don't write if the file already exists
-    if os.path.isfile(out_file_name):
+    if os.path.isfile(out_file_name) and not overwrite:
         print("File %s already exists, skipping" % out_file_name)
         return
 
@@ -250,7 +259,7 @@ def copy_file(args, day_directory, text_converters, conv_after, file_info):
     converted_text = convert_text(text_converters, raw_file_text)
 
     # 4. Do any final conversion
-    final_text = conv_after(args, text_converters, converted_text)
+    final_text = after(args, text_converters, converted_text)
 
     # 5. Write file
     with open(out_file_name, 'w') as output_file:
@@ -334,21 +343,56 @@ def clean_year(args):
     return 0
 
 # ----------------------------------------------------------------------
-#                                                            install_day
+#                                                    update_package_json
 # ----------------------------------------------------------------------
 
 
-def install_day(year_dir, day_dir):
-    "Remove non-source files from the year"
+def update_package_json(args, day_directory):
+    "Rebuild package.json file for a single day"
 
     # 1. Insure that there is a package.json file
-    json_file = os.path.join(year_dir, day_dir, 'package.json')
+    json_file = os.path.join(day_directory, 'package.json')
+    if not os.path.isfile(json_file):
+        print("No package.json (%s)" % json_file, flush=True)
+        return 1
+    print('Updating package json file %s' % json_file, flush=True)
+
+    # 2. Determine if javascript or typescript
+    language = 'javascript'
+
+    # 3. Get list of language specific files and pre and post converters
+    lang = LANGUAGES[language]
+
+    # 4. Execute the build converter function for this language
+    text_converters = lang.before(args)
+
+    # 5. Get this languages file_info javascript
+    file_info = ('package.json', lang.files['package.json'])
+
+    # 6. Process this single file
+    copy_file(args, day_directory, text_converters,
+              lang.after, file_info, overwrite=True)
+
+    # 7 Return success
+    return 0
+
+# ----------------------------------------------------------------------
+#                                                             update_day
+# ----------------------------------------------------------------------
+
+
+def update_day(args, year_dir, day_dir):
+    "Rebuild package[-lock].json and node_modules for a single day"
+
+    # 1. Insure that there is a package.json file
+    day_directory = os.path.join(year_dir, day_dir)
+    json_file = os.path.join(day_directory, 'package.json')
     if not os.path.isfile(json_file):
         print("No package.json (%s)" % json_file, flush=True)
         return 1
 
     # 2. Remove node_modules if it exists
-    node_modules_dir = os.path.join(year_dir, day_dir, 'node_modules')
+    node_modules_dir = os.path.join(day_directory, 'node_modules')
     if os.path.isdir(node_modules_dir):
         print("Deleting %s" % node_modules_dir, flush=True)
         shutil.rmtree(node_modules_dir)
@@ -363,7 +407,7 @@ def install_day(year_dir, day_dir):
         return 3
 
     # 4. Remove package-lock.json if it exists
-    lock_file = os.path.join(year_dir, day_dir, 'package-lock.json')
+    lock_file = os.path.join(day_directory, 'package-lock.json')
     if os.path.isfile(lock_file):
         print("Deleting %s" % lock_file, flush=True)
         os.remove(lock_file)
@@ -375,29 +419,32 @@ def install_day(year_dir, day_dir):
     print("Verifying the npm cache", flush=True)
     os.system('npm cache verify')
 
-    # 6. Install packages to node_modules
-    print("Installing packages to node_modules", flush=True)
+    # 6. Regenerate package.json
+    update_package_json(args, day_directory)
+
+    # 7. Update packages to node_modules
+    print("Updating packages to node_modules", flush=True)
     current_dir = os.getcwd()
-    os.chdir(os.path.join(year_dir, day_dir))
-    os.system('npm install')
+    os.chdir(day_directory)
+    os.system('npm update -include=dev')
     os.chdir(current_dir)
 
-    # 7. Check that the package-lock file was created
+    # 8. Check that the package-lock file was created
     if not os.path.isfile(lock_file):
         print("Unable to create %s" % lock_file, flush=True)
-        return 7
+        return 8
 
-    # 8. Return success
+    # 9. Return success
     return 0
 
 # ----------------------------------------------------------------------
-#                                                           install_year
+#                                                            update_year
 # ----------------------------------------------------------------------
 
 
-def install_year(args):
+def update_year(args):
     """Do npm install (creating package-lock.json) from the year"""
-    print('NPM Install year %d' % args.year, flush=True)
+    print('NPM update year %d' % args.year, flush=True)
 
     # 1. Get the directory for the year
     year_dir = os.path.join(args.base, str(args.year))
@@ -408,10 +455,16 @@ def install_year(args):
     # 3. Loop for all of the days in the year
     for day_dir in os.listdir(year_dir):
 
-        # 4. Install the day
-        problem = install_day(year_dir, day_dir)
+        # 4. Determine day from day_dir
+        if day_dir[2] != '_':
+            print("Invalid day %s", day_dir)
+            return 4
+        args.day = int(day_dir[:2])
+
+        # 5. Install the day
+        problem = update_day(args, year_dir, day_dir)
         if problem != 0:
-            break
+            return 500 + problem
 
     # 5. Return success (or failure)
     return problem
@@ -451,12 +504,12 @@ def main():
     # 1. Get the command line options
     args = parse_command_line()
 
-    # 2. If cleaning or install, go do it
+    # 2. If cleaning or update, go do it
     if args.language == 'clean':
         return_code = clean_year(args)
         sys.exit(return_code)
-    elif args.language == 'install':
-        return_code = install_year(args)
+    elif args.language == 'update':
+        return_code = update_year(args)
         sys.exit(return_code)
 
     # 3. Create the day directory (if needed)
