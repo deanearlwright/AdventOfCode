@@ -50,7 +50,7 @@ function parseCommandLine(): Arguments {
   // Parse the command line options"
 
   // 1. Create the command line parser
-  const { argv } = yargs
+  const argv = yargs(process.argv.slice(2))
     .command('aoc_DD', 'TITLE - Day DD of Advent of Code YYYY', { })
     .option('verbose', {
       alias: 'v',
@@ -78,7 +78,8 @@ function parseCommandLine(): Arguments {
     })
     .example('$0 -p 1 input.txt', 'Solve part one of the puzzle')
     .help()
-    .alias('help', 'h');
+    .alias('help', 'h')
+    .parseSync();
 
   // 2. Get the options and arguments
   return argv;
@@ -509,25 +510,26 @@ PACKAGE_JSON_TS = """{
     "private": true
     },
   "devDependencies": {
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.11.0",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-airbnb-typescript": "^14.0.1",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jest": "^25.2.1",
+    "@types/jest": "^29.2.0",
+    "@types/node": "^18.11.7",
+    "@types/yargs": "^17.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.41.0",
+    "@typescript-eslint/parser": "^5.41.0",
+    "eslint": "^8.26.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^27.1.3",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-react": "^7.22.0",
-    "jest": "^27.2.5",
-    "ts-jest": "^27.0.6",
-    "typescript": "^4.4.4"
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.31.10",
+    "jest": "^29.2.2",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.8.4"
   },
   "dependencies": {
-    "yargs": "^17.2.1"
+    "yargs": "^17.6.0"
   },
   "jest": {
     "transform": {

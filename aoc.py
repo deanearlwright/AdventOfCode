@@ -15,6 +15,7 @@
 # ----------------------------------------------------------------------
 import argparse
 import datetime
+import glob
 import os
 import shutil
 import subprocess
@@ -359,6 +360,8 @@ def update_package_json(args, day_directory):
 
     # 2. Determine if javascript or typescript
     language = 'javascript'
+    if len(glob.glob(os.path.join(day_directory, '*.ts'))) > 0:
+        language = 'typescript'
 
     # 3. Get list of language specific files and pre and post converters
     lang = LANGUAGES[language]

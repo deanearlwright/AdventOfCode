@@ -40,7 +40,7 @@ function parseCommandLine() : aocArguments {
   // Parse the command line options"
 
   // 1. Create the command line parser
-  const { argv } = yargs
+  const argv = yargs(process.argv.slice(2))
     .command('aoc_01', 'No Time for a Taxicab - Day 01 of Advent of Code 2016', { })
     .option('verbose', {
       alias: 'v',
@@ -68,7 +68,8 @@ function parseCommandLine() : aocArguments {
     })
     .example('$0 -p 1 input.txt', 'Solve part one of the puzzle')
     .help()
-    .alias('help', 'h');
+    .alias('help', 'h')
+    .parseSync();
 
   // 2. Get the options and arguments
   return argv;
