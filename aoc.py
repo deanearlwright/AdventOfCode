@@ -27,6 +27,8 @@ import aoc_javascript as js
 import aoc_python as py
 import aoc_typescript as ts
 import aoc_lua as lua
+import aoc_go as go
+import aoc_rust as rust
 
 # ----------------------------------------------------------------------
 #                                                                  types
@@ -49,7 +51,11 @@ LANGUAGES = {
     'typescript': Lang(ts.TYPESCRIPT_FILES, ts.TYPESCRIPT_EXTRA,
                        ts.ts_before, ts.ts_after),
     'lua': Lang(lua.LUA_FILES, lua.LUA_EXTRA,
-                lua.lua_before, lua.lua_after)
+                lua.lua_before, lua.lua_after),
+    'go': Lang(go.GO_FILES, go.GO_EXTRA,
+               go.go_before, go.go_after),
+    'rust': Lang(rust.RUST_FILES, rust.RUST_EXTRA,
+                 rust.rust_before, rust.rust_after)
 }
 
 # ----- Substitions
@@ -131,6 +137,12 @@ def parse_command_line():
     parser.add_argument('--lua', dest='language',
                         action='store_const', const='lua',
                         help='Programming language is lua')
+    parser.add_argument('--go', dest='language',
+                        action='store_const', const='go',
+                        help='Programming language is go')
+    parser.add_argument('--rust', dest='language',
+                        action='store_const', const='rust',
+                        help='Programming language is rust')
     parser.add_argument('--clean', dest='language',
                         action='store_const', const='clean',
                         help='Clean non-executables from year')
