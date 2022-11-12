@@ -36,7 +36,7 @@ import * as yargs from 'yargs';
 import { CLASS } from './MODULE';
 
 // ----------------------------------------------------------------------
-//                                                        parseCommndLine
+//                                                       parseCommandLine
 // ----------------------------------------------------------------------
 
 interface Arguments {

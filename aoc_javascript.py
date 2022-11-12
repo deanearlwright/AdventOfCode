@@ -37,7 +37,7 @@ const process = require('process');
 const MODULE = require('./MODULE');
 
 // ----------------------------------------------------------------------
-//                                                        parseCommndLine
+//                                                       parseCommandLine
 // ----------------------------------------------------------------------
 
 function parseCommandLine() {

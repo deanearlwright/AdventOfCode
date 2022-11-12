@@ -36,7 +36,7 @@ local MODULE = require "MODULE"
 local SAVE_BLANK_LINES = false
 
 -- ----------------------------------------------------------------------
---                                                      parse_commnd_line
+--                                                     parse_command_line
 -- ----------------------------------------------------------------------
 
 function parse_command_line ()

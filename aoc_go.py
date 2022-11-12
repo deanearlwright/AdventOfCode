@@ -11,426 +11,438 @@
 # ======================================================================
 "Generates go base programming source files for Advent of Code"
 
-AOC_DD_GO = """-- ======================================================================
--- TITLE
---   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
---
--- lua implementation by Dr. Dean Earl Wright III
--- ======================================================================
-
--- ======================================================================
---                           a o c _ D D . g o
--- ======================================================================
--- Solve the puzzles for Advent of Code YYYY day DD
-
--- ----------------------------------------------------------------------
---                                                                require
--- ----------------------------------------------------------------------
-local argparse = require "argparse"
-
-local MODULE = require "MODULE"
-
--- ----------------------------------------------------------------------
---                                                              constants
--- ----------------------------------------------------------------------
-local SAVE_BLANK_LINES = false
-
--- ----------------------------------------------------------------------
---                                                      parse_commnd_line
--- ----------------------------------------------------------------------
-
-function parse_command_line ()
-  -- Parse the command line options
-
-  -- 1. Create the command line parser
-  local parser = argparse()
-    :name "aoc_DD"
-    :description "TITLE - Day DD of Advent of Code YYYY"
-    :epilog "sample: lua aoc_DD.lua input.txt"
-  parser:argument("filepath", "Location of puzzle input")
-     :args(1)
-  parser:flag("-v --verbose", "Print status messages to stdout")
-  parser:option("-p --part", "Puzzle Part (1 or 2)", "1")
-  parser:option("-l --limit",
-                "Maximum limit (e.g., time, size, recursion) before stopping)",
-                "0")
-
-  -- 2. Get the options and arguments
-  local args = parser:parse()
-
-  -- 3. Validate arguments
-  assert(args.part == "1" or args.part == "2")
-  args.part = tonumber(args.part)
-  args.limit = tonumber(args.limit)
-
-  -- 4. Return the validated arguments
-  return args
-end
-
--- ----------------------------------------------------------------------
---                                                               part_one
--- ----------------------------------------------------------------------
-
-function part_one(args, input_lines)
-  -- Process part one of the puzzle
-
-  -- 1. Create the puzzle solver
-  local solver = MODULE:CLASS({part2=false, text=input_lines})
-
-  -- 2. Determine the solution for part one
-  local solution = solver:part_one(args)
-  if solution == nil then
-     print("There is no solution")
-  else
-     print("The solution for part one is " .. solution)
-  end
-
-    -- 3. Return result
-    return solution ~= nil
-end
-
--- ----------------------------------------------------------------------
---                                                               part_two
--- ----------------------------------------------------------------------
-
-function part_two(args, input_lines)
-    -- Process part two of the puzzle
-
-    -- 1. Create the puzzle solver
-    local solver = MODULE:CLASS({part2=true, text=input_lines})
-
-    -- 2. Determine the solution for part two
-    local solution = solver:part_two(args)
-    if solution == nil then
-        print("There is no solution")
-    else
-        print("The solution for part two is " .. solution)
-    end
-
-    -- 3. Return result
-    return solution ~= nil
-end
-
--- ----------------------------------------------------------------------
---                                                              from_file
--- ----------------------------------------------------------------------
-
-function from_file(filepath)
-  -- Read the file
-  io.input(filepath)
-  return from_text(io.read("*all"))
-end
-
--- ----------------------------------------------------------------------
---                                                              from_text
--- ----------------------------------------------------------------------
-
-function from_text(text)
-  -- Break the text into trimed, non-comment lines
-
-  -- 1. We start with no lines
-  local result = {}
-
-  -- 2. Set up to save blank lines (if desired)
-  text = text:gsub('[\\r]', '')
-  if SAVE_BLANK_LINES then
-    text = text:gsub('\\n\\n', '\\n \\n')
-  end
-
-  -- 3. Loop for lines in the text
-  for line in text:gmatch('[^\\n]+') do
-    line = line:gsub("%s*$", "")
-
-    -- 4. Ignore comment lines
-    if #line > 0 and "!" == line:sub(1, 1) then
-      -- Ignore
-    else -- not a comment line
-      if #line > 0 or SAVE_BLANK_LINES then
-        table.insert(result, line)
-      end
-    end
-  end
-
-  -- 5. Return a table of cleaned text lines
-  return result
-end
-
--- ----------------------------------------------------------------------
---                                                                   main
--- ----------------------------------------------------------------------
-
-function main()
-  -- Read the Advent of Code problem and solve it
-
-  -- 1. Get the command line options
-  local args = parse_command_line()
-
-  -- 2. Read the puzzle file
-  local input_text = from_file(args.filepath)
-
-  -- 3. Process the appropiate part of the puzzle
-  local result = nil
-  if args.part == 1 then
-    result = part_one(args, input_text)
-  else
-    result = part_two(args, input_text)
-  end
-
-  -- 5. Set return code (0 if solution found, 2 if not)
-  if result then
-    os.exit(0)
-  end
-  os.exit(2)
-end
-
--- ----------------------------------------------------------------------
---                                                  module initialization
--- ----------------------------------------------------------------------
-main()
-
--- ======================================================================
--- end                         a o c _ D D . g o                      end
--- ======================================================================
-"""
-
-MODULE_GO = """-- ======================================================================
--- TITLE
---   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
---
--- lua implementation by Dr. Dean Earl Wright III
--- ======================================================================
-
--- ======================================================================
---                         M O D U L E . g o
--- ======================================================================
--- A solver for the Advent of Code YYYY Day DD puzzle
-
--- ----------------------------------------------------------------------
---                                                                  local
--- ----------------------------------------------------------------------
-local CLASS = { part2 = false, text = {}, numbers = {} }
-
--- ----------------------------------------------------------------------
---                                                              constants
--- ----------------------------------------------------------------------
-
--- ======================================================================
---                                                                  CLASS
--- ======================================================================
-
--- Object for TITLE
-
-function CLASS:CLASS (o)
-
-  -- 1. Set the initial values
-  o = o or {}
-  o.part2 = o.part2 or false
-  o.text = o.text or {}
-  o.numbers = {}
-
-  -- 2. Create the object metatable
-  self.__index = self
-  setmetatable(o, self)
-
-  -- 3. Process text (if any)
-  if o.text ~= nil and #o.text > 0 then
-     o:_process_text(o.text)
-  end
-
-  return o
-end
-
-function CLASS:_process_text(text)
-  -- Assign values from text
-
-  -- 0. Precondition axioms
-  assert(text ~= nil and #text > 0)
-
-  -- 1. Loop for each line of the text
-  for _, line in ipairs(text) do
-
-    -- 2. Add the number to the entries
-    table.insert(self.numbers, tonumber(line))
-    end
-
-end
-
-function CLASS:part_one(args)
-  -- Returns the solution for part one
-
-  -- 0. Precondition axioms
-  local verbose = args.verbose or false
-  local limit = args.limit or 0
-  assert(verbose == true or verbose == false)
-  assert(limit >= 0)
-
-  -- 1. Return the solution for part one
-  return nil
-end
-
-
-function CLASS:part_two(args)
-  -- Returns the solution for part two
-
-  -- 0. Precondition axioms
-  local verbose = args.verbose or false
-  local limit = args.limit or 0
-  assert(verbose == true or verbose == false)
-  assert(limit >= 0)
-
-  -- 1. Return the solution for part two
-  return nil
-end
-
--- ----------------------------------------------------------------------
---                                                  module initialization
--- ----------------------------------------------------------------------
-
-return CLASS
-
--- ======================================================================
--- end                        M O D U L E . g o                       end
--- ======================================================================
-"""
-
-MODULE_TEST_GO = """-- ======================================================================
--- TITLE
---   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
---
--- lua implementation by Dr. Dean Earl Wright III
--- ======================================================================
-
--- ======================================================================
---                    M O D U L E _ t e s t . g o
--- ======================================================================
--- Test solver for Advent of Code YYYY day DD, TITLE
-
--- ----------------------------------------------------------------------
---                                                                require
--- ----------------------------------------------------------------------
-local luaunit = require('luaunit')
-
-local MODULE = require('MODULE')
-
--- ----------------------------------------------------------------------
---                                                              from_text
--- ----------------------------------------------------------------------
-
-function from_text(text)
-  -- Break the text into trimed, non-comment lines
-
-  -- 1. We start with no lines
-  local result = {}
-
-  -- 2. Loop for lines in the text
-  for line in text:gmatch('[^\\r\\n]+') do
-
-    -- 3. But ignore blank and comment lines
-    line = line:gsub("%s*$", "")
-    if #line > 0 and "!" ~= line:sub(1, 1) then
-
-      -- 4. Add the line
-      table.insert(result, line)
-    end
-  end
-
-  -- 5. Return a table of cleaned lines
-  return result
-end
-
--- ----------------------------------------------------------------------
---                                                               dict_len
--- ----------------------------------------------------------------------
-function dict_len(d)
-    local result = 0
-    for _ in pairs(d) do
-      result = result + 1
-    end
+AOC_DD_GO = """// ======================================================================
+// TITLE
+//   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
+//
+// lua implementation by Dr. Dean Earl Wright III
+// ======================================================================
+
+// ======================================================================
+//                           a o c _ D D . g o
+// ======================================================================
+// Solve the puzzles for Advent of Code YYYY day DD
+
+package main
+
+// ----------------------------------------------------------------------
+//                                                                imports
+// ----------------------------------------------------------------------
+import (
+    "flag"
+    "fmt"
+    "os"
+    "regexp"
+    "strings"
+)
+
+// ----------------------------------------------------------------------
+//                                                              constants
+// ----------------------------------------------------------------------
+const (
+     SAVE_BLANK_LINES = false
+)
+
+// ----------------------------------------------------------------------
+//                                                                globals
+// ----------------------------------------------------------------------
+var aocVerbose bool
+var aocPart int
+var aocLimit int
+var aocInput string = "";
+
+// ----------------------------------------------------------------------
+//                                                          initialzation
+// ----------------------------------------------------------------------
+
+func init() {
+  // Parse the command line options
+
+  // 1. Create the command line parser
+  flag.IntVar(&aocPart, "part", 1, "Part 1 or 2 of the puzzle")
+  flag.IntVar(&aocPart, "p", 1, "Part 1 or 2 of the puzzle")
+  flag.IntVar(&aocLimit, "limit", 0, "Optional execution limit")
+  flag.IntVar(&aocLimit, "l", 0, "Optional execution limit")
+  flag.BoolVar(&aocVerbose, "verbose", false, "Optional extra messages")
+  flag.BoolVar(&aocVerbose, "v", false, "Optional extra messages")
+  flag.StringVar(&aocInput, "input", "", "Input file name")
+  flag.StringVar(&aocInput, "i", "", "Input file name")
+}
+
+// ----------------------------------------------------------------------
+//                                                       parseCommandLine
+// ----------------------------------------------------------------------
+
+func parseCommandLine() {
+
+    // 1. Parse the command line to aocXXXX variables
+    flag.Parse()
+
+    // 2. Verify that part is 1 or 2
+    if aocPart != 1 && aocPart != 2 {
+        fmt.Println("part (-p) must be 1 or 2")
+        os.Exit(1)
+    }
+
+    // 3. If input file name not specified, get from unprocessed arguments
+    if aocInput == "" {
+        if flag.NArg() == 0 {
+            fmt.Println("Input file name (-i) not specified")
+            os.Exit(1)
+        }
+        aocInput = flag.Arg(0)
+    }
+}
+
+// ----------------------------------------------------------------------
+//                                                                partOne
+// ----------------------------------------------------------------------
+
+func partOne(verbose bool, limit int, input_lines []string) string {
+    // Process part one of the puzzle
+
+    // 1. Create the puzzle solver
+    solver := NewCLASS(false, input_lines)
+
+    // 2. Determine the solution for part one
+    solution := solver.PartOne(verbose, limit)
+    if solution == "" {
+        fmt.Println("There is no solution")
+    } else {
+        fmt.Println("The solution for part one is " + solution)
+    }
+
+    // 3. Return result
+    return solution
+}
+
+// ----------------------------------------------------------------------
+//                                                                partTwo
+// ----------------------------------------------------------------------
+
+func partTwo(verbose bool, limit int, input_lines []string) string {
+    // Process part two of the puzzle
+
+    // 1. Create the puzzle solver
+    solver := NewCLASS(true, input_lines)
+
+    // 2. Determine the solution for part two
+    solution := solver.PartTwo(verbose, limit)
+    if solution == "" {
+        fmt.Println("There is no solution")
+    } else {
+        fmt.Println("The solution for part two is " + solution)
+    }
+
+    // 3. Return result
+    return solution
+}
+
+// ----------------------------------------------------------------------
+//                                                               fromFile
+// ----------------------------------------------------------------------
+
+func fromFile(filepath string) []string {
+    // 1. Read the file
+    b, err := os.ReadFile(filepath)
+    if err != nil {
+        fmt.Print(err)
+        os.Exit(2)
+    }
+
+    // 2. Return the contents as a string
+    return fromText(string(b))
+}
+
+// ----------------------------------------------------------------------
+//                                                               fromText
+// ----------------------------------------------------------------------
+
+func fromText(text string) []string {
+    // Break the text into trimed, non-comment lines
+
+    // 1. We start with no lines
+    var result []string
+
+    // 2. Break up the text into lines
+    lines := regexp.MustCompile("\\\\r?\\\\n").Split(text, -1)
+
+    // 3. Loop for lines in the text
+    for _, line := range lines {
+
+        // 4. Ignore comment lines and maybe blank lines
+        if len(line) > 0 {
+            if !strings.HasPrefix(line, "!") {
+                result = append(result, line)
+            }
+        } else if SAVE_BLANK_LINES {
+            result = append(result, "")
+        }
+    }
+
+    // 5. Return a table of cleaned text lines
     return result
-end
+}
 
--- ----------------------------------------------------------------------
---                                                              constants
--- ----------------------------------------------------------------------
-local EXAMPLE_TEXT = [[
-]]
-local PART_ONE_TEXT = ""
-local PART_TWO_TEXT = ""
+// ----------------------------------------------------------------------
+//                                                                   main
+// ----------------------------------------------------------------------
 
-local PART_ONE_RESULT = nil
-local PART_TWO_RESULT = nil
+func main() {
+    // Read the Advent of Code problem and solve it
 
--- ======================================================================
---                                                              TestCLASS
--- ======================================================================
+    // 1. Get the command line options
+    parseCommandLine()
 
-function test_empty_init()
-  -- Test the default CLASS creation
+    // 2. Read the puzzle file
+    input_text := fromFile(aocInput)
 
-  -- 1. Create default CLASS object
-  local myobj = MODULE:CLASS()
+    // 3. Process the appropiate part of the puzzle
+    var result string
+    if aocPart == 1 {
+        result = partOne(aocVerbose, aocLimit, input_text)
+    } else {
+        result = partTwo(aocVerbose, aocLimit, input_text)
+    }
 
-  -- 2. Make sure it has the default values
-  luaunit.assertEquals(myobj.part2, false)
-  luaunit.assertEquals(#myobj.text, 0)
-  luaunit.assertEquals(#myobj.numbers, 0)
+    // 5. Set return code (0 if solution found, 2 if not)
+    if len(result) > 0 {
+        os.Exit(0)
+    }
+    os.Exit(2)
+}
 
-end
+// ======================================================================
+// end                         a o c _ D D . g o                      end
+// ======================================================================
+"""
 
-function test_text_init()
-  -- Test the CLASS object creation from text
+MODULE_GO = """// ======================================================================
+// TITLE
+//   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
+//
+// lua implementation by Dr. Dean Earl Wright III
+// ======================================================================
 
-  -- 1. Create CLASS object from text
-  local myobj = MODULE:CLASS({text=from_text(EXAMPLE_TEXT)})
+// ======================================================================
+//                         M O D U L E . g o
+// ======================================================================
+// A solver for the Advent of Code YYYY Day DD puzzle
 
-  -- 2. Make sure it has the expected values
-  luaunit.assertEquals(myobj.part2, false)
-  luaunit.assertEquals(#myobj.text, 0)
-  luaunit.assertEquals(#myobj.numbers, 0)
+package main
 
-end
+// ----------------------------------------------------------------------
+//                                                                imports
+// ----------------------------------------------------------------------
+import (
+    "fmt"
+    "os"
+    "strconv"
+)
 
-function test_part_one()
-  -- Test part one example of CLASS object
+// ----------------------------------------------------------------------
+//                                                              constants
+// ----------------------------------------------------------------------
+const (
+)
 
-  -- 1. Create CLASS object from text
-  local myobj = MODULE:CLASS({text=from_text(PART_ONE_TEXT)})
+// ======================================================================
+//                                                                  CLASS
+// ======================================================================
 
-  -- 2. Check the part one result
-  luaunit.assertEquals(myobj:part_one({verbose=false, limit=0}),
-                       PART_ONE_RESULT)
+// Object for TITLE
 
-end
+type CLASS struct {
+    Part2 bool
+    Text  []string
+    Numbers []int
+}
 
-function test_part_two()
-  -- Test part two example of CLASS object
+func NewCLASS(part2 bool, text []string) *CLASS {
 
-  -- 1. Create CLASS object from text
-  local myobj = MODULE:CLASS({part2=true, text=from_text(PART_TWO_TEXT)})
+    // 1. Set the initial values
+    p := new(CLASS)
+    p.Part2 = part2
+    p.Text = text
 
-  -- 2. Check the part two result
-  luaunit.assertEquals(myobj:part_two({verbose=false, limit=0}),
-                       PART_TWO_RESULT)
+    // 2. Process text (if any)
+    if p.Text != nil && len(p.Text) > 0 {
+       p.processText(p.Text)
+    }
 
-end
+    return p
+}
 
--- ----------------------------------------------------------------------
---                                                  module initialization
--- ----------------------------------------------------------------------
-os.exit( luaunit.LuaUnit.run() )
 
--- ======================================================================
--- end                  M O D U L E _ t e s t . g o                   end
--- ======================================================================
+func (p *CLASS) processText(text []string) {
+    // Assign values from text
+
+    // 1. Loop for each line of the text
+    for indx, line := range text {
+
+        // 2. Add the number to the entries
+        num, err := strconv.Atoi(line)
+        if err != nil {
+            fmt.Printf("Error %s in line %d: '%s'\\n", err.Error(), indx, line)
+            os.Exit(1)
+        }
+        p.Numbers = append(p.Numbers, num)
+    }
+}
+
+func (p *CLASS) PartOne(verbose bool, limit int) string {
+    // Returns the solution for part one
+
+    // 1. Return the solution for part one
+    return ""
+}
+
+
+func (p *CLASS) PartTwo(verbose bool, limit int) string {
+    // Returns the solution for part two
+
+    // 1. Return the solution for part two
+    return ""
+}
+
+
+// ======================================================================
+// end                        M O D U L E . g o                       end
+// ======================================================================
+"""
+
+MODULE_TEST_GO = """// ======================================================================
+// TITLE
+//   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
+//
+// lua implementation by Dr. Dean Earl Wright III
+// ======================================================================
+
+// ======================================================================
+//                    M O D U L E _ t e s t . g o
+// ======================================================================
+// Test solver for Advent of Code YYYY day DD, TITLE
+
+package main
+
+// ----------------------------------------------------------------------
+//                                                                imports
+// ----------------------------------------------------------------------
+import (
+    "testing"
+)
+
+// ----------------------------------------------------------------------
+//                                                              constants
+// ----------------------------------------------------------------------
+const (
+    EXAMPLE_TEXT = `
+`
+    PART_ONE_TEXT = ""
+    PART_TWO_TEXT = ""
+
+    PART_ONE_RESULT = ""
+    PART_TWO_RESULT = ""
+)
+
+// ======================================================================
+//                                                              TestCLASS
+// ======================================================================
+
+func TestEmptyInit(t *testing.T) {
+    // Test the default CLASS creation
+
+    // 1. Create default CLASS object
+    obj := NewCLASS(false, fromText(""))
+
+    // 2. Make sure it has the default values
+    if obj.Part2 {
+        t.Fatal("Part2 should be false")
+    }
+    if len(obj.Text) != 0 {
+        t.Fatal("There should be no Text")
+    }
+    if len(obj.Numbers) != 0 {
+        t.Fatal("There should be no Numbers")
+    }
+}
+
+func TestTextInit(t *testing.T) {
+    // Test the CLASS object creation from text
+
+    // 1. Create CLASS object from text
+    obj := NewCLASS(false, fromText(EXAMPLE_TEXT))
+
+    // 2. Make sure it has the expected values
+    if obj.Part2 {
+        t.Fatal("Part2 should be false")
+    }
+    if len(obj.Text) != len(EXAMPLE_TEXT) {
+        t.Fatalf("len(Text) is %d not %d", len(obj.Text),
+                 len(EXAMPLE_TEXT))
+    }
+    if len(obj.Numbers) != len(EXAMPLE_TEXT) {
+        t.Fatalf("len(Numbers) is %d not %d",
+                 len(obj.Numbers), len(EXAMPLE_TEXT))
+    }
+}
+
+func TestPartOne(t *testing.T) {
+    // Test part one example of CLASS object
+
+    // 1. Create CLASS object from text
+    obj := NewCalibration(false, fromText(PART_ONE_TEXT))
+
+    // 2. Make sure it has the expected values
+    if obj.Part2 {
+        t.Fatal("Part2 should be false")
+    }
+    if len(obj.Text) != len(PART_ONE_TEXT) {
+        t.Fatalf("len(Text) is %d not %d", len(obj.Text),
+                 len(PART_ONE_TEXT))
+    }
+
+    // 3. Make sure it returns the expected solution
+    result := obj.PartOne(false, 0)
+    if result != PART_ONE_RESULT {
+        t.Fatalf("PartOne returned '%s' not '%s'", result, PART_ONE_RESULT)
+    }
+}
+
+func TestPartTwo(t *testing.T) {
+    // Test part two example of CLASS object
+
+    // 1. Create Calibration object from text
+    obj := NewCalibration(true, fromText(PART_TWO_TEXT))
+
+    // 2. Make sure it has the expected values
+    if !obj.Part2 {
+        t.Fatal("Part2 should be true")
+    }
+    if len(obj.Text) != len(PART_TWO_TEXT) {
+        t.Fatalf("len(Text) is %d not %d", len(obj.Text),
+                 len(PART_TWO_TEXT))
+    }
+
+    // 3. Make sure it returns the expected solution
+    result := obj.PartTwo(false, 0)
+    if result != PART_TWO_RESULT {
+        t.Fatalf("PartTwo returned '%s' not '%s'", result, PART_TWO_RESULT)
+    }
+}
+
+// ======================================================================
+// end                  M O D U L E _ t e s t . g o                   end
+// ======================================================================
 """
 
 PART_ONE_TXT = """Advent of Code YYYY Day DD Part One
 
 From https://adventofcode.com/YYYY/day/DD by Eric Wastl
 
------ Day DD: TITLE -----
+---// Day DD: TITLE -----
 
------ Part One -----
+---// Part One -----
 
 """
 
@@ -438,134 +450,131 @@ PART_TWO_TXT = """Advent of Code YYYY Day DD Part Two
 
 From https://adventofcode.com/YYYY/day/DD by Eric Wastl
 
------ Day DD: TITLE -----
+---// Day DD: TITLE -----
 
------ Part Two -----
+---// Part Two -----
 
 """
 
-EXTRA_GO = """-- ======================================================================
--- TITLE
---   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
---
--- lua implementation by Dr. Dean Earl Wright III
--- ======================================================================
+EXTRA_GO = """// ======================================================================
+// TITLE
+//   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
+//
+// lua implementation by Dr. Dean Earl Wright III
+// ======================================================================
 
--- ======================================================================
---                         E X T R A . g o
--- ======================================================================
--- OTHER for the Advent of Code YYYY Day DD puzzle
+// ======================================================================
+//                         E X T R A . g o
+// ======================================================================
+// OTHER for the Advent of Code YYYY Day DD puzzle
 
--- ----------------------------------------------------------------------
---                                                                  local
--- ----------------------------------------------------------------------
-local OTHER = { part2=false, text='' }
+package main
 
--- ----------------------------------------------------------------------
---                                                              constants
--- ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+//                                                                imports
+// ----------------------------------------------------------------------
+import (
+)
 
--- ======================================================================
---                                                                 OTHER
--- ======================================================================
+// ----------------------------------------------------------------------
+//                                                              constants
+// ----------------------------------------------------------------------
+const (
+)
 
-function OTHER:OTHER (o)
-  -- Object for TITLE
+// ======================================================================
+//                                                                 OTHER
+// ======================================================================
 
-  -- 1. Set the initial values
-  o = o or {}
-  o.part2 = o.part2 or false
-  o.text = o.text or {}
+type OTHER struct {
+    Part2   bool
+    Text    string
+}
+func NewOTHER(part2 bool, text string) *CLASS {
+  // OTHER Object for TITLE
 
-  -- 2. Create the object metatable
-  self.__index = self
-  setmetatable(o, self)
+  // 1. Set the initial values
+  p = new(CLASS)
+  p.Part2 = part2
+  p.Text = text
+}
 
-  -- 3. Process text (if any)
-  if o.text ~= nil and #o.text > 0 then
-     o:_process_text(o.text)
-  end
-
-  return o
-end
-
-function OTHER:_process_text(text)
-  -- Assign values from text
-
-  -- 0. Precondition axioms
-  assert(text ~= nil and #text > 0)
-
-end
--- ----------------------------------------------------------------------
---                                                  module initialization
--- ----------------------------------------------------------------------
-return OTHER
-
--- ======================================================================
--- end                      E X T R A . g o                     end
--- ======================================================================
+// ======================================================================
+// end                      E X T R A . g o                     end
+// ======================================================================
 """
 
-EXTRA_TEST_GO = """-- ======================================================================
--- TITLE
---   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
---
--- lua implementation by Dr. Dean Earl Wright III
--- ======================================================================
+EXTRA_TEST_GO = """// ======================================================================
+// TITLE
+//   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
+//
+// lua implementation by Dr. Dean Earl Wright III
+// ======================================================================
 
--- ======================================================================
---                    E X T R A _ t e s t . g o
--- ======================================================================
--- Test OTHER for Advent of Code YYYY day DD, TITLE
+// ======================================================================
+//                    E X T R A _ t e s t . g o
+// ======================================================================
+// Test OTHER for Advent of Code YYYY day DD, TITLE
 
--- ----------------------------------------------------------------------
---                                                                require
--- ----------------------------------------------------------------------
-local luaunit = require('luaunit')
+package main
 
-local EXTRA = require('EXTRA')
+// ----------------------------------------------------------------------
+//                                                                imports
+// ----------------------------------------------------------------------
+import (
+    "testing"
+)
 
--- ----------------------------------------------------------------------
---                                                              constants
--- ----------------------------------------------------------------------
-local EXAMPLE_TEXT = ""
+// ----------------------------------------------------------------------
+//                                                              constants
+// ----------------------------------------------------------------------
+const (
+    EXAMPLE_TEXT = ""
+)
 
--- ======================================================================
---                                                             TestOTHER
--- ======================================================================
+// ======================================================================
+//                                                             TestOTHER
+// ======================================================================
 
-function test_empty_init()
-  -- Test the default OTHER creation
+func testEmptyInit(t *testing.T) {
+    // Test the default OTHER creation
 
-  -- 1. Create default OTHER object
-  local myobj = EXTRA:OTHER()
+    // 1. Create default OTHER object
+    obj = newOTHER(false, "")
 
-  -- 2. Make sure it has the default values
-  luaunit.assertEquals(myobj.part2, false)
-  luaunit.assertEquals(#myobj.text, 0)
+    // 2. Make sure it has the default values
+    if !obj.Part2 {
+        t.Fatal("Part2 should be false")
+    }
+    if len(obj.Text) != 0 {
+        t.Fatal("There should be no Text")
+    }
+}
 
-end
+func testTextInit(t *testing.T) {
+    // Test the OTHER object creation from text
 
-function test_text_init()
-  -- Test the OTHER object creation from text
+    // 1. Create default OTHER object
+    obj = newOTHER(false, EXAMPLE_TEXT)
 
-  -- 1. Create CLASS object from text
-  local myobj = EXTRA:OTHER({text=EXAMPLE_TEXT})
+    // 2. Make sure it has the default values
+    if !obj.Part2 {
+        t.Fatal("Part2 should be false")
+    }
+    if len(obj.Text) != len(EXAMPLE_TEXT) {
+        t.Fatalf("len(Text) is %d not %d", len(obj.Text), len(EXAMPLE_TEXT))
+    }
+}
 
-  -- 2. Make sure it has the expected values
-  luaunit.assertEquals(myobj.part2, false)
-  luaunit.assertEquals(#myobj.text, 0)
+// ======================================================================
+// end                  E X T R A _ t e s t. g o                end
+// ======================================================================
+"""
 
-end
+GO_MOD = """
+module DIR
 
--- ----------------------------------------------------------------------
---                                                  module initialization
--- ----------------------------------------------------------------------
-os.exit( luaunit.LuaUnit.run() )
-
--- ======================================================================
--- end                  E X T R A _ t e s t. g o                end
--- ======================================================================
+go 1.17
 """
 
 GO_FILES = {
@@ -574,6 +583,7 @@ GO_FILES = {
     'MODULE_test.go': MODULE_TEST_GO,
     'part_one.txt': PART_ONE_TXT,
     'part_two.txt': PART_TWO_TXT,
+    'go.mod': GO_MOD,
 }
 
 GO_EXTRA = {
@@ -602,6 +612,7 @@ def go_before(args):
         "EXTRA": args.ename.lower(),
         "OTHER": args.ename.capitalize(),
         "E X T R A": ' '.join(list(args.ename.lower())),
+        "DIR": "%02d_%s" % (args.day, ''.join(args.title))
     }
 
     # 9. Return the text converters

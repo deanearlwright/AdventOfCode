@@ -25,10 +25,10 @@ from collections import namedtuple
 
 import aoc_javascript as js
 import aoc_python as py
+import aoc_rust as rust
 import aoc_typescript as ts
 import aoc_lua as lua
 import aoc_go as go
-import aoc_rust as rust
 
 # ----------------------------------------------------------------------
 #                                                                  types
@@ -337,6 +337,11 @@ def clean_day(year_dir, day_dir):
     if os.path.isdir(pycache_dir):
         print("Deleting %s" % pycache_dir, flush=True)
         shutil.rmtree(pycache_dir)
+
+    # 4. Remove any exe files
+    exe_files = os.path.join(year_dir, day_dir, '*.exe')
+    os.system('rm -f %s' % exe_files)
+
 
 # ----------------------------------------------------------------------
 #                                                             clean_year
