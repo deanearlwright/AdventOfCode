@@ -140,6 +140,57 @@ func TestPartOne(t *testing.T) {
 	}
 }
 
+func TestDifferanceAt(t *testing.T) {
+	// Test differeanceAt() function
+
+	// 1. Differ by two characters
+	diff := differanceAt("abcde", "axcye")
+	if diff != -1 {
+		t.Logf("differanceAt('abcde', 'axcye') should be %d not %d",
+			-1, diff)
+	}
+
+	// 2. Differ by zero characters
+	diff = differanceAt("abcde", "abcde")
+	if diff != -1 {
+		t.Logf("differanceAt('abcde', 'abcde') should be %d not %d",
+			-1, diff)
+	}
+
+	// 3. Differ by one character
+	diff = differanceAt("fghij", "fguij")
+	if diff != 2 {
+		t.Logf("differanceAt('fghij', 'fguij') should be %d not %d",
+			2, diff)
+	}
+}
+
+func TestallLettersBut(t *testing.T) {
+	// Test allLettersBut() function
+
+	// 1. First letter
+	letters := allLettersBut("fghij", 0)
+	if letters != "ghij" {
+		t.Logf("differanceAt('fghij', 0) should be %s not %s",
+			"ghij", letters)
+	}
+
+	// 2. Last letter
+	letters = allLettersBut("fghij", 4)
+	if letters != "fghi" {
+		t.Logf("differanceAt('fghij', 4) should be %s not %s",
+			"fghi", letters)
+	}
+
+	// 3. Some middle letter
+	letters = allLettersBut("fghij", 2)
+	if letters != "fgij" {
+		t.Logf("differanceAt('fghij', 2) should be %s not %s",
+			"fgij", letters)
+	}
+
+}
+
 func TestPartTwo(t *testing.T) {
 	// Test part two example of System object
 

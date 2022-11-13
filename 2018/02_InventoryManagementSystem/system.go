@@ -138,10 +138,70 @@ func (p *System) PartOne(verbose bool, limit int) string {
 	return strconv.Itoa(twos * threes)
 }
 
+func differanceAt(line1 string, line2 string) int {
+	// Returns position where strings differ (-1 if multiple)
+
+	// 1. Start with no differences
+	diffAt := -1
+
+	// 2. Loop for all of the characters
+	for indx := 0; indx < len(line1); indx++ {
+
+		// 3. Are the characters the same or different
+		if line1[indx] != line2[indx] {
+			if diffAt != -1 {
+				return -1
+			}
+			diffAt = indx
+		}
+	}
+
+	// 4. Either they are the same (-1) or have one difference >= 0
+	return diffAt
+}
+
+func allLettersBut(letters string, exclude int) string {
+	// Returns the string minus the letter at the indicated position
+
+	// 1. Start the result
+	result := ""
+
+	// 2. Loop for all the characters
+	for indx := 0; indx < len(letters); indx++ {
+
+		// 3. If not the excluded letter, add it
+		if indx != exclude {
+			result = result + string(letters[indx])
+		}
+	}
+
+	// 3. Return the resulting string
+	return result
+
+}
+
 func (p *System) PartTwo(verbose bool, limit int) string {
 	// Returns the solution for part two
 
-	// 1. Return the solution for part two
+	// 1. Loop for all of the box IDs
+	for indx := 0; indx < len(p.Text)-1; indx++ {
+		id1 := p.Text[indx]
+
+		// 2. Loop for the rest of the box IDs
+		for indx2 := indx + 1; indx2 < len(p.Text); indx2++ {
+			id2 := p.Text[indx2]
+
+			// 3. Compare the two IDs
+			diff := differanceAt(id1, id2)
+
+			// 4. If there is only one difference, return the common letters
+			if diff >= 0 {
+				return allLettersBut(id1, diff)
+			}
+		}
+	}
+
+	// 5. Return no solution for part two
 	return ""
 }
 
