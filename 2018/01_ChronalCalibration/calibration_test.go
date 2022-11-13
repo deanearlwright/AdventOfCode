@@ -23,17 +23,28 @@ import (
 //                                                              constants
 // ----------------------------------------------------------------------
 const (
-	EXAMPLE_TEXT = `
+	EXAMPLE_TEXT = `+1
++1
++1
 `
-	PART_ONE_TEXT = ""
-	PART_TWO_TEXT = ""
+	PART_ONE_TEXT = `+1
++1
+-2
+`
+	PART_TWO_TEXT = `
+-6
++3
++8
++5
+-6
+`
 
-	PART_ONE_RESULT = ""
-	PART_TWO_RESULT = ""
+	PART_ONE_RESULT = "0"
+	PART_TWO_RESULT = "5"
 )
 
 // ======================================================================
-//                                                              TestCalibration
+//                                                        TestCalibration
 // ======================================================================
 
 func TestEmptyInit(t *testing.T) {
@@ -64,13 +75,13 @@ func TestTextInit(t *testing.T) {
 	if obj.Part2 {
 		t.Fatal("Part2 should be false")
 	}
-	if len(obj.Text) != len(EXAMPLE_TEXT) {
-		t.Fatalf("len(Text) is %d not %d", len(obj.Text),
-			len(EXAMPLE_TEXT))
+	if len(obj.Text) != 3 {
+		t.Fatalf("len(Text) is %d not %d",
+			len(obj.Text), 3)
 	}
-	if len(obj.Numbers) != len(EXAMPLE_TEXT) {
+	if len(obj.Numbers) != 3 {
 		t.Fatalf("len(Numbers) is %d not %d",
-			len(obj.Numbers), len(EXAMPLE_TEXT))
+			len(obj.Numbers), 3)
 	}
 }
 
@@ -84,9 +95,9 @@ func TestPartOne(t *testing.T) {
 	if obj.Part2 {
 		t.Fatal("Part2 should be false")
 	}
-	if len(obj.Text) != len(PART_ONE_TEXT) {
-		t.Fatalf("len(Text) is %d not %d", len(obj.Text),
-			len(PART_ONE_TEXT))
+	if len(obj.Text) != 3 {
+		t.Fatalf("len(Text) is %d not %d",
+			len(obj.Text), 3)
 	}
 
 	// 3. Make sure it returns the expected solution
@@ -106,9 +117,9 @@ func TestPartTwo(t *testing.T) {
 	if !obj.Part2 {
 		t.Fatal("Part2 should be true")
 	}
-	if len(obj.Text) != len(PART_TWO_TEXT) {
-		t.Fatalf("len(Text) is %d not %d", len(obj.Text),
-			len(PART_TWO_TEXT))
+	if len(obj.Text) != 5 {
+		t.Fatalf("len(Text) is %d not %d",
+			len(obj.Text), 5)
 	}
 
 	// 3. Make sure it returns the expected solution
@@ -119,5 +130,5 @@ func TestPartTwo(t *testing.T) {
 }
 
 // ======================================================================
-// end                  c a l i b r a t i o n _ t e s t . g o                   end
+// end             c a l i b r a t i o n _ t e s t . g o              end
 // ======================================================================

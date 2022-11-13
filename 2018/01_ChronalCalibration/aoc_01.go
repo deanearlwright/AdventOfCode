@@ -16,18 +16,18 @@ package main
 //                                                                imports
 // ----------------------------------------------------------------------
 import (
-    "flag"
-    "fmt"
-    "os"
-    "regexp"
-    "strings"
+	"flag"
+	"fmt"
+	"os"
+	"regexp"
+	"strings"
 )
 
 // ----------------------------------------------------------------------
 //                                                              constants
 // ----------------------------------------------------------------------
 const (
-     SAVE_BLANK_LINES = false
+	SAVE_BLANK_LINES = false
 )
 
 // ----------------------------------------------------------------------
@@ -36,24 +36,24 @@ const (
 var aocVerbose bool
 var aocPart int
 var aocLimit int
-var aocInput string = "";
+var aocInput string = ""
 
 // ----------------------------------------------------------------------
 //                                                          initialzation
 // ----------------------------------------------------------------------
 
 func init() {
-  // Parse the command line options
+	// Parse the command line options
 
-  // 1. Create the command line parser
-  flag.IntVar(&aocPart, "part", 1, "Part 1 or 2 of the puzzle")
-  flag.IntVar(&aocPart, "p", 1, "Part 1 or 2 of the puzzle")
-  flag.IntVar(&aocLimit, "limit", 0, "Optional execution limit")
-  flag.IntVar(&aocLimit, "l", 0, "Optional execution limit")
-  flag.BoolVar(&aocVerbose, "verbose", false, "Optional extra messages")
-  flag.BoolVar(&aocVerbose, "v", false, "Optional extra messages")
-  flag.StringVar(&aocInput, "input", "", "Input file name")
-  flag.StringVar(&aocInput, "i", "", "Input file name")
+	// 1. Create the command line parser
+	flag.IntVar(&aocPart, "part", 1, "Part 1 or 2 of the puzzle")
+	flag.IntVar(&aocPart, "p", 1, "Part 1 or 2 of the puzzle")
+	flag.IntVar(&aocLimit, "limit", 0, "Optional execution limit")
+	flag.IntVar(&aocLimit, "l", 0, "Optional execution limit")
+	flag.BoolVar(&aocVerbose, "verbose", false, "Optional extra messages")
+	flag.BoolVar(&aocVerbose, "v", false, "Optional extra messages")
+	flag.StringVar(&aocInput, "input", "", "Input file name")
+	flag.StringVar(&aocInput, "i", "", "Input file name")
 }
 
 // ----------------------------------------------------------------------
@@ -62,23 +62,23 @@ func init() {
 
 func parseCommandLine() {
 
-    // 1. Parse the command line to aocXXXX variables
-    flag.Parse()
+	// 1. Parse the command line to aocXXXX variables
+	flag.Parse()
 
-    // 2. Verify that part is 1 or 2
-    if aocPart != 1 && aocPart != 2 {
-        fmt.Println("part (-p) must be 1 or 2")
-        os.Exit(1)
-    }
+	// 2. Verify that part is 1 or 2
+	if aocPart != 1 && aocPart != 2 {
+		fmt.Println("part (-p) must be 1 or 2")
+		os.Exit(1)
+	}
 
-    // 3. If input file name not specified, get from unprocessed arguments
-    if aocInput == "" {
-        if flag.NArg() == 0 {
-            fmt.Println("Input file name (-i) not specified")
-            os.Exit(1)
-        }
-        aocInput = flag.Arg(0)
-    }
+	// 3. If input file name not specified, get from unprocessed arguments
+	if aocInput == "" {
+		if flag.NArg() == 0 {
+			fmt.Println("Input file name (-i) not specified")
+			os.Exit(1)
+		}
+		aocInput = flag.Arg(0)
+	}
 }
 
 // ----------------------------------------------------------------------
@@ -86,21 +86,21 @@ func parseCommandLine() {
 // ----------------------------------------------------------------------
 
 func partOne(verbose bool, limit int, input_lines []string) string {
-    // Process part one of the puzzle
+	// Process part one of the puzzle
 
-    // 1. Create the puzzle solver
-    solver := NewCalibration(false, input_lines)
+	// 1. Create the puzzle solver
+	solver := NewCalibration(false, input_lines)
 
-    // 2. Determine the solution for part one
-    solution := solver.PartOne(verbose, limit)
-    if solution == "" {
-        fmt.Println("There is no solution")
-    } else {
-        fmt.Println("The solution for part one is " + solution)
-    }
+	// 2. Determine the solution for part one
+	solution := solver.PartOne(verbose, limit)
+	if solution == "" {
+		fmt.Println("There is no solution")
+	} else {
+		fmt.Println("The solution for part one is " + solution)
+	}
 
-    // 3. Return result
-    return solution
+	// 3. Return result
+	return solution
 }
 
 // ----------------------------------------------------------------------
@@ -108,21 +108,21 @@ func partOne(verbose bool, limit int, input_lines []string) string {
 // ----------------------------------------------------------------------
 
 func partTwo(verbose bool, limit int, input_lines []string) string {
-    // Process part two of the puzzle
+	// Process part two of the puzzle
 
-    // 1. Create the puzzle solver
-    solver := NewCalibration(true, input_lines)
+	// 1. Create the puzzle solver
+	solver := NewCalibration(true, input_lines)
 
-    // 2. Determine the solution for part two
-    solution := solver.PartTwo(verbose, limit)
-    if solution == "" {
-        fmt.Println("There is no solution")
-    } else {
-        fmt.Println("The solution for part two is " + solution)
-    }
+	// 2. Determine the solution for part two
+	solution := solver.PartTwo(verbose, limit)
+	if solution == "" {
+		fmt.Println("There is no solution")
+	} else {
+		fmt.Println("The solution for part two is " + solution)
+	}
 
-    // 3. Return result
-    return solution
+	// 3. Return result
+	return solution
 }
 
 // ----------------------------------------------------------------------
@@ -130,15 +130,15 @@ func partTwo(verbose bool, limit int, input_lines []string) string {
 // ----------------------------------------------------------------------
 
 func fromFile(filepath string) []string {
-    // 1. Read the file
-    b, err := os.ReadFile(filepath)
-    if err != nil {
-        fmt.Print(err)
-        os.Exit(2)
-    }
+	// 1. Read the file
+	b, err := os.ReadFile(filepath)
+	if err != nil {
+		fmt.Print(err)
+		os.Exit(2)
+	}
 
-    // 2. Return the contents as a string
-    return fromText(string(b))
+	// 2. Return the contents as a string
+	return fromText(string(b))
 }
 
 // ----------------------------------------------------------------------
@@ -146,29 +146,29 @@ func fromFile(filepath string) []string {
 // ----------------------------------------------------------------------
 
 func fromText(text string) []string {
-    // Break the text into trimed, non-comment lines
+	// Break the text into trimed, non-comment lines
 
-    // 1. We start with no lines
-    var result []string
+	// 1. We start with no lines
+	var result []string
 
-    // 2. Break up the text into lines
-    lines := regexp.MustCompile("\\r?\\n").Split(text, -1)
+	// 2. Break up the text into lines
+	lines := regexp.MustCompile("\\r?\\n").Split(text, -1)
 
-    // 3. Loop for lines in the text
-    for _, line := range lines {
+	// 3. Loop for lines in the text
+	for _, line := range lines {
 
-        // 4. Ignore comment lines and maybe blank lines
-        if len(line) > 0 {
-            if !strings.HasPrefix(line, "!") {
-                result = append(result, line)
-            }
-        } else if SAVE_BLANK_LINES {
-            result = append(result, "")
-        }
-    }
+		// 4. Ignore comment lines and maybe blank lines
+		if len(line) > 0 {
+			if !strings.HasPrefix(line, "!") {
+				result = append(result, line)
+			}
+		} else if SAVE_BLANK_LINES {
+			result = append(result, "")
+		}
+	}
 
-    // 5. Return a table of cleaned text lines
-    return result
+	// 5. Return a table of cleaned text lines
+	return result
 }
 
 // ----------------------------------------------------------------------
@@ -176,27 +176,27 @@ func fromText(text string) []string {
 // ----------------------------------------------------------------------
 
 func main() {
-    // Read the Advent of Code problem and solve it
+	// Read the Advent of Code problem and solve it
 
-    // 1. Get the command line options
-    parseCommandLine()
+	// 1. Get the command line options
+	parseCommandLine()
 
-    // 2. Read the puzzle file
-    input_text := fromFile(aocInput)
+	// 2. Read the puzzle file
+	input_text := fromFile(aocInput)
 
-    // 3. Process the appropiate part of the puzzle
-    var result string
-    if aocPart == 1 {
-        result = partOne(aocVerbose, aocLimit, input_text)
-    } else {
-        result = partTwo(aocVerbose, aocLimit, input_text)
-    }
+	// 3. Process the appropiate part of the puzzle
+	var result string
+	if aocPart == 1 {
+		result = partOne(aocVerbose, aocLimit, input_text)
+	} else {
+		result = partTwo(aocVerbose, aocLimit, input_text)
+	}
 
-    // 5. Set return code (0 if solution found, 2 if not)
-    if len(result) > 0 {
-        os.Exit(0)
-    }
-    os.Exit(2)
+	// 5. Set return code (0 if solution found, 2 if not)
+	if len(result) > 0 {
+		os.Exit(0)
+	}
+	os.Exit(2)
 }
 
 // ======================================================================

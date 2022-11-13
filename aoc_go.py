@@ -378,12 +378,12 @@ func TestTextInit(t *testing.T) {
         t.Fatal("Part2 should be false")
     }
     if len(obj.Text) != len(EXAMPLE_TEXT) {
-        t.Fatalf("len(Text) is %d not %d", len(obj.Text),
-                 len(EXAMPLE_TEXT))
+        t.Fatalf("len(Text) is %d not %d",
+            len(obj.Text), len(EXAMPLE_TEXT))
     }
     if len(obj.Numbers) != len(EXAMPLE_TEXT) {
         t.Fatalf("len(Numbers) is %d not %d",
-                 len(obj.Numbers), len(EXAMPLE_TEXT))
+            len(obj.Numbers), len(EXAMPLE_TEXT))
     }
 }
 
@@ -398,8 +398,8 @@ func TestPartOne(t *testing.T) {
         t.Fatal("Part2 should be false")
     }
     if len(obj.Text) != len(PART_ONE_TEXT) {
-        t.Fatalf("len(Text) is %d not %d", len(obj.Text),
-                 len(PART_ONE_TEXT))
+        t.Fatalf("len(Text) is %d not %d",
+            len(obj.Text), len(PART_ONE_TEXT))
     }
 
     // 3. Make sure it returns the expected solution
@@ -420,8 +420,8 @@ func TestPartTwo(t *testing.T) {
         t.Fatal("Part2 should be true")
     }
     if len(obj.Text) != len(PART_TWO_TEXT) {
-        t.Fatalf("len(Text) is %d not %d", len(obj.Text),
-                 len(PART_TWO_TEXT))
+        t.Fatalf("len(Text) is %d not %d",
+            len(obj.Text), len(PART_TWO_TEXT))
     }
 
     // 3. Make sure it returns the expected solution
@@ -562,7 +562,8 @@ func testTextInit(t *testing.T) {
         t.Fatal("Part2 should be false")
     }
     if len(obj.Text) != len(EXAMPLE_TEXT) {
-        t.Fatalf("len(Text) is %d not %d", len(obj.Text), len(EXAMPLE_TEXT))
+        t.Fatalf("len(Text) is %d not %d",
+            len(obj.Text), len(EXAMPLE_TEXT))
     }
 }
 
