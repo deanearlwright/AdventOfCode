@@ -391,7 +391,7 @@ func TestPartOne(t *testing.T) {
     // Test part one example of CLASS object
 
     // 1. Create CLASS object from text
-    obj := NewCalibration(false, fromText(PART_ONE_TEXT))
+    obj := NewCLASS(false, fromText(PART_ONE_TEXT))
 
     // 2. Make sure it has the expected values
     if obj.Part2 {
@@ -412,8 +412,8 @@ func TestPartOne(t *testing.T) {
 func TestPartTwo(t *testing.T) {
     // Test part two example of CLASS object
 
-    // 1. Create Calibration object from text
-    obj := NewCalibration(true, fromText(PART_TWO_TEXT))
+    // 1. Create CLASS object from text
+    obj := NewCLASS(true, fromText(PART_TWO_TEXT))
 
     // 2. Make sure it has the expected values
     if !obj.Part2 {
