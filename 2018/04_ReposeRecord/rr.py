@@ -109,6 +109,8 @@ def part_one(args, input_lines):
 
     # 3. Get the minute most often asleep for the sleepest guard
     most_often = guards[max_minutes[0]].often()[0]
+    if args.verbose:
+        print("Guard #%04d was most often asleep at %d" % (max_minutes[0], most_often))
 
     # 4. Solution is ID of the guard you chose multiplied by the minute
     solution = max_minutes[0] * most_often

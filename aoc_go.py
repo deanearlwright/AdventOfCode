@@ -349,7 +349,7 @@ const (
 //                                                              TestCLASS
 // ======================================================================
 
-func TestEmptyInit(t *testing.T) {
+func TestCLASSEmptyInit(t *testing.T) {
     // Test the default CLASS creation
 
     // 1. Create default CLASS object
@@ -367,7 +367,7 @@ func TestEmptyInit(t *testing.T) {
     }
 }
 
-func TestTextInit(t *testing.T) {
+func TestCLASSTextInit(t *testing.T) {
     // Test the CLASS object creation from text
 
     // 1. Create CLASS object from text
@@ -387,7 +387,7 @@ func TestTextInit(t *testing.T) {
     }
 }
 
-func TestPartOne(t *testing.T) {
+func TestCLASSPartOne(t *testing.T) {
     // Test part one example of CLASS object
 
     // 1. Create CLASS object from text
@@ -409,7 +409,7 @@ func TestPartOne(t *testing.T) {
     }
 }
 
-func TestPartTwo(t *testing.T) {
+func TestCLASSPartTwo(t *testing.T) {
     // Test part two example of CLASS object
 
     // 1. Create CLASS object from text
@@ -490,13 +490,14 @@ type OTHER struct {
     Part2   bool
     Text    string
 }
-func NewOTHER(part2 bool, text string) *CLASS {
-  // OTHER Object for TITLE
 
-  // 1. Set the initial values
-  p = new(CLASS)
-  p.Part2 = part2
-  p.Text = text
+func NewOTHER(part2 bool, text string) *OTHER {
+    // OTHER Object for TITLE
+
+    // 1. Set the initial values
+    p := new(OTHER)
+    p.Part2 = part2
+    p.Text = text
 }
 
 // ======================================================================
@@ -529,18 +530,18 @@ import (
 //                                                              constants
 // ----------------------------------------------------------------------
 const (
-    EXAMPLE_TEXT = ""
+    OTHER_TEXT = ""
 )
 
 // ======================================================================
 //                                                             TestOTHER
 // ======================================================================
 
-func testEmptyInit(t *testing.T) {
+func TestOTHEREmptyInit(t *testing.T) {
     // Test the default OTHER creation
 
     // 1. Create default OTHER object
-    obj = newOTHER(false, "")
+    obj := NewOTHER(false, "")
 
     // 2. Make sure it has the default values
     if !obj.Part2 {
@@ -551,19 +552,19 @@ func testEmptyInit(t *testing.T) {
     }
 }
 
-func testTextInit(t *testing.T) {
+func TestOTHERTextInit(t *testing.T) {
     // Test the OTHER object creation from text
 
     // 1. Create default OTHER object
-    obj = newOTHER(false, EXAMPLE_TEXT)
+    obj := NewOTHER(false, OTHER_TEXT)
 
     // 2. Make sure it has the default values
     if !obj.Part2 {
         t.Fatal("Part2 should be false")
     }
-    if len(obj.Text) != len(EXAMPLE_TEXT) {
+    if len(obj.Text) != len(OTHER_TEXT) {
         t.Fatalf("len(Text) is %d not %d",
-            len(obj.Text), len(EXAMPLE_TEXT))
+            len(obj.Text), len(OTHER_TEXT))
     }
 }
 

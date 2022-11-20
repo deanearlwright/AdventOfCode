@@ -239,10 +239,10 @@ def copy_files(args, day_directory):
 
             # 6. Get the converters
             args.ename = ename
-            text_converters = lang.conv_before(args)
+            text_converters = lang.before(args)
 
             # 7. Loop for the extra files
-            for file_info in lang.extras.items():
+            for file_info in lang.extra.items():
 
                 # 8. Process this single file
                 copy_file(args, day_directory, text_converters,
