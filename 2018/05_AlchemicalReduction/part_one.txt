@@ -1,0 +1,8 @@
+Advent of Code 2018 Day 05 Part One
+
+From https://adventofcode.com/2018/day/05 by Eric Wastl
+
+---// Day 05: Alchemical Reduction -----
+
+---// Part One -----
+

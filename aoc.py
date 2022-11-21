@@ -106,7 +106,7 @@ def parse_command_line():
                         default="", dest='inval',
                         help='Puzzle input from web page')
     parser.add_argument('-c', '--class', action='store',
-                        default="", dest='cname',
+                        default="Solver", dest='cname',
                         help='Name of class')
     parser.add_argument('-r', '--result', action='store',
                         default="int", dest='rtype',
