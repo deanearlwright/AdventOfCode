@@ -16,16 +16,23 @@ package main
 //                                                                imports
 // ----------------------------------------------------------------------
 import (
-    "fmt"
-    "os"
-    "strconv"
+	//"fmt"
+	//"os"
+	"regexp"
+	"strconv"
 )
 
 // ----------------------------------------------------------------------
 //                                                              constants
 // ----------------------------------------------------------------------
 const (
+	pairsAJ = "aA|Aa|bB|Bb|cC|Cc|dD|Dd|eE|Ee|fF|Ff|gG|Gg|hH|Hh|iI|Ii|jJ|Jj"
+	pairsKT = "kK|Kk|lL|Ll|mM|Mm|nN|Nn|oO|Oo|pP|Pp|qQ|Qq|rR|Rr|sS|Ss|tT|Tt"
+	pairsUZ = "uU|Uu|vV|Vv|wW|Ww|xX|Xx|yY|Yy|zZ|Zz"
+	pairsAZ = pairsAJ + "|" + pairsKT + "|" + pairsUZ
 )
+
+var rePairs = regexp.MustCompile(pairsAZ)
 
 // ======================================================================
 //                                                                  Solver
@@ -34,58 +41,59 @@ const (
 // Object for Alchemical Reduction
 
 type Solver struct {
-    Part2 bool
-    Text  []string
-    Numbers []int
+	Part2   bool
+	Text    []string
+	Numbers []int
 }
 
 func NewSolver(part2 bool, text []string) *Solver {
 
-    // 1. Set the initial values
-    p := new(Solver)
-    p.Part2 = part2
-    p.Text = text
+	// 1. Set the initial values
+	p := new(Solver)
+	p.Part2 = part2
+	p.Text = text
 
-    // 2. Process text (if any)
-    if p.Text != nil && len(p.Text) > 0 {
-       p.processText(p.Text)
-    }
-
-    return p
+	return p
 }
 
+func process(text string) string {
+	// Process polymer
 
-func (p *Solver) processText(text []string) {
-    // Assign values from text
+	var newText string
 
-    // 1. Loop for each line of the text
-    for indx, line := range text {
+	// 1. Loop forever (
+	for {
 
-        // 2. Add the number to the entries
-        num, err := strconv.Atoi(line)
-        if err != nil {
-            fmt.Printf("Error %s in line %d: '%s'\n", err.Error(), indx, line)
-            os.Exit(1)
-        }
-        p.Numbers = append(p.Numbers, num)
-    }
+		// 2. Process the porarized pairs
+		newText = rePairs.ReplaceAllString(text, "")
+
+		// 3. If no changes made, we are done
+		if text == newText {
+			break
+		}
+
+		// 4. This is the new polymer
+		text = newText
+	}
+
+	// 5. Return the processed polymer
+	return newText
 }
 
 func (p *Solver) PartOne(verbose bool, limit int) string {
-    // Returns the solution for part one
+	// Returns the solution for part one
 
-    // 1. Return the solution for part one
-    return ""
+	text := process(p.Text[0])
+	// 1. Return the solution for part one
+	return strconv.Itoa(len(text))
 }
-
 
 func (p *Solver) PartTwo(verbose bool, limit int) string {
-    // Returns the solution for part two
+	// Returns the solution for part two
 
-    // 1. Return the solution for part two
-    return ""
+	// 1. Return the solution for part two
+	return ""
 }
-
 
 // ======================================================================
 // end                        s o l v e r . g o                       end
