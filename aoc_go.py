@@ -544,7 +544,7 @@ func TestOTHEREmptyInit(t *testing.T) {
     obj := NewOTHER(false, "")
 
     // 2. Make sure it has the default values
-    if !obj.Part2 {
+    if obj.Part2 {
         t.Fatal("Part2 should be false")
     }
     if len(obj.Text) != 0 {
@@ -559,7 +559,7 @@ func TestOTHERTextInit(t *testing.T) {
     obj := NewOTHER(false, OTHER_TEXT)
 
     // 2. Make sure it has the default values
-    if !obj.Part2 {
+    if obj.Part2 {
         t.Fatal("Part2 should be false")
     }
     if len(obj.Text) != len(OTHER_TEXT) {
