@@ -70,10 +70,10 @@ def part_one(args, input_lines):
     "Process part one of the puzzle"
 
     # 1. Create the puzzle solver
-    solver = MODULE.CLASS(part2=False, text=input_lines)
+    my_solver = MODULE.CLASS(part2=False, text=input_lines)
 
     # 2. Determine the solution for part one
-    solution = solver.part_one(verbose=args.verbose, limit=args.limit)
+    solution = my_solver.part_one(verbose=args.verbose, limit=args.limit)
     if solution is None:
         print("There is no solution")
     else:
@@ -91,10 +91,10 @@ def part_two(args, input_lines):
     "Process part two of the puzzle"
 
     # 1. Create the puzzle solver
-    solver = MODULE.CLASS(part2=True, text=input_lines)
+    my_solver = MODULE.CLASS(part2=True, text=input_lines)
 
     # 2. Determine the solution for part two
-    solution = solver.part_two(verbose=args.verbose, limit=args.limit)
+    solution = my_solver.part_two(verbose=args.verbose, limit=args.limit)
     if solution is None:
         print("There is no solution")
     else:
@@ -110,17 +110,17 @@ def part_two(args, input_lines):
 # ----------------------------------------------------------------------
 
 
-def from_file(filepath):
+def from_file(filepath, keep_blank=False):
     "Read the file"
 
-    return from_text(open(filepath).read())
+    return from_text(open(filepath).read(), keep_blank)
 
 # ----------------------------------------------------------------------
 #                                                              from_text
 # ----------------------------------------------------------------------
 
 
-def from_text(text):
+def from_text(text, keep_blank=False):
     "Break the text into trimed, non-comment lines"
 
     # 1. We start with no lines
@@ -131,7 +131,7 @@ def from_text(text):
 
         # 3. But ignore blank and comment lines
         line = line.rstrip()
-        if not line:
+        if (not line) and (not keep_blank):
             continue
         if line.startswith('!'):
             continue
