@@ -1,0 +1,8 @@
+Advent of Code 2022 Day 07 Part One
+
+From https://adventofcode.com/2022/day/07 by Eric Wastl
+
+----- Day 07: No Space Left On Device -----
+
+----- Part One -----
+
