@@ -1,0 +1,8 @@
+Advent of Code 2022 Day 09 Part One
+
+From https://adventofcode.com/2022/day/09 by Eric Wastl
+
+----- Day 09: Rope Bridge -----
+
+----- Part One -----
+
