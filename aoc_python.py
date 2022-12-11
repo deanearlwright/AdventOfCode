@@ -10,7 +10,8 @@
 # ======================================================================
 "Generates python base programming source files for Advent of Code"
 
-AOC_DD_PY = """# ======================================================================
+AOC_DD_PY = """
+# ======================================================================
 # TITLE
 #   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 #
@@ -47,13 +48,14 @@ def parse_command_line():
     sample = 'sample: python aoc_DD.py input.txt'
     parser = argparse.ArgumentParser(description=desc,
                                      epilog=sample)
-    parser.add_argument('-v', '--verbose', action='store_true', default=False,
-                        dest='verbose', help='Print status messages to stdout')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        default=False, dest='verbose',
+                        help='Print status messages to stdout')
     parser.add_argument('-p', '--part', action='store', default=1, type=int,
                         dest='part', help='Puzzle Part (1 or 2)')
     parser.add_argument('-l', '--limit', action='store', default=0, type=int,
                         dest='limit',
-                        help='Maximum (time, size, recursion) before stopping')
+                        help='Maximum (time, size, depth) before stopping')
     parser.add_argument('filepath', metavar='FILENAME',
                         action='store', type=str,
                         help="Location of puzzle input")
@@ -77,7 +79,7 @@ def part_one(args, input_lines):
     if solution is None:
         print("There is no solution")
     else:
-        print("The solution for part one is %s" % (solution))
+        print(f"The solution for part one is {solution}")
 
     # 3. Return result
     return solution is not None
@@ -98,7 +100,7 @@ def part_two(args, input_lines):
     if solution is None:
         print("There is no solution")
     else:
-        print("The solution for part two is %s" % (solution))
+        print(f"The solution for part two is {solution}")
 
 
     # 3. Return result
@@ -179,7 +181,8 @@ if __name__ == '__main__':
 # ======================================================================
 """
 
-MODULE_PY = """# ======================================================================
+MODULE_PY = """
+# ======================================================================
 # TITLE
 #   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 #
@@ -254,7 +257,8 @@ if __name__ == '__main__':
 # ======================================================================
 """
 
-TEST_MODULE_PY = """# ======================================================================
+TEST_MODULE_PY = """
+# ======================================================================
 # TITLE
 #   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 #
@@ -326,7 +330,8 @@ class TestCLASS(unittest.TestCase):  # pylint: disable=R0904
         "Test part two example of CLASS object"
 
         # 1. Create CLASS object from text
-        myobj = MODULE.CLASS(part2=True, text=aoc_DD.from_text(PART_TWO_TEXT))
+        myobj = MODULE.CLASS(part2=True,
+                             text=aoc_DD.from_text(PART_TWO_TEXT))
 
         # 2. Check the part two result
         self.assertEqual(myobj.part_two(verbose=False), PART_TWO_RESULT)
@@ -380,7 +385,8 @@ proj.launch-config = {loc('aoc_DD.py'): ('project',
          ''))}
 """
 
-EXTRA_PY = """# ======================================================================
+EXTRA_PY = """
+# ======================================================================
 # TITLE
 #   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 #
@@ -435,7 +441,8 @@ if __name__ == '__main__':
 # ======================================================================
 """
 
-TEST_EXTRA_PY = """# ======================================================================
+TEST_EXTRA_PY = """
+# ======================================================================
 # TITLE
 #   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 #
@@ -522,9 +529,9 @@ def python_before(args):
 
     # 1. Start with simple conversions
     result = {
-        "YYYY": "%4d" % args.year,
-        "DD": "%02d" % args.day,
-        "D D": ' '.join(list("%02d" % args.day)),
+        "YYYY": f"{args.year:4d}",
+        "DD": f"{args.day:2d}",
+        "D D": ' '.join(list(f"{args.day:2d}")),
         "TITLE": ' '.join(args.title),
         "MODULE": args.cname.lower(),
         "CLASS": args.cname.capitalize(),

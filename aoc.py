@@ -97,8 +97,9 @@ def parse_command_line():
     desc = 'Advent of Code source file generator'
     sample = 'sample: python aoc.py --py -d 17 My Little Programs'
     parser = argparse.ArgumentParser(description=desc, epilog=sample)
-    parser.add_argument('-v', '--verbose', action='store_true', default=False,
-                        dest='verbose', help='Print status messages to stdout')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        default=False, dest='verbose',
+                        help='Print status messages to stdout')
     parser.add_argument('-l', '--language',
                         choices=['python', 'javascript', 'typescript'],
                         help='Programming language (python or javascript)')
@@ -115,8 +116,9 @@ def parse_command_line():
                         help="Year of puzzle", dest='year', type=int)
     parser.add_argument('-d', '--day', action='store', default=default_day,
                         help="Day of puzzle", dest='day', type=int)
-    parser.add_argument('-b', '--base', action='store', default=default_dir,
-                        help="base direcotory of Advent of Code", dest='base')
+    parser.add_argument('-b', '--base', action='store',
+                        default=default_dir, dest='base',
+                        help="base direcotory of Advent of Code")
     parser.add_argument('title', action='store', type=str, nargs='*',
                         help="Title of puzzle")
     parser.add_argument('-a', '--add', action='store_true', default=False,
@@ -158,18 +160,18 @@ def parse_command_line():
 
     # 5. Ensure base and year directories exist but not the day
     if not os.path.isdir(args.base):
-        parser.error("Base directory (%s) does not exist" % (args.base))
+        parser.error(f"Base directory ({args.base}) does not exist")
     base_year = os.path.join(args.base, str(args.year))
     if not os.path.isdir(base_year):
-        parser.error("Year directory (%s) does not exist" % (base_year))
+        parser.error("Year directory ({base.year}) does not exist")
     if args.language not in ['clean', 'update']:
-        day_begins = '%02d_' % (args.day)
+        day_begins = f"{args.day:02d}_"
         with os.scandir(base_year) as scan_dir:
             for entry in scan_dir:
                 if entry.name.startswith(day_begins) and \
                         entry.is_dir() and not args.add:
-                    parser.error("Day directory (%s) already exists" %
-                                 (entry.name))
+                    parser.error(f"Day directory ({entry.name})"
+                                 f" already exists")
 
     # 6. If there is no class name, use last word in title
     if not args.cname:
@@ -265,7 +267,7 @@ def copy_file(args, day_directory,   # pylint: disable=R0913
 
     # 2. Don't write if the file already exists
     if os.path.isfile(out_file_name) and not overwrite:
-        print("File %s already exists, skipping" % out_file_name)
+        print(f"File {out_file_name} already exists, skipping")
         return
 
     # 3. Convert the text for this file
@@ -275,7 +277,7 @@ def copy_file(args, day_directory,   # pylint: disable=R0913
     final_text = after(args, text_converters, converted_text)
 
     # 5. Write file
-    with open(out_file_name, 'w') as output_file:
+    with open(out_file_name, 'w', encoding="utf8") as output_file:
         output_file.write(final_text)
 
 # ----------------------------------------------------------------------
@@ -323,24 +325,30 @@ def clean_day(year_dir, day_dir):
     # 1. Remove node_modules if it exists
     node_modules_dir = os.path.join(year_dir, day_dir, 'node_modules')
     if os.path.isdir(node_modules_dir):
-        print("Deleting %s" % node_modules_dir, flush=True)
+        print(f"Deleting {node_modules_dir}", flush=True)
         shutil.rmtree(node_modules_dir)
 
     # 2. Remove __pycache__ if it exists
     pycache_dir = os.path.join(year_dir, day_dir, '__pycache__')
     if os.path.isdir(pycache_dir):
-        print("Deleting %s" % pycache_dir, flush=True)
+        print(f"Deleting {pycache_dir}", flush=True)
         shutil.rmtree(pycache_dir)
 
     # 3. Remove test/__pycache__ if it exists
     pycache_dir = os.path.join(year_dir, day_dir, 'test/__pycache__')
     if os.path.isdir(pycache_dir):
-        print("Deleting %s" % pycache_dir, flush=True)
+        print(f"Deleting {pycache_dir}", flush=True)
         shutil.rmtree(pycache_dir)
 
-    # 4. Remove any exe files
+    # 4. Remove .mypy_pycache if it exists
+    mypycache_dir = os.path.join(year_dir, day_dir, '.mypy_pycache')
+    if os.path.isdir(mypycache_dir):
+        print(f"Deleting {mypycache_dir}", flush=True)
+        shutil.rmtree(mypycache_dir)
+
+    # 5. Remove any exe files
     exe_files = os.path.join(year_dir, day_dir, '*.exe')
-    os.system('rm -f %s' % exe_files)
+    os.system(f"rm -f {exe_files}")
 
 
 # ----------------------------------------------------------------------
@@ -350,7 +358,7 @@ def clean_day(year_dir, day_dir):
 
 def clean_year(args):
     """Remove non-source files from the year"""
-    print('Cleaning year %d' % args.year, flush=True)
+    print(f"Cleaning year {args.year}", flush=True)
     # 1. Get the directory for the year
     year_dir = os.path.join(args.base, str(args.year))
     # 2. Loop for all of the days in the year
@@ -371,9 +379,9 @@ def update_package_json(args, day_directory):
     # 1. Insure that there is a package.json file
     json_file = os.path.join(day_directory, 'package.json')
     if not os.path.isfile(json_file):
-        print("No package.json (%s)" % json_file, flush=True)
+        print(f"No package.json ({json_file})", flush=True)
         return 1
-    print('Updating package json file %s' % json_file, flush=True)
+    print(f"Updating package json file {json_file}", flush=True)
 
     # 2. Determine if javascript or typescript
     language = 'javascript'
@@ -408,31 +416,31 @@ def update_day(args, year_dir, day_dir):
     day_directory = os.path.join(year_dir, day_dir)
     json_file = os.path.join(day_directory, 'package.json')
     if not os.path.isfile(json_file):
-        print("No package.json (%s)" % json_file, flush=True)
+        print(f"No package.json ({json_file})", flush=True)
         return 1
 
     # 2. Remove node_modules if it exists
     node_modules_dir = os.path.join(day_directory, 'node_modules')
     if os.path.isdir(node_modules_dir):
-        print("Deleting %s" % node_modules_dir, flush=True)
+        print(f"Deleting {node_modules_dir}", flush=True)
         shutil.rmtree(node_modules_dir)
     if os.path.isdir(node_modules_dir):
-        print("Unable to Delete %s" % node_modules_dir, flush=True)
+        print(f"Unable to Delete {node_modules_dir}", flush=True)
         return 2
 
     # 3. Create empty node_module directory
     os.mkdir(node_modules_dir)
     if not os.path.isdir(node_modules_dir):
-        print("Unable to create %s" % node_modules_dir, flush=True)
+        print(f"Unable to create {node_modules_dir}", flush=True)
         return 3
 
     # 4. Remove package-lock.json if it exists
     lock_file = os.path.join(day_directory, 'package-lock.json')
     if os.path.isfile(lock_file):
-        print("Deleting %s" % lock_file, flush=True)
+        print(f"Deleting {lock_file}", flush=True)
         os.remove(lock_file)
     if os.path.isfile(lock_file):
-        print("Unable to delete %s" % lock_file, flush=True)
+        print(f"Unable to delete {lock_file}", flush=True)
         return 4
 
     # 5. Verify the npm cache
@@ -451,7 +459,7 @@ def update_day(args, year_dir, day_dir):
 
     # 8. Check that the package-lock file was created
     if not os.path.isfile(lock_file):
-        print("Unable to create %s" % lock_file, flush=True)
+        print(f"Unable to create {lock_file}", flush=True)
         return 8
 
     # 9. Return success
@@ -464,7 +472,7 @@ def update_day(args, year_dir, day_dir):
 
 def update_year(args):
     """Do npm install (creating package-lock.json) from the year"""
-    print('NPM update year %d' % args.year, flush=True)
+    print(f"npm update year {args.year}", flush=True)
 
     # 1. Get the directory for the year
     year_dir = os.path.join(args.base, str(args.year))
@@ -477,7 +485,7 @@ def update_year(args):
 
         # 4. Determine day from day_dir
         if day_dir[2] != '_':
-            print("Invalid day %s", day_dir)
+            print(f"Invalid day {day_dir}")
             return 4
         args.day = int(day_dir[:2])
 
@@ -498,19 +506,21 @@ def aocd_input(args):
 
     # 1. Get the directory of the input.txt file
     base_year_day = os.path.join(args.base, str(args.year),
-                                 '%02d_%s' % (args.day, ''.join(args.title)))
+                                 f"{args.day:02d}_{''.join(args.title)}")
 
     # 2. Get the compilete input.txt path
     input_txt_path = os.path.join(base_year_day, INPUT_FILE_NAME)
 
     # 3. Create the input.txt file
-    input_txt_file = open(input_txt_path, "w")
+    input_txt_file = open(input_txt_path,  # pylint: disable=R1732
+                          "w", encoding="utf8")
 
     # 4. Create the aocd command
-    aocd_cmd = "aocd %d %d" % (args.day, args.year)
+    aocd_cmd = f"aocd {args.day} {args.year}"
 
-    # 5. Use aocd to populate the file
-    subprocess.Popen(aocd_cmd, stdout=input_txt_file)
+    # 5. Use aocd to populate the file  # pylint: disable=R1732
+    subprocess.Popen(aocd_cmd,
+                     stdout=input_txt_file)
 
 
 # ----------------------------------------------------------------------
@@ -534,10 +544,10 @@ def main():
 
     # 3. Create the day directory (if needed)
     base_year_day = os.path.join(args.base, str(args.year),
-                                 '%02d_%s' % (args.day, ''.join(args.title)))
+                                 f"{args.day:02d}_{''.join(args.title)}")
     if args.add:
         if not os.path.isdir(base_year_day):
-            print("Missing day directory %s" % base_year_day)
+            print(f"Missing day directory {base_year_day}")
             sys.exit(1)
     else:
         os.mkdir(base_year_day)
@@ -547,8 +557,8 @@ def main():
 
     # 5. Create input file for sepecified input (if any)
     if args.inval:
-        with open(os.path.join(base_year_day,
-                               INPUT_FILE_NAME), 'w') as input_txt:
+        with open(os.path.join(base_year_day, INPUT_FILE_NAME),
+                  "w", encoding="utf8") as input_txt:
             input_txt.write(args.inval)
             input_txt.write('\n')
 
@@ -560,7 +570,7 @@ def main():
     if args.inval or args.aocd:
         input_txt_file = os.path.join(base_year_day, INPUT_FILE_NAME)
         if not os.path.isfile(input_txt_file):
-            print("Unable to create %s" % input_txt_file)
+            print(f"Unable to create {input_txt_file}")
             sys.exit(1)
 
 
