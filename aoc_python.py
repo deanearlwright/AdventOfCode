@@ -105,7 +105,6 @@ def part_two(args, input_lines):
     # 3. Return result
     return solution is not None
 
-
 # ----------------------------------------------------------------------
 #                                                              from_file
 # ----------------------------------------------------------------------
@@ -114,7 +113,7 @@ def part_two(args, input_lines):
 def from_file(filepath, keep_blank=False):
     "Read the file"
 
-    return from_text(open(filepath, encoding="utf8".read(), keep_blank)
+    return from_text(open(filepath, encoding="utf8").read(), keep_blank)
 
 # ----------------------------------------------------------------------
 #                                                              from_text
@@ -233,7 +232,6 @@ class CLASS(object):   # pylint: disable=R0902, R0205
 
         # 1. Return the solution for part one
         return None
-
 
     def part_two(self, verbose=False, limit=0):
         "Returns the solution for part two"
@@ -368,7 +366,7 @@ From https://adventofcode.com/YYYY/day/DD by Eric Wastl
 """
 
 WINGWARE_PY = """#!wing
-#!version=7.0
+#!version=9.0
 ##################################################################
 # Wing project file                                              #
 ##################################################################
@@ -410,7 +408,7 @@ EXTRA_PY = """
 # ======================================================================
 
 
-class OTHER(object):   # pylint: disable=R0902, R0205
+class OTHER(object):   # pylint: disable=R0902, R0903, R0205
     "Object for TITLE"
 
     def __init__(self, text=None, part2=False):
@@ -427,7 +425,6 @@ class OTHER(object):   # pylint: disable=R0902, R0205
         "Assign values from text"
 
         assert text is not None and len(text) > 0
-
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
@@ -492,7 +489,6 @@ class TestOTHER(unittest.TestCase):  # pylint: disable=R0904
         # 2. Make sure it has the expected values
         self.assertEqual(myobj.part2, False)
         self.assertEqual(len(myobj.text), 0)
-
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
