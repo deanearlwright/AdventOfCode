@@ -102,7 +102,6 @@ def part_two(args, input_lines):
     else:
         print(f"The solution for part two is {solution}")
 
-
     # 3. Return result
     return solution is not None
 
@@ -115,7 +114,7 @@ def part_two(args, input_lines):
 def from_file(filepath, keep_blank=False):
     "Read the file"
 
-    return from_text(open(filepath).read(), keep_blank)
+    return from_text(open(filepath, encoding="utf8".read(), keep_blank)
 
 # ----------------------------------------------------------------------
 #                                                              from_text
