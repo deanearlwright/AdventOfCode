@@ -347,8 +347,9 @@ def clean_day(year_dir, day_dir):
         shutil.rmtree(mypycache_dir)
 
     # 5. Remove any exe files
-    exe_files = os.path.join(year_dir, day_dir, '*.exe')
-    os.system(f"rm -f {exe_files}")
+    for exe_file in glob.glob(os.path.join(year_dir, day_dir, '*.exe')):
+        print(f"Deleting {exe_file}", flush=True)
+        os.remove(exe_file)
 
 
 # ----------------------------------------------------------------------
@@ -512,15 +513,13 @@ def aocd_input(args):
     input_txt_path = os.path.join(base_year_day, INPUT_FILE_NAME)
 
     # 3. Create the input.txt file
-    input_txt_file = open(input_txt_path,  # pylint: disable=R1732
-                          "w", encoding="utf8")
+    input_txt_file = open(input_txt_path, "w", encoding="utf8")
 
     # 4. Create the aocd command
     aocd_cmd = f"aocd {args.day} {args.year}"
 
-    # 5. Use aocd to populate the file  # pylint: disable=R1732
-    subprocess.Popen(aocd_cmd,
-                     stdout=input_txt_file)
+    # 5. Use aocd to populate the file
+    subprocess.Popen(aocd_cmd, stdout=input_txt_file)
 
 
 # ----------------------------------------------------------------------
