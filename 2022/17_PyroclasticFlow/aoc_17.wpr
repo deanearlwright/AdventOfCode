@@ -1,0 +1,24 @@
+#!wing
+#!version=9.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_17.py'),
+                  loc('chamber.py'),
+                  loc('input.txt'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('rock.py'),
+                  loc('rocks.py'),
+                  loc('simulation.py'),
+                  loc('solver.py'),
+                  loc('test_chamber.py'),
+                  loc('test_rock.py'),
+                  loc('test_rocks.py'),
+                  loc('test_simulation.py'),
+                  loc('test_solver.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_17.py'): ('project',
+        ('-p2 -v input.txt',
+         ''))}

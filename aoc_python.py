@@ -68,7 +68,7 @@ def parse_command_line():
 # ----------------------------------------------------------------------
 
 
-def part_one(args, input_lines):
+def part_one(args, input_lines):  # pylint: disable=E1128
     "Process part one of the puzzle"
 
     # 1. Create the puzzle solver
@@ -89,7 +89,7 @@ def part_one(args, input_lines):
 # ----------------------------------------------------------------------
 
 
-def part_two(args, input_lines):
+def part_two(args, input_lines):  # pylint: disable=E1128
     "Process part two of the puzzle"
 
     # 1. Create the puzzle solver
@@ -171,6 +171,8 @@ def main():
 # ----------------------------------------------------------------------
 #                                                  module initialization
 # ----------------------------------------------------------------------
+
+
 if __name__ == '__main__':
     main()
 
@@ -231,6 +233,8 @@ class CLASS(object):   # pylint: disable=R0902, R0205
         assert limit >= 0
 
         # 1. Return the solution for part one
+        if self.text:
+            return None
         return None
 
     def part_two(self, verbose=False, limit=0):
@@ -241,11 +245,15 @@ class CLASS(object):   # pylint: disable=R0902, R0205
         assert limit >= 0
 
         # 1. Return the solution for part two
+        if self.text:
+            return None
         return None
 
 # ----------------------------------------------------------------------
 #                                                  module initialization
 # ----------------------------------------------------------------------
+
+
 if __name__ == '__main__':
     pass
 
@@ -317,18 +325,18 @@ class TestCLASS(unittest.TestCase):  # pylint: disable=R0904
         "Test part one example of CLASS object"
 
         # 1. Create CLASS object from text
-        myobj = MODULE.CLASS(text=aoc_DD.from_text(PART_ONE_TEXT))
+        text = aoc_DD.from_text(PART_ONE_TEXT)
+        myobj = MODULE.CLASS(text=text)
 
         # 2. Check the part one result
         self.assertEqual(myobj.part_one(verbose=False), PART_ONE_RESULT)
-
 
     def test_part_two(self):
         "Test part two example of CLASS object"
 
         # 1. Create CLASS object from text
-        myobj = MODULE.CLASS(part2=True,
-                             text=aoc_DD.from_text(PART_TWO_TEXT))
+        text = aoc_DD.from_text(PART_TWO_TEXT)
+        myobj = MODULE.CLASS(part2=True, text=text)
 
         # 2. Check the part two result
         self.assertEqual(myobj.part_two(verbose=False), PART_TWO_RESULT)
@@ -337,6 +345,8 @@ class TestCLASS(unittest.TestCase):  # pylint: disable=R0904
 # ----------------------------------------------------------------------
 #                                                  module initialization
 # ----------------------------------------------------------------------
+
+
 if __name__ == '__main__':
     pass
 
@@ -429,6 +439,8 @@ class OTHER(object):   # pylint: disable=R0902, R0903, R0205
 # ----------------------------------------------------------------------
 #                                                  module initialization
 # ----------------------------------------------------------------------
+
+
 if __name__ == '__main__':
     pass
 
@@ -493,6 +505,8 @@ class TestOTHER(unittest.TestCase):  # pylint: disable=R0904
 # ----------------------------------------------------------------------
 #                                                  module initialization
 # ----------------------------------------------------------------------
+
+
 if __name__ == '__main__':
     pass
 

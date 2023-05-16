@@ -1,0 +1,28 @@
+Advent of Code 2022 Day 23 Part Two
+
+From https://adventofcode.com/2022/day/23 by Eric Wastl
+
+----- Day 23: Unstable Diffusion -----
+
+----- Part Two -----
+
+t seems you're on the right track. Finish simulating the process and
+figure out where the Elves need to go. How many rounds did you save them?
+
+In the example above, the first round where no Elf moved was round 20:
+
+.......#......
+....#......#..
+..#.....#.....
+......#.......
+...#....#.#..#
+#.............
+....#.....#...
+..#.....#.....
+....#.#....#..
+.........#....
+....#......#..
+.......#......
+
+Figure out where the Elves need to go. What is the number of the first
+round where no Elf moves?

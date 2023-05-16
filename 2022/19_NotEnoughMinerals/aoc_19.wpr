@@ -1,0 +1,29 @@
+#!wing
+#!version=9.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_19.py'),
+                  loc('blueprint.py'),
+                  loc('blueprints.py'),
+                  loc('input.txt'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('pastebin.py'),
+                  loc('robot.py'),
+                  loc('robots.py'),
+                  loc('solver.py'),
+                  loc('state.py'),
+                  loc('states.py'),
+                  loc('test_blueprint.py'),
+                  loc('test_blueprints.py'),
+                  loc('test_robot.py'),
+                  loc('test_robots.py'),
+                  loc('test_solver.py'),
+                  loc('test_state.py'),
+                  loc('test_states.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_19.py'): ('project',
+        ('-p2 -v input.txt',
+         ''))}

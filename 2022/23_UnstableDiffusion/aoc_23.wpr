@@ -1,0 +1,20 @@
+#!wing
+#!version=9.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_23.py'),
+                  loc('grove.py'),
+                  loc('input.txt'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('process.py'),
+                  loc('solver.py'),
+                  loc('test_grove.py'),
+                  loc('test_process.py'),
+                  loc('test_solver.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_23.py'): ('project',
+        ('-p2 -v input.txt',
+         ''))}
