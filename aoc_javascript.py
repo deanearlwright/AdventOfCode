@@ -30,9 +30,9 @@ AOC_DD_JS = """/* eslint-disable linebreak-style */
 //                                                                 import
 // ----------------------------------------------------------------------
 
-const yargs = require('yargs');
 const fs = require('fs');
 const process = require('process');
+const yargs = require('yargs');
 
 const MODULE = require('./MODULE');
 
@@ -41,7 +41,7 @@ const MODULE = require('./MODULE');
 // ----------------------------------------------------------------------
 
 function parseCommandLine() {
-  // Parse the command line options"
+  // Parse the command line options
 
   // 1. Create the command line parser
   const { argv } = yargs
@@ -133,7 +133,7 @@ function partTwo(args, inputLines) {
 // ----------------------------------------------------------------------
 
 function fromText(text) {
-  // Break the text into trimed, non-comment lines"
+  // Break the text into trimed, non-comment lines
 
   // 1. We start with no lines
   const lines = [];
@@ -411,18 +411,18 @@ PACKAGE_JSON_JS = """
     "author": "Dr. Dean Earl Wright III",
   "license": "MIT",
 "devDependencies": {
-    "eslint": "^8.26.0",
+    "eslint": "^8.46.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^27.1.3",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-jest": "^27.2.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.31.10",
-    "jest": "^29.2.2"
+    "eslint-plugin-react": "^7.33.1",
+    "jest": "^29.6.2"
   },
   "dependencies": {
-    "yargs": "^17.6.0"
+    "yargs": "^17.7.2"
 
   }
 }
