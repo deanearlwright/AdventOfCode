@@ -539,8 +539,8 @@ def python_before(args):
     # 1. Start with simple conversions
     result = {
         "YYYY": f"{args.year:4d}",
-        "DD": f"{args.day:2d}",
-        "D D": ' '.join(list(f"{args.day:2d}")),
+        "DD": f"{args.day:02d}",
+        "D D": ' '.join(list(f"{args.day:02d}")),
         "TITLE": ' '.join(args.title),
         "MODULE": args.cname.lower(),
         "CLASS": args.cname.capitalize(),

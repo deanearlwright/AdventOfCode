@@ -1,0 +1,19 @@
+#!wing
+#!version=9.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_22.py'),
+                  loc('brick.py'),
+                  loc('bricks.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('solver.py'),
+                  loc('test_brick.py'),
+                  loc('test_bricks.py'),
+                  loc('test_solver.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_22.py'): ('project',
+        ('-p2 -v input.txt',
+         ''))}

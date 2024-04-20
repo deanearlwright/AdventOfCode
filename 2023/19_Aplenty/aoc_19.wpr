@@ -1,0 +1,26 @@
+#!wing
+#!version=9.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_19.py'),
+                  loc('input.txt'),
+                  loc('part.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('rule.py'),
+                  loc('solver.py'),
+                  loc('sorter.py'),
+                  loc('test_part.py'),
+                  loc('test_rule.py'),
+                  loc('test_solver.py'),
+                  loc('test_sorter.py'),
+                  loc('test_workflow.py'),
+                  loc('test_workflows.py'),
+                  loc('workflow.py'),
+                  loc('workflows.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_19.py'): ('project',
+        ('-p2 -v input.txt',
+         ''))}
