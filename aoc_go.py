@@ -165,7 +165,7 @@ func fromText(text string) []string {
     var result []string
 
     // 2. Break up the text into lines
-    lines := regexp.MustCompile("\\\\r?\\\\n").Split(text, -1)
+    lines := regexp.MustCompile(`\\r?\\n`).Split(text, -1)
 
     // 3. Loop for lines in the text
     for _, line := range lines {
@@ -330,6 +330,7 @@ package main
 // ----------------------------------------------------------------------
 import (
     "testing"
+    "github.com/stretchr/testify/assert"
 )
 
 // ----------------------------------------------------------------------
@@ -356,16 +357,9 @@ func TestCLASSEmptyInit(t *testing.T) {
     obj := NewCLASS(false, fromText(""))
 
     // 2. Make sure it has the default values
-    if obj.Part2 {
-        t.Fatal("Part2 should be false")
-    }
-    if len(obj.Text) != 0 {
-        t.Fatal("There should be no Text")
-    }
-    if len(obj.Numbers) != 0 {
-        t.Fatal("There should be no Numbers")
-    }
-}
+    assert.False(t, obj.Part2)
+    assert.Len(t, obj.Text, 0)}
+    assert.Len(t, obj.Numbers, 0)}
 
 func TestCLASSTextInit(t *testing.T) {
     // Test the CLASS object creation from text
@@ -374,17 +368,8 @@ func TestCLASSTextInit(t *testing.T) {
     obj := NewCLASS(false, fromText(EXAMPLE_TEXT))
 
     // 2. Make sure it has the expected values
-    if obj.Part2 {
-        t.Fatal("Part2 should be false")
-    }
-    if len(obj.Text) != len(EXAMPLE_TEXT) {
-        t.Fatalf("len(Text) is %d not %d",
-            len(obj.Text), len(EXAMPLE_TEXT))
-    }
-    if len(obj.Numbers) != len(EXAMPLE_TEXT) {
-        t.Fatalf("len(Numbers) is %d not %d",
-            len(obj.Numbers), len(EXAMPLE_TEXT))
-    }
+    assert.False(t, obj.Part2)
+    assert.Equal(t, len(obj.Text), len(obj.Numbers))
 }
 
 func TestCLASSPartOne(t *testing.T) {
@@ -394,19 +379,12 @@ func TestCLASSPartOne(t *testing.T) {
     obj := NewCLASS(false, fromText(PART_ONE_TEXT))
 
     // 2. Make sure it has the expected values
-    if obj.Part2 {
-        t.Fatal("Part2 should be false")
-    }
-    if len(obj.Text) != len(PART_ONE_TEXT) {
-        t.Fatalf("len(Text) is %d not %d",
-            len(obj.Text), len(PART_ONE_TEXT))
-    }
+    assert.False(t, obj.Part2)
+    assert.Equal(t, len(obj.Text), len(obj.Numbers))
 
     // 3. Make sure it returns the expected solution
     result := obj.PartOne(false, 0)
-    if result != PART_ONE_RESULT {
-        t.Fatalf("PartOne returned '%s' not '%s'", result, PART_ONE_RESULT)
-    }
+    assert.Equal(t, PART_ONE_RESULT, result)
 }
 
 func TestCLASSPartTwo(t *testing.T) {
@@ -416,19 +394,12 @@ func TestCLASSPartTwo(t *testing.T) {
     obj := NewCLASS(true, fromText(PART_TWO_TEXT))
 
     // 2. Make sure it has the expected values
-    if !obj.Part2 {
-        t.Fatal("Part2 should be true")
-    }
-    if len(obj.Text) != len(PART_TWO_TEXT) {
-        t.Fatalf("len(Text) is %d not %d",
-            len(obj.Text), len(PART_TWO_TEXT))
-    }
+    assert.True(t, obj.Part2)
+    assert.Equal(t, len(obj.Text), len(obj.Numbers))
 
     // 3. Make sure it returns the expected solution
-    result := obj.PartTwo(false, 0)
-    if result != PART_TWO_RESULT {
-        t.Fatalf("PartTwo returned '%s' not '%s'", result, PART_TWO_RESULT)
-    }
+    result := obj.PartOne(false, 0)
+    assert.Equal(t, PART_TWO_RESULT, result)
 }
 
 // ======================================================================
@@ -576,7 +547,7 @@ func TestOTHERTextInit(t *testing.T) {
 GO_MOD = """
 module DIR
 
-go 1.17
+go 1.22
 """
 
 GO_FILES = {
