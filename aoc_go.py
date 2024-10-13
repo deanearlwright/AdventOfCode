@@ -15,7 +15,7 @@ AOC_DD_GO = """// ==============================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 //
-// lua implementation by Dr. Dean Earl Wright III
+// go implementation by Dr. Dean Earl Wright III
 // ======================================================================
 
 // ======================================================================
@@ -221,7 +221,7 @@ MODULE_GO = """// ==============================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 //
-// lua implementation by Dr. Dean Earl Wright III
+// go implementation by Dr. Dean Earl Wright III
 // ======================================================================
 
 // ======================================================================
@@ -258,7 +258,7 @@ type CLASS struct {
     Numbers []int
 }
 
-func NewCLASS(part2 bool, text []string) *CLASS {
+func NewCLASS(part2 bool, text []string) (*CLASS, error) {
 
     // 1. Set the initial values
     p := new(CLASS)
@@ -267,14 +267,18 @@ func NewCLASS(part2 bool, text []string) *CLASS {
 
     // 2. Process text (if any)
     if p.Text != nil && len(p.Text) > 0 {
-       p.processText(p.Text)
+        err := p.processText(p.Text)
+        if err != nil {
+           return nil, err
+        }
     }
 
-    return p
+    // 3. Return the new CLASS object
+    return p, nil
 }
 
 
-func (p *CLASS) processText(text []string) {
+func (p *CLASS) processText(text []string) error {
     // Assign values from text
 
     // 1. Loop for each line of the text
@@ -283,8 +287,7 @@ func (p *CLASS) processText(text []string) {
         // 2. Add the number to the entries
         num, err := strconv.Atoi(line)
         if err != nil {
-            fmt.Printf("Error %s in line %d: '%s'\\n", err.Error(), indx, line)
-            os.Exit(1)
+            return err
         }
         p.Numbers = append(p.Numbers, num)
     }
@@ -315,7 +318,7 @@ MODULE_TEST_GO = """// =========================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 //
-// lua implementation by Dr. Dean Earl Wright III
+// go implementation by Dr. Dean Earl Wright III
 // ======================================================================
 
 // ======================================================================
@@ -337,13 +340,13 @@ import (
 //                                                              constants
 // ----------------------------------------------------------------------
 const (
-    EXAMPLE_TEXT = `
+    MODULEExampleTest = `
 `
-    PART_ONE_TEXT = ""
-    PART_TWO_TEXT = ""
+    MODULEPartOneText = ""
+    MODULEPartTwoText = ""
 
-    PART_ONE_RESULT = ""
-    PART_TWO_RESULT = ""
+    MODULEPartOneResult = ""
+    MODULEPartOneResult = ""
 )
 
 // ======================================================================
@@ -354,18 +357,21 @@ func TestCLASSEmptyInit(t *testing.T) {
     // Test the default CLASS creation
 
     // 1. Create default CLASS object
-    obj := NewCLASS(false, fromText(""))
+    obj, err := NewCLASS(false, fromText(""))
+    assert.NoError(err)
 
     // 2. Make sure it has the default values
     assert.False(t, obj.Part2)
-    assert.Len(t, obj.Text, 0)}
-    assert.Len(t, obj.Numbers, 0)}
+    assert.Len(t, obj.Text, 0)
+    assert.Len(t, obj.Numbers, 0)
+}
 
 func TestCLASSTextInit(t *testing.T) {
     // Test the CLASS object creation from text
 
     // 1. Create CLASS object from text
-    obj := NewCLASS(false, fromText(EXAMPLE_TEXT))
+    obj, err := NewCLASS(false, fromText(EXAMPLE_TEXT))
+    assert.NoError(err)
 
     // 2. Make sure it has the expected values
     assert.False(t, obj.Part2)
@@ -376,7 +382,8 @@ func TestCLASSPartOne(t *testing.T) {
     // Test part one example of CLASS object
 
     // 1. Create CLASS object from text
-    obj := NewCLASS(false, fromText(PART_ONE_TEXT))
+    obj, err := NewCLASS(false, fromText(MODULEPartOneText))
+    assert.NoError(err)
 
     // 2. Make sure it has the expected values
     assert.False(t, obj.Part2)
@@ -384,22 +391,24 @@ func TestCLASSPartOne(t *testing.T) {
 
     // 3. Make sure it returns the expected solution
     result := obj.PartOne(false, 0)
-    assert.Equal(t, PART_ONE_RESULT, result)
+    assert.Equal(t, MODULEPartOneResult, result)
 }
 
 func TestCLASSPartTwo(t *testing.T) {
     // Test part two example of CLASS object
 
     // 1. Create CLASS object from text
-    obj := NewCLASS(true, fromText(PART_TWO_TEXT))
+    obj, err := NewCLASS(true, fromText(MODULEPartTwoText))
+    assert.NoError(err)
+
 
     // 2. Make sure it has the expected values
     assert.True(t, obj.Part2)
     assert.Equal(t, len(obj.Text), len(obj.Numbers))
 
     // 3. Make sure it returns the expected solution
-    result := obj.PartOne(false, 0)
-    assert.Equal(t, PART_TWO_RESULT, result)
+    result := obj.PartTwo(false, 0)
+    assert.Equal(t, MODULEPartTwoResult, result)
 }
 
 // ======================================================================
@@ -431,7 +440,7 @@ EXTRA_GO = """// ===============================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 //
-// lua implementation by Dr. Dean Earl Wright III
+// go implementation by Dr. Dean Earl Wright III
 // ======================================================================
 
 // ======================================================================
@@ -462,13 +471,16 @@ type OTHER struct {
     Text    string
 }
 
-func NewOTHER(part2 bool, text string) *OTHER {
+func NewOTHER(part2 bool, text string) (*OTHER, error) {
     // OTHER Object for TITLE
 
     // 1. Set the initial values
     p := new(OTHER)
     p.Part2 = part2
     p.Text = text
+
+    // 2. Return success
+    return p, nil
 }
 
 // ======================================================================
@@ -480,7 +492,7 @@ EXTRA_TEST_GO = """// ==========================================================
 // TITLE
 //   Advent of Code YYYY Day DD -- Eric Wastl -- https://adventofcode.com
 //
-// lua implementation by Dr. Dean Earl Wright III
+// go implementation by Dr. Dean Earl Wright III
 // ======================================================================
 
 // ======================================================================
@@ -495,13 +507,14 @@ package main
 // ----------------------------------------------------------------------
 import (
     "testing"
+    "github.com/stretchr/testify/assert"
 )
 
 // ----------------------------------------------------------------------
 //                                                              constants
 // ----------------------------------------------------------------------
 const (
-    OTHER_TEXT = ""
+    EXTRAText = ""
 )
 
 // ======================================================================
@@ -512,14 +525,12 @@ func TestOTHEREmptyInit(t *testing.T) {
     // Test the default OTHER creation
 
     // 1. Create default OTHER object
-    obj := NewOTHER(false, "")
+    obj, err := NewOTHER(false, "")
+    assert.NoError(err)
 
     // 2. Make sure it has the default values
-    if obj.Part2 {
-        t.Fatal("Part2 should be false")
-    }
-    if len(obj.Text) != 0 {
-        t.Fatal("There should be no Text")
+    assert.False(t, obj.Part2)
+    assert.Len(t, obj.Text, 0)
     }
 }
 
@@ -527,16 +538,12 @@ func TestOTHERTextInit(t *testing.T) {
     // Test the OTHER object creation from text
 
     // 1. Create default OTHER object
-    obj := NewOTHER(false, OTHER_TEXT)
+    obj, err := NewOTHER(false, EXTRAText)
+    assert.NoError(err)
 
     // 2. Make sure it has the default values
-    if obj.Part2 {
-        t.Fatal("Part2 should be false")
-    }
-    if len(obj.Text) != len(OTHER_TEXT) {
-        t.Fatalf("len(Text) is %d not %d",
-            len(obj.Text), len(OTHER_TEXT))
-    }
+    assert.False(t, obj.Part2)
+    assert.Equal(t, len(obj.Text), len(EXTRAText))
 }
 
 // ======================================================================
@@ -548,6 +555,8 @@ GO_MOD = """
 module DIR
 
 go 1.22
+
+require github.com/stretchr/testify v1.9.0
 """
 
 GO_FILES = {
