@@ -66,8 +66,8 @@ func TestGameTextInit(t *testing.T) {
 	assert.Len(t, obj.Text, 54)
 	assert.Equal(t, obj.ID, 1)
 	assert.Len(t, obj.Draws, 3)
-	assert.Equal(t, obj.Draws[0].Red, 4)
-	assert.Equal(t, obj.Draws[0].Blue, 3)
+	assert.Equal(t, obj.Draws[0].Count("red"), 4)
+	assert.Equal(t, obj.Draws[0].Count("blue"), 3)
 }
 
 func TestGamePartOne(t *testing.T) {
@@ -82,8 +82,8 @@ func TestGamePartOne(t *testing.T) {
 	assert.Len(t, obj.Text, 54)
 	assert.Equal(t, obj.ID, 1)
 	assert.Len(t, obj.Draws, 3)
-	assert.Equal(t, obj.Draws[0].Red, 4)
-	assert.Equal(t, obj.Draws[0].Blue, 3)
+	assert.Equal(t, obj.Draws[0].Count("red"), 4)
+	assert.Equal(t, obj.Draws[0].Count("blue"), 3)
 
 	// 3. Make sure it returns the expected solution
 	result := obj.PartOne(false, 0)
@@ -102,8 +102,8 @@ func TestGamePartTwo(t *testing.T) {
 	assert.Len(t, obj.Text, 54)
 	assert.Equal(t, obj.ID, 1)
 	assert.Len(t, obj.Draws, 3)
-	assert.Equal(t, obj.Draws[0].Red, 4)
-	assert.Equal(t, obj.Draws[0].Blue, 3)
+	assert.Equal(t, obj.Draws[0].Count("red"), 4)
+	assert.Equal(t, obj.Draws[0].Count("blue"), 3)
 
 	// 3. Make sure it returns the expected solution
 	result := obj.PartTwo(false, 0)

@@ -340,7 +340,7 @@ import (
 //                                                              constants
 // ----------------------------------------------------------------------
 const (
-    MODULEExampleTest = `
+    MODULEExampleText = `
 `
     MODULEPartOneText = ""
     MODULEPartTwoText = ""
@@ -358,7 +358,7 @@ func TestCLASSEmptyInit(t *testing.T) {
 
     // 1. Create default CLASS object
     obj, err := NewCLASS(false, fromText(""))
-    assert.NoError(err)
+    assert.NoError(t, err)
 
     // 2. Make sure it has the default values
     assert.False(t, obj.Part2)
@@ -370,8 +370,8 @@ func TestCLASSTextInit(t *testing.T) {
     // Test the CLASS object creation from text
 
     // 1. Create CLASS object from text
-    obj, err := NewCLASS(false, fromText(EXAMPLE_TEXT))
-    assert.NoError(err)
+    obj, err := NewCLASS(false, fromText(MODULEExampleText))
+    assert.NoError(t, err)
 
     // 2. Make sure it has the expected values
     assert.False(t, obj.Part2)
@@ -383,7 +383,7 @@ func TestCLASSPartOne(t *testing.T) {
 
     // 1. Create CLASS object from text
     obj, err := NewCLASS(false, fromText(MODULEPartOneText))
-    assert.NoError(err)
+    assert.NoError(t, err)
 
     // 2. Make sure it has the expected values
     assert.False(t, obj.Part2)
@@ -399,7 +399,7 @@ func TestCLASSPartTwo(t *testing.T) {
 
     // 1. Create CLASS object from text
     obj, err := NewCLASS(true, fromText(MODULEPartTwoText))
-    assert.NoError(err)
+    assert.NoError(t, err)
 
 
     // 2. Make sure it has the expected values
