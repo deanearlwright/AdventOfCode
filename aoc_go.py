@@ -102,7 +102,11 @@ func partOne(verbose bool, limit int, input_lines []string) string {
     // Process part one of the puzzle
 
     // 1. Create the puzzle solver
-    solver := NewCLASS(false, input_lines)
+    solver, err := NewCLASS(false, input_lines)
+    if err != nil {
+        fmt.Printf("unable to construct solver %s\\n", err)
+        return ""
+    }
 
     // 2. Determine the solution for part one
     solution := solver.PartOne(verbose, limit)
@@ -124,7 +128,11 @@ func partTwo(verbose bool, limit int, input_lines []string) string {
     // Process part two of the puzzle
 
     // 1. Create the puzzle solver
-    solver := NewCLASS(true, input_lines)
+    solver, err := NewCLASS(true, input_lines)
+    if err != nil {
+        fmt.Printf("unable to construct solver %s\\n", err)
+        return ""
+    }
 
     // 2. Determine the solution for part two
     solution := solver.PartTwo(verbose, limit)
@@ -236,7 +244,6 @@ package main
 // ----------------------------------------------------------------------
 import (
     "fmt"
-    "os"
     "strconv"
 )
 
@@ -266,7 +273,7 @@ func NewCLASS(part2 bool, text []string) (*CLASS, error) {
     p.Text = text
 
     // 2. Process text (if any)
-    if p.Text != nil && len(p.Text) > 0 {
+    if len(p.Text) > 0 {
         err := p.processText(p.Text)
         if err != nil {
            return nil, err
@@ -287,10 +294,13 @@ func (p *CLASS) processText(text []string) error {
         // 2. Add the number to the entries
         num, err := strconv.Atoi(line)
         if err != nil {
-            return err
+            return fmt.Errorf("error in line %d: %s", indx, err)
         }
         p.Numbers = append(p.Numbers, num)
     }
+
+    // 3. Return success
+    return nil
 }
 
 func (p *CLASS) PartOne(verbose bool, limit int) string {
@@ -342,11 +352,11 @@ import (
 const (
     MODULEExampleText = `
 `
-    MODULEPartOneText = ""
+    MODULEPartOneText = MODULEExampleText
     MODULEPartTwoText = ""
 
     MODULEPartOneResult = ""
-    MODULEPartOneResult = ""
+    MODULEPartTwoResult = ""
 )
 
 // ======================================================================
