@@ -55,8 +55,8 @@ var aocInput string = "";
 //                                                          initialzation
 // ----------------------------------------------------------------------
 
+// init ... Create the command line parser
 func init() {
-  // Parse the command line options
 
   // 1. Create the command line parser
   flag.IntVar(&aocPart, "part", 1, "Part 1 or 2 of the puzzle")
@@ -73,6 +73,7 @@ func init() {
 //                                                       parseCommandLine
 // ----------------------------------------------------------------------
 
+// parseCommandLine ... Parse the command line options
 func parseCommandLine() {
 
     // 1. Parse the command line to aocXXXX variables
@@ -98,11 +99,11 @@ func parseCommandLine() {
 //                                                                partOne
 // ----------------------------------------------------------------------
 
-func partOne(verbose bool, limit int, input_lines []string) string {
-    // Process part one of the puzzle
+// partOne ... Process part one of the puzzle
+func partOne(verbose bool, limit int, inputLines []string) string {
 
     // 1. Create the puzzle solver
-    solver, err := NewCLASS(false, input_lines)
+    solver, err := NewCLASS(false, inputLines)
     if err != nil {
         fmt.Printf("unable to construct solver %s\\n", err)
         return ""
@@ -124,11 +125,11 @@ func partOne(verbose bool, limit int, input_lines []string) string {
 //                                                                partTwo
 // ----------------------------------------------------------------------
 
-func partTwo(verbose bool, limit int, input_lines []string) string {
-    // Process part two of the puzzle
+// partTwo ... Process part two of the puzzle
+func partTwo(verbose bool, limit int, inputLines []string) string {
 
     // 1. Create the puzzle solver
-    solver, err := NewCLASS(true, input_lines)
+    solver, err := NewCLASS(true, inputLines)
     if err != nil {
         fmt.Printf("unable to construct solver %s\\n", err)
         return ""
@@ -150,7 +151,9 @@ func partTwo(verbose bool, limit int, input_lines []string) string {
 //                                                               fromFile
 // ----------------------------------------------------------------------
 
+// fromFile ... get input from file
 func fromFile(filepath string) []string {
+
     // 1. Read the file
     b, err := os.ReadFile(filepath)
     if err != nil {
@@ -166,8 +169,8 @@ func fromFile(filepath string) []string {
 //                                                               fromText
 // ----------------------------------------------------------------------
 
+// fromText ... Break the text into trimed, non-comment lines
 func fromText(text string) []string {
-    // Break the text into trimed, non-comment lines
 
     // 1. We start with no lines
     var result []string
@@ -196,21 +199,21 @@ func fromText(text string) []string {
 //                                                                   main
 // ----------------------------------------------------------------------
 
+// main ... Read the Advent of Code problem and solve it
 func main() {
-    // Read the Advent of Code problem and solve it
 
     // 1. Get the command line options
     parseCommandLine()
 
     // 2. Read the puzzle file
-    input_text := fromFile(aocInput)
+    inputText := fromFile(aocInput)
 
     // 3. Process the appropiate part of the puzzle
     var result string
     if aocPart == 1 {
-        result = partOne(aocVerbose, aocLimit, input_text)
+        result = partOne(aocVerbose, aocLimit, inputText)
     } else {
-        result = partTwo(aocVerbose, aocLimit, input_text)
+        result = partTwo(aocVerbose, aocLimit, inputText)
     }
 
     // 5. Set return code (0 if solution found, 2 if not)
@@ -257,14 +260,14 @@ const (
 //                                                                  CLASS
 // ======================================================================
 
-// Object for TITLE
-
+// CLASS ... Object for TITLE
 type CLASS struct {
     Part2 bool
     Text  []string
     Numbers []int
 }
 
+// NewCLASS ... Create a CLASS object
 func NewCLASS(part2 bool, text []string) (*CLASS, error) {
 
     // 1. Set the initial values
@@ -285,8 +288,8 @@ func NewCLASS(part2 bool, text []string) (*CLASS, error) {
 }
 
 
+// processText ... Assign values from text
 func (p *CLASS) processText(text []string) error {
-    // Assign values from text
 
     // 1. Loop for each line of the text
     for indx, line := range text {
@@ -303,16 +306,16 @@ func (p *CLASS) processText(text []string) error {
     return nil
 }
 
+// PartOne ... Returns the solution for part one
 func (p *CLASS) PartOne(verbose bool, limit int) string {
-    // Returns the solution for part one
 
     // 1. Return the solution for part one
     return ""
 }
 
 
+// PartTwo ... Returns the solution for part two
 func (p *CLASS) PartTwo(verbose bool, limit int) string {
-    // Returns the solution for part two
 
     // 1. Return the solution for part two
     return ""
@@ -363,8 +366,8 @@ const (
 //                                                              TestCLASS
 // ======================================================================
 
+// TestCLASSEmptyInit ... Test the default CLASS creation
 func TestCLASSEmptyInit(t *testing.T) {
-    // Test the default CLASS creation
 
     // 1. Create default CLASS object
     obj, err := NewCLASS(false, fromText(""))
@@ -376,8 +379,8 @@ func TestCLASSEmptyInit(t *testing.T) {
     assert.Len(t, obj.Numbers, 0)
 }
 
+// TestCLASSTextInit ... Test the CLASS object creation from text
 func TestCLASSTextInit(t *testing.T) {
-    // Test the CLASS object creation from text
 
     // 1. Create CLASS object from text
     obj, err := NewCLASS(false, fromText(MODULEExampleText))
@@ -388,8 +391,8 @@ func TestCLASSTextInit(t *testing.T) {
     assert.Equal(t, len(obj.Text), len(obj.Numbers))
 }
 
+// TestCLASSPartOne ... Test part one example of CLASS object
 func TestCLASSPartOne(t *testing.T) {
-    // Test part one example of CLASS object
 
     // 1. Create CLASS object from text
     obj, err := NewCLASS(false, fromText(MODULEPartOneText))
@@ -404,6 +407,7 @@ func TestCLASSPartOne(t *testing.T) {
     assert.Equal(t, MODULEPartOneResult, result)
 }
 
+// TestCLASSPartTwo ... Test part two example of CLASS object
 func TestCLASSPartTwo(t *testing.T) {
     // Test part two example of CLASS object
 
@@ -476,11 +480,13 @@ const (
 //                                                                 OTHER
 // ======================================================================
 
+// OTHER ... Objext for TITLE
 type OTHER struct {
     Part2   bool
     Text    string
 }
 
+// NewOTHER ... Create a OTHER object
 func NewOTHER(part2 bool, text string) (*OTHER, error) {
     // OTHER Object for TITLE
 
@@ -531,27 +537,26 @@ const (
 //                                                             TestOTHER
 // ======================================================================
 
+// TestOTHEREmptyInit ... Test the default OTHER creation
 func TestOTHEREmptyInit(t *testing.T) {
-    // Test the default OTHER creation
 
     // 1. Create default OTHER object
     obj, err := NewOTHER(false, "")
-    assert.NoError(err)
+    assert.NoError(t, err)
 
     // 2. Make sure it has the default values
     assert.False(t, obj.Part2)
     assert.Len(t, obj.Text, 0)
-    }
 }
 
+// TestOTHERTextInit ... Test the OTHER object creation from text
 func TestOTHERTextInit(t *testing.T) {
-    // Test the OTHER object creation from text
 
     // 1. Create default OTHER object
     obj, err := NewOTHER(false, EXTRAText)
-    assert.NoError(err)
+    assert.NoError(t, err)
 
-    // 2. Make sure it has the default values
+    // 2. Make sure it has the expected values
     assert.False(t, obj.Part2)
     assert.Equal(t, len(obj.Text), len(EXTRAText))
 }
