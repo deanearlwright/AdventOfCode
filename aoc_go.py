@@ -40,7 +40,7 @@ import (
 //                                                              constants
 // ----------------------------------------------------------------------
 const (
-     SAVE_BLANK_LINES = false
+     SaveBlankLines = false
 )
 
 // ----------------------------------------------------------------------
@@ -186,7 +186,7 @@ func fromText(text string) []string {
             if !strings.HasPrefix(line, "!") {
                 result = append(result, line)
             }
-        } else if SAVE_BLANK_LINES {
+        } else if SaveBlankLines {
             result = append(result, "")
         }
     }
@@ -388,7 +388,8 @@ func TestCLASSTextInit(t *testing.T) {
 
     // 2. Make sure it has the expected values
     assert.False(t, obj.Part2)
-    assert.Equal(t, len(obj.Text), len(obj.Numbers))
+    assert.Len(t, obj.Text, 0)
+    assert.Len(t, obj.Numbers, 0)
 }
 
 // TestCLASSPartOne ... Test part one example of CLASS object
@@ -400,7 +401,8 @@ func TestCLASSPartOne(t *testing.T) {
 
     // 2. Make sure it has the expected values
     assert.False(t, obj.Part2)
-    assert.Equal(t, len(obj.Text), len(obj.Numbers))
+    assert.Len(t, obj.Text, 0)
+    assert.Len(t, obj.Numbers, 0)
 
     // 3. Make sure it returns the expected solution
     result := obj.PartOne(false, 0)
@@ -418,7 +420,8 @@ func TestCLASSPartTwo(t *testing.T) {
 
     // 2. Make sure it has the expected values
     assert.True(t, obj.Part2)
-    assert.Equal(t, len(obj.Text), len(obj.Numbers))
+    assert.Len(t, obj.Text, 0)
+    assert.Len(t, obj.Numbers, 0)
 
     // 3. Make sure it returns the expected solution
     result := obj.PartTwo(false, 0)
@@ -480,7 +483,7 @@ const (
 //                                                                 OTHER
 // ======================================================================
 
-// OTHER ... Objext for TITLE
+// OTHER ... Object for TITLE
 type OTHER struct {
     Part2   bool
     Text    string
