@@ -34,6 +34,9 @@ import MODULE
 # ----------------------------------------------------------------------
 #                                                              constants
 # ----------------------------------------------------------------------
+KEEP_BLANK = False
+IGNORE_COMMENTS = False
+COMMENT = "!"
 
 # ----------------------------------------------------------------------
 #                                                     parse_command_line
@@ -110,17 +113,17 @@ def part_two(args, input_lines):  # pylint: disable=E1128
 # ----------------------------------------------------------------------
 
 
-def from_file(filepath, keep_blank=False):
+def from_file(filepath):
     "Read the file"
 
-    return from_text(open(filepath, encoding="utf8").read(), keep_blank)
+    return from_text(open(filepath, encoding="utf8").read())
 
 # ----------------------------------------------------------------------
 #                                                              from_text
 # ----------------------------------------------------------------------
 
 
-def from_text(text, keep_blank=False):
+def from_text(text):
     "Break the text into trimed, non-comment lines"
 
     # 1. We start with no lines
@@ -131,9 +134,9 @@ def from_text(text, keep_blank=False):
 
         # 3. But ignore blank and comment lines
         line = line.rstrip()
-        if (not line) and (not keep_blank):
+        if (not line) and (not KEEP_BLANK):
             continue
-        if line.startswith('!'):
+        if line.startswith(COMMENT) and IGNORE_COMMENTS:
             continue
 
         # 4. Add the line
@@ -218,12 +221,12 @@ class CLASS(object):   # pylint: disable=R0902, R0205
 
         # 2. Process text (if any)
         if text is not None and len(text) > 0:
-            self._process_text(text)
+            self._process_text()
 
-    def _process_text(self, text):
+    def _process_text(self):
         "Assign values from text"
 
-        assert text is not None and len(text) > 0
+        assert self.text is not None and len(self.text) > 0
 
     def part_one(self, verbose=False, limit=0):
         "Returns the solution for part one"
@@ -232,9 +235,11 @@ class CLASS(object):   # pylint: disable=R0902, R0205
         assert verbose in [True, False]
         assert limit >= 0
 
-        # 1. Return the solution for part one
-        if self.text:
+        # 1. No solution if no text
+        if self.text is None:
             return None
+
+        # 2. Return the solution for part one
         return None
 
     def part_two(self, verbose=False, limit=0):
@@ -244,9 +249,11 @@ class CLASS(object):   # pylint: disable=R0902, R0205
         assert verbose in [True, False]
         assert limit >= 0
 
-        # 1. Return the solution for part two
-        if self.text:
+        # 1. No solution if no text
+        if self.text is None:
             return None
+
+        # 2. Return the solution for part two
         return None
 
 # ----------------------------------------------------------------------
@@ -385,7 +392,10 @@ proj.file-list = [loc('aoc_DD.py'),
                   loc('part_one.txt'),
                   loc('part_two.txt'),
                   loc('MODULE.py'),
-                  loc('test_MODULE.py')]
+                  loc('input.txt'),
+                  loc('test_MODULE.py'),
+                  # --- extra files go here ---
+                  ]
 proj.file-type = 'shared'
 proj.launch-config = {loc('aoc_DD.py'): ('project',
         (u'-p1 -v input.txt',
@@ -550,8 +560,38 @@ def python_before(args):
         "E X T R A": ' '.join(list(args.ename.lower())),
     }
 
+    # 2, If there are any extra files, add them into the wpr prototype
+    if args.enames is not None and args.ename == "":
+        update_wpr_prototype(args)
+
     # 9. Return the text converters
     return result
+
+
+def update_wpr_prototype(args):
+    "Update WINGWARE_PY for the extra files"
+    global WINGWARE_PY  # pylint: disable=W0603
+    print("update_wpr_prototype")
+
+    # 1. Start with nothing
+    additional = []
+    prefix = "                  loc('"
+    postfix = "'),"
+    replace = "                  # --- extra files go here ---"
+
+    # 2. Add the file names for each additional class
+    for extra in args.enames:
+        file_name = extra.lower() + ".py"
+        print(file_name)
+        additional.append(prefix + file_name + postfix)
+        additional.append(prefix + "test_" + file_name + postfix)
+
+    # 3. Convert to the additional text
+    additional_text = '/n'.join(additional)
+    print("additional_text")
+
+    # 4. Put the additional file name into the wpr prototype
+    WINGWARE_PY = WINGWARE_PY.replace(replace, additional_text)
 
 
 def python_after(args, converters, text):

@@ -1,0 +1,17 @@
+#!wing
+#!version=9.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_07.py'),
+                  loc('equation.py'),
+                  loc('equations.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_equation.py'),
+                  loc('test_equations.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_07.py'): ('project',
+        ('-p2 -v input.txt',
+         ''))}

@@ -1,0 +1,17 @@
+#!wing
+#!version=9.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_06.py'),
+                  loc('guard.py'),
+                  loc('lab.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_guard.py'),
+                  loc('test_lab.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_06.py'): ('project',
+        ('-p2 -v input.txt',
+         ''))}

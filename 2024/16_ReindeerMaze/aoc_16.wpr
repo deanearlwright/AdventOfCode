@@ -1,0 +1,20 @@
+#!wing
+#!version=9.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_16.py'),
+                  loc('input.txt'),
+                  loc('maze.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('path.py'),
+                  loc('paths.py'),
+                  loc('test_maze.py'),
+                  loc('test_path.py'),
+                  loc('test_paths.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_16.py'): ('project',
+        ('-p2 -v input.txt',
+         ''))}

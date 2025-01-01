@@ -1,0 +1,18 @@
+#!wing
+#!version=9.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('aoc_22.py'),
+                  loc('buyer.py'),
+                  loc('input.txt'),
+                  loc('market.py'),
+                  loc('part_one.txt'),
+                  loc('part_two.txt'),
+                  loc('test_buyer.py'),
+                  loc('test_market.py')]
+proj.file-type = 'shared'
+proj.launch-config = {loc('aoc_22.py'): ('project',
+        ('-p2 -v input.txt',
+         ''))}
