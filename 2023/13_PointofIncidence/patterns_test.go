@@ -27,7 +27,8 @@ import (
 //
 // ----------------------------------------------------------------------
 const (
-	patternsExampleText = `#.##..##.
+	patternsExampleText = `
+#.##..##.
 ..#.##.#.
 ##......#
 ##......#
@@ -44,10 +45,10 @@ const (
 #....#..#
 `
 	patternsPartOneText = patternsExampleText
-	patternsPartTwoText = ""
+	patternsPartTwoText = patternsExampleText
 
 	patternsPartOneResult = "405"
-	patternsPartTwoResult = ""
+	patternsPartTwoResult = "400"
 )
 
 // ======================================================================
@@ -63,8 +64,8 @@ func TestPatternsEmptyInit(t *testing.T) {
 
 	// 2. Make sure it has the default values
 	assert.False(t, obj.Part2)
-	assert.Len(t, obj.Text, 0)
-	assert.Len(t, obj.Numbers, 0)
+	assert.Len(t, obj.Text, 1)
+	assert.Len(t, obj.Patterns, 0)
 }
 
 // TestPatternsTextInit ... Test the Patterns object creation from text
@@ -76,8 +77,8 @@ func TestPatternsTextInit(t *testing.T) {
 
 	// 2. Make sure it has the expected values
 	assert.False(t, obj.Part2)
-	assert.Len(t, obj.Text, 0)
-	assert.Len(t, obj.Numbers, 0)
+	assert.Len(t, obj.Text, 17)
+	assert.Len(t, obj.Patterns, 2)
 }
 
 // TestPatternsPartOne ... Test part one example of Patterns object
@@ -89,8 +90,8 @@ func TestPatternsPartOne(t *testing.T) {
 
 	// 2. Make sure it has the expected values
 	assert.False(t, obj.Part2)
-	assert.Len(t, obj.Text, 0)
-	assert.Len(t, obj.Numbers, 0)
+	assert.Len(t, obj.Text, 17)
+	assert.Len(t, obj.Patterns, 2)
 
 	// 3. Make sure it returns the expected solution
 	result := obj.PartOne(false, 0)
@@ -107,8 +108,8 @@ func TestPatternsPartTwo(t *testing.T) {
 
 	// 2. Make sure it has the expected values
 	assert.True(t, obj.Part2)
-	assert.Len(t, obj.Text, 0)
-	assert.Len(t, obj.Numbers, 0)
+	assert.Len(t, obj.Text, 17)
+	assert.Len(t, obj.Patterns, 2)
 
 	// 3. Make sure it returns the expected solution
 	result := obj.PartTwo(false, 0)
